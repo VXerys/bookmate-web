@@ -1,8 +1,11 @@
 import type { Metadata, Viewport } from "next";
 import { Inter, JetBrains_Mono, Newsreader } from "next/font/google";
 
+import { IntroGate } from "@/components/motion/intro-gate";
+import { SmoothScroll } from "@/components/motion/smooth-scroll";
 import { palette } from "@/content/palette";
 import { site } from "@/content/site";
+import { bootScript } from "@/lib/motion/boot-script";
 import "./globals.css";
 
 // The app's own serif; opsz lets large display sizes switch to the tighter optical cut.
@@ -39,8 +42,14 @@ export const viewport: Viewport = {
 
 export default function RootLayout({ children }: LayoutProps<"/">) {
   return (
-    <html lang="id" className={`${newsreader.variable} ${inter.variable} ${jetbrains.variable}`}>
+    // The boot script adds html.js before hydration, so React must not flag the class difference.
+    <html lang="id" className={`${newsreader.variable} ${inter.variable} ${jetbrains.variable}`} suppressHydrationWarning>
+      <head>
+        <script dangerouslySetInnerHTML={{ __html: bootScript }} />
+      </head>
       <body>
+        <SmoothScroll />
+        <IntroGate />
         <div className="grain" aria-hidden="true" />
         {children}
       </body>

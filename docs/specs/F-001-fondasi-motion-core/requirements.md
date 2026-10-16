@@ -3,7 +3,7 @@ id: F-001
 title: "Fondasi dan motion core"
 type: requirements
 status: implementing
-tier: lite
+tier: full
 owner: "M Sechan Alfarisi"
 created: 2026-10-16
 last_updated: 2026-10-16

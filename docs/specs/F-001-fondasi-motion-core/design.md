@@ -3,7 +3,7 @@ id: F-001
 title: "Fondasi dan motion core"
 type: design
 status: implementing
-tier: lite
+tier: full
 owner: "M Sechan Alfarisi"
 created: 2026-10-16
 last_updated: 2026-10-16
@@ -27,9 +27,11 @@ T-001 selesai: Next 16.4.2, React 19.3, Tailwind v4 lewat `@tailwindcss/turbopac
 | Component or path | Change | Responsibility after change |
 |---|---|---|
 | `src/app/globals.css` | `@theme static` (palet bawaan Tailwind dibuang, semua token selalu ada di `:root` untuk tween GSAP lewat `var()`), font, ease; base, `.grain`, fokus, blok reduced motion, CSS Lenis | token dan gaya dasar |
-| `src/app/layout.tsx` | `next/font/google` Newsreader, Inter, JetBrains Mono; boot script; `<SmoothScroll/>` | shell root |
-| `src/lib/motion/gsap.ts` | baru: register ScrollTrigger, SplitText, Flip, ScrambleText, `useGSAP`; ekspor `MOTION_OK`, `DESKTOP_MOTION`, `POINTER_FINE`, `EASE_OUT` | satu-satunya pintu masuk GSAP |
-| `src/lib/motion/intro-state.ts` | baru: `finishIntro()`, `whenIntroDone(cb)` | sinyal intro selesai |
+| `src/app/layout.tsx` | `next/font/google` Newsreader, Inter, JetBrains Mono; boot script; `<SmoothScroll/>`, `<IntroGate/>` | shell root |
+| `src/lib/motion/gsap.ts` | baru: register ScrollTrigger, SplitText, `useGSAP` (Flip, ScrambleText menyusul bersama fiturnya); ekspor `MOTION_OK`, `DESKTOP_MOTION`, `POINTER_MOTION`, `EASE_OUT` | satu-satunya pintu masuk GSAP |
+| `src/lib/motion/intro-state.ts` | baru: `createIntroState()`, singleton `finishIntro()`, `whenIntroDone(cb)`, `isIntroDone()` | sinyal intro selesai |
+| `src/lib/motion/boot-script.ts` | baru: string boot script dan `BOOT_FALLBACK_MS` | dites langsung oleh `boot-script.test.ts` |
+| `src/components/motion/intro-gate.tsx` | baru: `completeIntro()` (set `data-intro="done"`, refresh, `finishIntro`) dan `IntroGate` (selesai saat `fonts.ready`) | penanda intro sampai sampul F-002 |
 | `src/lib/color/contrast.ts` | baru: rasio kontras WCAG murni | dipakai test token |
 | `src/content/palette.ts` | baru: hex token + pasangan teks/latar yang diizinkan | sumber data test kontras |
 | `src/components/motion/smooth-scroll.tsx` | baru: Lenis singleton, `setScrollLocked`, `scrollToTarget`, `jumpToTarget` | smooth scroll |
@@ -42,8 +44,10 @@ T-001 selesai: Next 16.4.2, React 19.3, Tailwind v4 lewat `@tailwindcss/turbopac
 boot script (html.js, scrollRestoration manual, fallback 6 s)
   -> SmoothScroll: matchMedia(MOTION_OK)? new Lenis -> lenis.on(scroll, ScrollTrigger.update) -> gsap.ticker.add(raf)
   -> section useGSAP: gsap.matchMedia() -> ScrollTrigger / SplitText
-  -> finishIntro() (F-002) -> ScrollTrigger.refresh()
+  -> IntroGate (F-001) atau sampul (F-002) -> completeIntro() -> ScrollTrigger.refresh() -> listeners whenIntroDone
 ```
+
+Arsitektur state bersama, invarian, dan rencana verifikasi: `system-architecture.md`.
 
 ## Data and state
 
@@ -66,8 +70,9 @@ Boot script inline tidak membaca input pengguna; tidak ada data sensitif.
 |---|---|---|
 | AC-002 | `src/content/site.test.ts` | unit |
 | AC-003, AC-004 | `src/content/palette.test.ts`, `src/lib/color/contrast.test.ts` | unit |
-| AC-010 | `src/lib/motion/intro-state.test.ts` (urutan callback) + cek manual tanpa JS | unit, manual |
-| AC-005 to AC-009, AC-011 to AC-013 | Browser pane: desktop, mobile, emulasi reduced motion, JS dimatikan | manual |
+| AC-010 | `src/lib/motion/boot-script.test.ts`, `src/lib/motion/intro-state.test.ts` | unit |
+| AC-005, AC-006, AC-008, AC-009 | Browser pane dengan handle dev `window.__bookmateMotion` dan input asli; `curl` HTML produksi | manual |
+| AC-007, AC-011 to AC-013 | emulasi reduced motion di DevTools (pemilik), screen reader | manual |
 
 ## Out of scope
 

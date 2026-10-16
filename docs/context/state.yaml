@@ -23,7 +23,7 @@ features:
           - EV-003
       - id: T-002
         title: Token desain, font, dan gaya dasar
-        status: review
+        status: done
         requirements:
           - FR-002
         depends_on:
@@ -33,13 +33,16 @@ features:
           - EV-005
       - id: T-003
         title: Hub GSAP, Lenis, state intro, dan boot script
-        status: planned
+        status: review
         requirements:
           - FR-003
           - FR-004
         depends_on:
           - T-002
-        evidence: []
+        evidence:
+          - EV-006
+          - EV-007
+          - EV-008
       - id: T-004
         title: Primitive reveal teks
         status: planned
@@ -63,7 +66,7 @@ features:
         evidence: []
 active:
   feature_id: F-001
-  task_id: T-002
+  task_id: T-003
 assumptions_open:
   - id: A-001
     feature: null
@@ -87,5 +90,5 @@ assumptions_open:
     feature: null
     title: Analytics yang dipakai
 blockers: []
-generated_at: 2026-10-16T08:05:24.638Z
-source_hash: 438a8129b4cb52e865b5001f85b1a66dbb24c904ac4c75009005e6f23a4b77b6
+generated_at: 2026-10-16T08:35:21.780Z
+source_hash: fa754734bf1d1bff8c41abd1d484308d98fe75757ed4b05f7012531fb24d3b7b

@@ -1,6 +1,6 @@
 <!-- GENERATED FILE — DO NOT EDIT. Rendered by `npm run context:render`.
 Source: sdd.config.json, docs/steering/, docs/specs/F-*/, docs/context/ASSUMPTIONS.md, docs/handoff/current.md.
-source_hash: 438a8129b4cb52e865b5001f85b1a66dbb24c904ac4c75009005e6f23a4b77b6 -->
+source_hash: fa754734bf1d1bff8c41abd1d484308d98fe75757ed4b05f7012531fb24d3b7b -->
 
 # Brief
 
@@ -10,14 +10,16 @@ Project `BookMate Web`, tier `lite`. Rendered from sdd.config.json, docs/steerin
 
 ## Active
 Feature F-001 — Fondasi dan motion core (`implementing`, docs/specs/F-001-fondasi-motion-core/)
-Task T-002 — Token desain, font, dan gaya dasar (`review`); requirements: FR-002; depends on: T-001
+Task T-003 — Hub GSAP, Lenis, state intro, dan boot script (`review`); requirements: FR-003, FR-004; depends on: T-002
 
-Scope: `src/content/palette.ts`, `src/lib/color/contrast.ts` + test, `@theme` di `globals.css`, `next/font/google` (Newsreader dengan sumbu `opsz` dan italic, Inter, JetBrains Mono) di `layout.tsx`, kelas `.display`, `.statement`, `.label`, `.grain`, gaya fokus. Acceptance: AC-003, AC-004, AC-005. Stop jika pasangan warna dari art direction gagal kontras: laporkan, jangan ubah palet diam-diam.
+Scope: `src/lib/motion/gsap.ts`, `src/lib/motion/intro-state.ts` + test, `src/components/motion/smooth-scroll.tsx`, boot script di `layout.tsx`, CSS Lenis, `scrollbar-gutter: stable`, blok `prefers-reduced-motion`. Acceptance: AC-006 sampai AC-010. Referensi pola: `sechan-portfolio/src/components/motion/smooth-scroll.tsx`.
+
+Hasil: boot script dipindah ke `src/lib/motion/boot-script.ts` agar string yang dikirim bisa dites; `intro-gate.tsx` (`completeIntro()`) menjadi satu-satunya penanda intro selesai sampai sampul F-002 ada; Flip dan ScrambleText belum didaftarkan. Temuan kecil ikut diperbaiki: `@import "tailwindcss" source("..")` membatasi pemindaian ke `src/` (CSS 17,7 KB menjadi 15,6 KB). AC-007 menunggu cek manual pemilik (lihat `verification.md`).
 
 Acceptance criteria:
-- AC-003: Given token di `@theme`, when komponen memakai `bg-paper`, `text-ink`, `bg-ember`, `font-serif`, `font-sans`, `font-mono`, then nilai sesuai tabel art direction.
-- AC-004: Given setiap pasangan teks dan latar yang diizinkan, when test kontras berjalan, then rasionya minimal 4,5:1 untuk teks normal dan 3:1 untuk teks besar.
-- AC-005: Given halaman dimuat, when font web selesai dimuat, then CLS di Lighthouse di bawah 0,1.
+- AC-006: Given motion diizinkan, when halaman dimuat, then satu instance Lenis berjalan dan `ScrollTrigger.update` dipanggil pada setiap event scroll Lenis.
+- AC-007: Given `prefers-reduced-motion: reduce`, when halaman dimuat, then Lenis tidak dibuat dan scroll native berjalan.
+- AC-010: Given skrip boot berjalan tetapi intro tidak pernah menandai selesai dalam 6 detik, when batas waktu lewat, then kelas `js` dilepas dan konten terlihat.
 
 ## Rules
 Stop conditions:
@@ -46,14 +48,13 @@ None.
 ## Handoff
 Next step:
 
-Pemilik review dan commit T-002, set T-002 `done`, lalu `/sdd:task T-003` (hub GSAP, Lenis, state intro, boot script): `src/lib/motion/gsap.ts`, `src/lib/motion/intro-state.ts` + test, `src/components/motion/smooth-scroll.tsx`, `src/app/layout.tsx`, `src/app/globals.css`. Verifikasi: `npm test && npm run lint && npm run typecheck && npm run build`, lalu Browser pane dengan emulasi reduced motion.
+Pemilik cek AC-007 di DevTools dan commit T-003. Setelah itu set T-003 `done` dengan hash commit, lalu `/sdd:task T-004` (reveal teks): `src/components/motion/reveal.tsx` dengan SplitText `mask: "lines"`, `aria: "auto"`, `autoSplit`, hanya menyembunyikan saat `html.js` ada dan motion diizinkan. Verifikasi: `npm test && npm run lint && npm run typecheck && npm run build`, lalu Browser pane dan pemeriksaan aksesibilitas nama judul.
 
 ## Other open tasks
-- T-003 — Hub GSAP, Lenis, state intro, dan boot script (`planned`)
 - T-004 — Primitive reveal teks (`planned`)
 - T-005 — Integrasi dan verifikasi fondasi (`planned`)
 
 ## Features
 | Feature | Status | Phase | Done/Total |
 |---|---|---|---|
-| F-001 Fondasi dan motion core | implementing | in_progress | 1/5 |
+| F-001 Fondasi dan motion core | implementing | in_progress | 2/5 |

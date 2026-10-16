@@ -3,10 +3,10 @@ status: active
 owner: M Sechan Alfarisi
 session_date: 2026-10-16
 branch: feat/F-001-fondasi-motion-core
-base_commit: fa6aab4
+base_commit: 879854e
 current_commit: uncommitted
 feature_id: F-001
-task_id: T-002
+task_id: T-003
 expires_after: 2026-11-15
 ---
 
@@ -16,78 +16,81 @@ Current coding session delta. It does not replace product docs, architecture, AD
 
 ## Session objective
 
-Commit awal repo, tandai T-001 selesai, dan kerjakan T-002 (token desain, font, gaya dasar).
+Commit T-002 dan tandai selesai, lalu kerjakan T-003: hub GSAP, Lenis, state intro, boot script.
 
 ## Context used
 
-- `docs/context/BRIEF.md`, `docs/steering/tech.md`, `docs/product/art-direction.md`
-- `docs/specs/F-001-fondasi-motion-core/{requirements,design,tasks}.md`
-- `node_modules/next/dist/docs/01-app/03-api-reference/02-components/font.md` (opsi `axes`)
+- `docs/context/BRIEF.md`, `docs/steering/tech.md`, `docs/specs/F-001-fondasi-motion-core/{requirements,design,tasks}.md`
+- Pola referensi: `sechan-portfolio-marquee/src/lib/motion/{gsap,intro-state}.ts`, `src/components/motion/{smooth-scroll,intro}.tsx`
+- `node_modules/lenis/dist/lenis.css`
 
 ## Completed
 
-- Commit awal `fa6aab4` di `main` (bootstrap dari template v2.0.0). Branch `feat/F-001-fondasi-motion-core` dibuat dari situ.
-- T-001 `done` dengan commit `fa6aab4` di EV-001 sampai EV-003; pembuktian AC-014 (CI) dipindah ke T-005.
-- T-002 `review`: `src/lib/color/contrast.ts` + test, `src/content/palette.ts` + test, `@theme static` di `globals.css` (palet bawaan Tailwind dibuang), font Newsreader (opsz, italic), Inter, JetBrains Mono lewat `next/font/google`, kelas `.display`, `.statement`, `.label`, `.grain`, fokus `currentColor`, halaman uji fondasi di `/`.
-- Aturan kontras hasil ukur ditambahkan ke `docs/product/art-direction.md`.
+- T-002 di-commit `879854e` dan `done`.
+- T-003 `review`: `src/lib/motion/gsap.ts`, `intro-state.ts` (+ test), `boot-script.ts` (+ test), `src/components/motion/smooth-scroll.tsx`, `intro-gate.tsx`, boot script di `<head>`, CSS Lenis, `scrollbar-gutter: stable`, blok reduced motion, `@import "tailwindcss" source("..")`.
+- F-001 dinaikkan ke tier `full` dengan `system-architecture.md`: motion core adalah shared state lintas semua fitur, dan 14 AC tidak muat di batas 80 baris tier lite.
 
 ## Requirement coverage
 
-- AC-001 sampai AC-005: pass (EV-001 sampai EV-005). AC-005 diukur dengan PerformanceObserver, bukan Lighthouse.
-- AC-006 sampai AC-013: belum (T-003, T-004). AC-014: belum (T-005).
+- AC-001 sampai AC-006, AC-008 sampai AC-010: pass (EV-001 sampai EV-008).
+- AC-007: belum, butuh cek manual pemilik di DevTools (langkah di `verification.md`).
+- AC-011 sampai AC-013: T-004. AC-014: T-005.
 
 ## Changed files
 
 | File | Change | State |
 |---|---|---|
-| `src/lib/color/contrast.ts`, `contrast.test.ts` | rasio kontras WCAG | Complete |
-| `src/content/palette.ts`, `palette.test.ts` | token dan pasangan teks yang diizinkan | Complete |
-| `src/app/globals.css`, `layout.tsx`, `page.tsx` | token, font, gaya dasar, halaman uji | Complete |
-| `docs/specs/F-001-fondasi-motion-core/*`, `docs/product/art-direction.md` | status, evidence, aturan kontras | Complete |
+| `src/lib/motion/*` | hub GSAP, state intro, boot script + test | Complete |
+| `src/components/motion/{smooth-scroll,intro-gate}.tsx` | Lenis, kunci scroll, penanda intro | Complete |
+| `src/app/{layout.tsx,globals.css}` | boot script, mount motion, CSS Lenis dan reduced motion | Complete |
+| `docs/specs/F-001-fondasi-motion-core/*` | tier full, system architecture, evidence T-003 | Complete |
 
 ## Commands executed
 
 ```bash
-npm test && npm run test:sdd && npm run lint && npm run typecheck && npm run build
+npm test && npm run test:sdd && npm run lint && npm run typecheck && npm run build && npm run context:validate -- --strict
 ```
 
 Result:
 
 ```text
-tests 10 pass 0 fail; SDD tests 34 pass; eslint no findings; tsc clean; build static 3/3
+tests 17 pass 0 fail; SDD 34 pass; eslint clean; tsc clean; build static 3/3; dev handle absent from .next/static
+Context validation passed: 0 error(s), 0 warning(s); strict
 ```
 
 ## Current implementation state
 
-`/` menampilkan halaman uji fondasi dengan token dan font final. Belum ada Lenis, GSAP, boot script, atau reveal.
+Lenis berjalan dan tersinkron dengan ScrollTrigger; intro dinyatakan selesai saat font siap. Belum ada animasi yang terlihat; reveal teks datang di T-004.
 
 ## Uncommitted work
 
-- Semua perubahan T-002 dan pembaruan dokumen di branch `feat/F-001-fondasi-motion-core`.
+- Semua perubahan T-003 di branch `feat/F-001-fondasi-motion-core`.
 
 ## Blockers
 
-- Tidak ada untuk F-001.
+- Tidak ada. AC-007 menunggu cek manual, tidak memblokir T-004.
 
 ## Decisions made during session
 
-- `@theme static` agar GSAP bisa men-tween warna bab lewat `var(--color-*)` walau utility-nya belum dipakai.
-- JetBrains Mono `preload: false` karena hanya untuk label.
-- Dev server Turbopack sempat menyajikan CSS lama setelah `globals.css` diubah; `rm -rf .next` lalu restart memperbaikinya.
+- Boot script sebagai modul string yang dites di Node, bukan string inline di layout.
+- `completeIntro()` di `intro-gate.tsx` adalah satu-satunya penanda intro selesai; sampul F-002 akan memanggilnya.
+- Handle debug `window.__bookmateMotion` hanya di development; terbukti tidak ada di bundle produksi.
+- Flip dan ScrambleText belum didaftarkan sampai fitur pemakainya masuk.
 
 ## Context updates
 
-- Konfigurasi preview `bookmate-web` (dev, port 3100) dan `bookmate-web-prod` (`next start`, port 3101) ada di `D:\Projects\.claude\launch.json`.
+- Browser pane hanya menjalankan `requestAnimationFrame` untuk tab yang aktif; tutup tab lain dan pilih tab dev sebelum menguji Lenis.
+- Browser pane tidak bisa mengemulasikan `prefers-reduced-motion`.
 
 ## Exact next step
 
-Pemilik review dan commit T-002, set T-002 `done`, lalu `/sdd:task T-003` (hub GSAP, Lenis, state intro, boot script): `src/lib/motion/gsap.ts`, `src/lib/motion/intro-state.ts` + test, `src/components/motion/smooth-scroll.tsx`, `src/app/layout.tsx`, `src/app/globals.css`. Verifikasi: `npm test && npm run lint && npm run typecheck && npm run build`, lalu Browser pane dengan emulasi reduced motion.
+Pemilik cek AC-007 di DevTools dan commit T-003. Setelah itu set T-003 `done` dengan hash commit, lalu `/sdd:task T-004` (reveal teks): `src/components/motion/reveal.tsx` dengan SplitText `mask: "lines"`, `aria: "auto"`, `autoSplit`, hanya menyembunyikan saat `html.js` ada dan motion diizinkan. Verifikasi: `npm test && npm run lint && npm run typecheck && npm run build`, lalu Browser pane dan pemeriksaan aksesibilitas nama judul.
 
 ## Do not do next
 
-- Jangan memakai `ember` sebagai warna teks di atas `paper` atau teks `paper` di atas `ember`.
-- Jangan mengimpor `gsap` langsung di komponen; lewat `src/lib/motion/gsap.ts` (T-003).
+- Jangan membuat instance Lenis atau mengimpor `gsap` langsung di komponen lain.
+- Jangan menyembunyikan konten di CSS tanpa awalan `html.js` dan media `prefers-reduced-motion: no-preference`.
 
 ## Validity
 
-Berlaku sampai 2026-11-15 atau sampai T-003 dimulai.
+Berlaku sampai 2026-11-15 atau sampai T-004 dimulai.
