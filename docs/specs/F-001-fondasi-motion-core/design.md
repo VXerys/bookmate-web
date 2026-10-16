@@ -26,7 +26,7 @@ T-001 selesai: Next 16.4.2, React 19.3, Tailwind v4 lewat `@tailwindcss/turbopac
 
 | Component or path | Change | Responsibility after change |
 |---|---|---|
-| `src/app/globals.css` | `@theme` palet, font, ease; base, `.grain`, fokus, blok reduced motion, CSS Lenis | token dan gaya dasar |
+| `src/app/globals.css` | `@theme static` (palet bawaan Tailwind dibuang, semua token selalu ada di `:root` untuk tween GSAP lewat `var()`), font, ease; base, `.grain`, fokus, blok reduced motion, CSS Lenis | token dan gaya dasar |
 | `src/app/layout.tsx` | `next/font/google` Newsreader, Inter, JetBrains Mono; boot script; `<SmoothScroll/>` | shell root |
 | `src/lib/motion/gsap.ts` | baru: register ScrollTrigger, SplitText, Flip, ScrambleText, `useGSAP`; ekspor `MOTION_OK`, `DESKTOP_MOTION`, `POINTER_FINE`, `EASE_OUT` | satu-satunya pintu masuk GSAP |
 | `src/lib/motion/intro-state.ts` | baru: `finishIntro()`, `whenIntroDone(cb)` | sinyal intro selesai |

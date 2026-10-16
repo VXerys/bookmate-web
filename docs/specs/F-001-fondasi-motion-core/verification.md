@@ -14,62 +14,66 @@ supersedes: null
 
 # Verification: Fondasi dan motion core
 
-Evidence that acceptance criteria hold at a named commit. A claim without a command and an output excerpt is not evidence. Unrun checks are listed, never omitted.
-
 ## Evidence
 
 ### EV-001 — Clean install, lint, dan typecheck
 - command: `npm ci && npm run lint && npm run typecheck`
 - output:
   ```text
-  > bookmate-web@0.1.0 lint
-  > eslint
-  (no findings)
-  Generating route types...
-  ✓ Types generated successfully
+  eslint: no findings; ✓ Types generated successfully; tsc clean
   ```
 - date: 2026-10-16
-- commit: uncommitted (scaffold awal, belum ada commit)
+- commit: fa6aab4
 - covers: [AC-001]
 
 ### EV-002 — Test konten merek
 - command: `npm test`
 - output:
   ```text
-  ✔ Play Store link targets the production package id
-  ✔ brand copy is filled in
-  ℹ tests 2
-  ℹ pass 2
-  ℹ fail 0
+  ✔ Play Store link targets the production package id; ✔ brand copy is filled in; pass 2, fail 0
   ```
 - date: 2026-10-16
-- commit: uncommitted (scaffold awal, belum ada commit)
+- commit: fa6aab4
 - covers: [AC-001, AC-002]
 
 ### EV-003 — Build produksi
 - command: `npm run build`
 - output:
   ```text
-  ✓ Compiled successfully in 37.7s
-  ✓ Generating static pages using 4 workers (3/3) in 5.2s
-  Route (app)
-  ┌ ○ /
-  └ ○ /_not-found
+  ✓ Compiled successfully; ✓ Generating static pages (3/3); ○ / and ○ /_not-found static
   ```
 - date: 2026-10-16
-- commit: uncommitted (scaffold awal, belum ada commit)
+- commit: fa6aab4
 - covers: [AC-001]
+
+### EV-004 — Token, palet, dan kontras (T-002)
+- command: `npm test && npm run lint && npm run typecheck && npm run build`
+- output:
+  ```text
+  ✔ allowed text pairs meet WCAG AA; ✔ @theme matches palette; tests 10 pass 0 fail; eslint clean; tsc clean; build 3/3
+  ```
+- date: 2026-10-16
+- commit: uncommitted on feat/F-001-fondasi-motion-core (base fa6aab4)
+- covers: [AC-001, AC-003, AC-004]
+
+### EV-005 — Computed style dan CLS di browser (T-002)
+- command: `Browser pane: getComputedStyle on next dev; PerformanceObserver layout-shift on next start (375 and 1440 px)`
+- output:
+  ```text
+  9 tokens on :root, no default palette; h1 Newsreader (em italic), body Inter, .label JetBrains Mono; CTA ember/ink; CLS 0 at 375 and 1440 px
+  ```
+- date: 2026-10-16
+- commit: uncommitted on feat/F-001-fondasi-motion-core (base fa6aab4)
+- covers: [AC-003, AC-005]
 
 ## Coverage
 
 | Criterion | Evidence | Result |
 |---|---|---|
-| AC-001 | EV-001, EV-002, EV-003 | pass |
+| AC-001 | EV-001, EV-002, EV-003, EV-004 | pass |
 | AC-002 | EV-002 | pass |
-| AC-003 to AC-013 | none | not_run (T-002 sampai T-005) |
-| AC-014 | none | not_run |
+| AC-003, AC-004 | EV-004, EV-005 | pass |
+| AC-005 | EV-005 | pass (PerformanceObserver di localhost, bukan Lighthouse) |
+| AC-006 to AC-014 | none | not_run (T-003 to T-005; AC-014 butuh PR pertama) |
 
-## Not run
-
-- AC-014: workflow CI baru bisa terbukti setelah repo di-push dan PR pertama dibuka. `npm run test:sdd` lokal lulus (34 dari 34) dan dipanggil di workflow.
-- `npm ci` menampilkan peringatan `allow-scripts` untuk `unrs-resolver` (postinstall tidak dijalankan); lint tetap jalan tanpa temuan. Perlu dicek ulang di CI.
+Not run: Lighthouse (CLS diukur tanpa throttling jaringan; ulangi di F-010). Peringatan `allow-scripts` untuk `unrs-resolver` saat `npm ci` dicek di CI.

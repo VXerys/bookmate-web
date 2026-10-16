@@ -1,7 +1,32 @@
 import type { Metadata, Viewport } from "next";
+import { Inter, JetBrains_Mono, Newsreader } from "next/font/google";
 
+import { palette } from "@/content/palette";
 import { site } from "@/content/site";
 import "./globals.css";
+
+// The app's own serif; opsz lets large display sizes switch to the tighter optical cut.
+const newsreader = Newsreader({
+  variable: "--font-newsreader",
+  subsets: ["latin"],
+  style: ["normal", "italic"],
+  axes: ["opsz"],
+  display: "swap",
+});
+
+const inter = Inter({
+  variable: "--font-inter",
+  subsets: ["latin"],
+  display: "swap",
+});
+
+// Labels only, never above the fold's main text, so it is not worth a preload request.
+const jetbrains = JetBrains_Mono({
+  variable: "--font-jetbrains",
+  subsets: ["latin"],
+  display: "swap",
+  preload: false,
+});
 
 export const metadata: Metadata = {
   title: `${site.name} | Klub baca komunitas`,
@@ -9,13 +34,16 @@ export const metadata: Metadata = {
 };
 
 export const viewport: Viewport = {
-  themeColor: "#fcf9f4",
+  themeColor: palette.paper,
 };
 
 export default function RootLayout({ children }: LayoutProps<"/">) {
   return (
-    <html lang="id">
-      <body>{children}</body>
+    <html lang="id" className={`${newsreader.variable} ${inter.variable} ${jetbrains.variable}`}>
+      <body>
+        <div className="grain" aria-hidden="true" />
+        {children}
+      </body>
     </html>
   );
 }

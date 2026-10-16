@@ -1,6 +1,6 @@
 <!-- GENERATED FILE — DO NOT EDIT. Rendered by `npm run context:render`.
 Source: sdd.config.json, docs/steering/, docs/specs/F-*/, docs/context/ASSUMPTIONS.md, docs/handoff/current.md.
-source_hash: 2adada7da28a43eb6bbefdf6963a5d4d82ac1454623f1bf9ddcc857838463e2a -->
+source_hash: 438a8129b4cb52e865b5001f85b1a66dbb24c904ac4c75009005e6f23a4b77b6 -->
 
 # Brief
 
@@ -10,14 +10,14 @@ Project `BookMate Web`, tier `lite`. Rendered from sdd.config.json, docs/steerin
 
 ## Active
 Feature F-001 — Fondasi dan motion core (`implementing`, docs/specs/F-001-fondasi-motion-core/)
-Task T-001 — Scaffold Next.js, toolchain, CI, dan sumber fakta merek (`review`); requirements: FR-001, FR-006; depends on: none
+Task T-002 — Token desain, font, dan gaya dasar (`review`); requirements: FR-002; depends on: T-001
 
-Scope: `package.json` (stack sama dengan `sechan-portfolio`, `"type": "module"`), `next.config.ts`, `tsconfig.json`, `eslint.config.mjs`, `.gitignore`, `src/app/{layout,page}.tsx`, `src/app/globals.css` minimal, `src/content/site.ts` + test, `.github/workflows/context-integrity.yml`. Dependency `gsap`, `@gsap/react`, `lenis` disetujui pemilik (2026-10-16). Acceptance: AC-001, AC-002, AC-014 (AC-014 baru terbukti di PR pertama). Menunggu commit pertama dan review pemilik.
+Scope: `src/content/palette.ts`, `src/lib/color/contrast.ts` + test, `@theme` di `globals.css`, `next/font/google` (Newsreader dengan sumbu `opsz` dan italic, Inter, JetBrains Mono) di `layout.tsx`, kelas `.display`, `.statement`, `.label`, `.grain`, gaya fokus. Acceptance: AC-003, AC-004, AC-005. Stop jika pasangan warna dari art direction gagal kontras: laporkan, jangan ubah palet diam-diam.
 
 Acceptance criteria:
-- AC-001: Given checkout bersih, when `npm ci`, `npm run lint`, `npm run typecheck`, `npm test`, `npm run build` dijalankan, then semuanya keluar dengan kode 0.
-- AC-002: Given `src/content/site.ts`, when test konten berjalan, then tautan Google Play memakai package id produksi dan semua field merek terisi.
-- AC-014: Given pull request ke `main`, when CI berjalan, then lint, typecheck, test konten, test SDD, build, dan `context:validate --strict` dijalankan dan gagal jika salah satu gagal.
+- AC-003: Given token di `@theme`, when komponen memakai `bg-paper`, `text-ink`, `bg-ember`, `font-serif`, `font-sans`, `font-mono`, then nilai sesuai tabel art direction.
+- AC-004: Given setiap pasangan teks dan latar yang diizinkan, when test kontras berjalan, then rasionya minimal 4,5:1 untuk teks normal dan 3:1 untuk teks besar.
+- AC-005: Given halaman dimuat, when font web selesai dimuat, then CLS di Lighthouse di bawah 0,1.
 
 ## Rules
 Stop conditions:
@@ -46,10 +46,9 @@ None.
 ## Handoff
 Next step:
 
-Pemilik review art direction dan roadmap, lalu commit awal. Setelah itu set T-001 ke `done` dengan hash commit di EV-001 sampai EV-003, dan jalankan `/sdd:task T-002` (token, font, gaya dasar: `src/content/palette.ts`, `src/lib/color/contrast.ts`, `src/app/globals.css`, `src/app/layout.tsx`). Verifikasi: `npm run lint && npm run typecheck && npm test && npm run build`.
+Pemilik review dan commit T-002, set T-002 `done`, lalu `/sdd:task T-003` (hub GSAP, Lenis, state intro, boot script): `src/lib/motion/gsap.ts`, `src/lib/motion/intro-state.ts` + test, `src/components/motion/smooth-scroll.tsx`, `src/app/layout.tsx`, `src/app/globals.css`. Verifikasi: `npm test && npm run lint && npm run typecheck && npm run build`, lalu Browser pane dengan emulasi reduced motion.
 
 ## Other open tasks
-- T-002 — Token desain, font, dan gaya dasar (`planned`)
 - T-003 — Hub GSAP, Lenis, state intro, dan boot script (`planned`)
 - T-004 — Primitive reveal teks (`planned`)
 - T-005 — Integrasi dan verifikasi fondasi (`planned`)
@@ -57,4 +56,4 @@ Pemilik review art direction dan roadmap, lalu commit awal. Setelah itu set T-00
 ## Features
 | Feature | Status | Phase | Done/Total |
 |---|---|---|---|
-| F-001 Fondasi dan motion core | implementing | in_progress | 0/5 |
+| F-001 Fondasi dan motion core | implementing | in_progress | 1/5 |

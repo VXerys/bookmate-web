@@ -19,18 +19,18 @@ This file is the master for task status. `state.yaml`, `BRIEF.md`, and the progr
 ## Tasks
 
 ### T-001 — Scaffold Next.js, toolchain, CI, dan sumber fakta merek
-- status: review
-- requirements: [FR-001, FR-006]
+- status: done
+- requirements: [FR-001]
 - depends_on: []
 - evidence: [EV-001, EV-002, EV-003]
 
-Scope: `package.json` (stack sama dengan `sechan-portfolio`, `"type": "module"`), `next.config.ts`, `tsconfig.json`, `eslint.config.mjs`, `.gitignore`, `src/app/{layout,page}.tsx`, `src/app/globals.css` minimal, `src/content/site.ts` + test, `.github/workflows/context-integrity.yml`. Dependency `gsap`, `@gsap/react`, `lenis` disetujui pemilik (2026-10-16). Acceptance: AC-001, AC-002, AC-014 (AC-014 baru terbukti di PR pertama). Menunggu commit pertama dan review pemilik.
+Scope: `package.json` (stack sama dengan `sechan-portfolio`, `"type": "module"`), `next.config.ts`, `tsconfig.json`, `eslint.config.mjs`, `.gitignore`, `src/app/{layout,page}.tsx`, `src/app/globals.css` minimal, `src/content/site.ts` + test, `.github/workflows/context-integrity.yml`. Dependency `gsap`, `@gsap/react`, `lenis` disetujui pemilik (2026-10-16). Acceptance: AC-001, AC-002. Workflow CI ikut di commit `fa6aab4`; pembuktian AC-014 dipindah ke T-005 karena butuh PR pertama. Disetujui pemilik 2026-10-16.
 
 ### T-002 — Token desain, font, dan gaya dasar
-- status: planned
+- status: review
 - requirements: [FR-002]
 - depends_on: [T-001]
-- evidence: []
+- evidence: [EV-004, EV-005]
 
 Scope: `src/content/palette.ts`, `src/lib/color/contrast.ts` + test, `@theme` di `globals.css`, `next/font/google` (Newsreader dengan sumbu `opsz` dan italic, Inter, JetBrains Mono) di `layout.tsx`, kelas `.display`, `.statement`, `.label`, `.grain`, gaya fokus. Acceptance: AC-003, AC-004, AC-005. Stop jika pasangan warna dari art direction gagal kontras: laporkan, jangan ubah palet diam-diam.
 
@@ -52,11 +52,11 @@ Scope: `src/components/motion/reveal.tsx` (mode `lines` dan `words`), dipakai di
 
 ### T-005 — Integrasi dan verifikasi fondasi
 - status: planned
-- requirements: [FR-001, FR-002, FR-003, FR-004, FR-005]
+- requirements: [FR-001, FR-002, FR-003, FR-004, FR-005, FR-006]
 - depends_on: [T-004]
 - evidence: []
 
-Halaman uji fondasi di `/` memakai token, font, Lenis, dan reveal. Verifikasi di Browser pane pada 360, 768, 1440 px, emulasi reduced motion, dan JavaScript dimatikan; Lighthouse CLS. Semua EV dicatat, handoff diperbarui.
+Halaman uji fondasi di `/` memakai token, font, Lenis, dan reveal. Verifikasi di Browser pane pada 360, 768, 1440 px, emulasi reduced motion, dan JavaScript dimatikan; CLS. AC-014: CI hijau di PR `feat/F-001-fondasi-motion-core` ke `main` (push butuh izin pemilik). Semua EV dicatat, handoff diperbarui.
 
 ## Deferred
 

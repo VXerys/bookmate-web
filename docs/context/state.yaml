@@ -13,10 +13,9 @@ features:
     tasks:
       - id: T-001
         title: Scaffold Next.js, toolchain, CI, dan sumber fakta merek
-        status: review
+        status: done
         requirements:
           - FR-001
-          - FR-006
         depends_on: []
         evidence:
           - EV-001
@@ -24,12 +23,14 @@ features:
           - EV-003
       - id: T-002
         title: Token desain, font, dan gaya dasar
-        status: planned
+        status: review
         requirements:
           - FR-002
         depends_on:
           - T-001
-        evidence: []
+        evidence:
+          - EV-004
+          - EV-005
       - id: T-003
         title: Hub GSAP, Lenis, state intro, dan boot script
         status: planned
@@ -56,12 +57,13 @@ features:
           - FR-003
           - FR-004
           - FR-005
+          - FR-006
         depends_on:
           - T-004
         evidence: []
 active:
   feature_id: F-001
-  task_id: T-001
+  task_id: T-002
 assumptions_open:
   - id: A-001
     feature: null
@@ -85,5 +87,5 @@ assumptions_open:
     feature: null
     title: Analytics yang dipakai
 blockers: []
-generated_at: 2026-10-16T07:41:38.607Z
-source_hash: 2adada7da28a43eb6bbefdf6963a5d4d82ac1454623f1bf9ddcc857838463e2a
+generated_at: 2026-10-16T08:05:24.638Z
+source_hash: 438a8129b4cb52e865b5001f85b1a66dbb24c904ac4c75009005e6f23a4b77b6
