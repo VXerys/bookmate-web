@@ -1,0 +1,89 @@
+# GENERATED FILE. Rendered by `npm run context:render`. Do not edit by hand.
+# Source: sdd.config.json, docs/steering/, docs/specs/F-*/, docs/context/ASSUMPTIONS.md, docs/handoff/current.md.
+
+schema_version: 2
+project: BookMate Web
+tier: lite
+features:
+  - id: F-001
+    title: Fondasi dan motion core
+    status: implementing
+    phase: in_progress
+    spec_path: docs/specs/F-001-fondasi-motion-core
+    tasks:
+      - id: T-001
+        title: Scaffold Next.js, toolchain, CI, dan sumber fakta merek
+        status: review
+        requirements:
+          - FR-001
+          - FR-006
+        depends_on: []
+        evidence:
+          - EV-001
+          - EV-002
+          - EV-003
+      - id: T-002
+        title: Token desain, font, dan gaya dasar
+        status: planned
+        requirements:
+          - FR-002
+        depends_on:
+          - T-001
+        evidence: []
+      - id: T-003
+        title: Hub GSAP, Lenis, state intro, dan boot script
+        status: planned
+        requirements:
+          - FR-003
+          - FR-004
+        depends_on:
+          - T-002
+        evidence: []
+      - id: T-004
+        title: Primitive reveal teks
+        status: planned
+        requirements:
+          - FR-005
+        depends_on:
+          - T-003
+        evidence: []
+      - id: T-005
+        title: Integrasi dan verifikasi fondasi
+        status: planned
+        requirements:
+          - FR-001
+          - FR-002
+          - FR-003
+          - FR-004
+          - FR-005
+        depends_on:
+          - T-004
+        evidence: []
+active:
+  feature_id: F-001
+  task_id: T-001
+assumptions_open:
+  - id: A-001
+    feature: null
+    title: Nama merek tetap BookMate selama pembangunan situs
+  - id: A-002
+    feature: null
+    title: Screenshot asli app tersedia
+  - id: A-003
+    feature: null
+    title: Lencana tarot boleh dipakai di web, dan daftar nama serta syaratnya tersedia
+  - id: A-004
+    feature: null
+    title: Hosting di Vercel dengan domain yang belum ditentukan
+  - id: A-005
+    feature: null
+    title: Isi kebijakan privasi dan prosedur hapus akun disediakan pemilik
+  - id: A-006
+    feature: null
+    title: Tautan komunitas WhatsApp resmi boleh ditampilkan publik
+  - id: A-007
+    feature: null
+    title: Analytics yang dipakai
+blockers: []
+generated_at: 2026-10-16T07:41:38.607Z
+source_hash: 2adada7da28a43eb6bbefdf6963a5d4d82ac1454623f1bf9ddcc857838463e2a
