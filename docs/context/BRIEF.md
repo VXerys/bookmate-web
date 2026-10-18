@@ -1,6 +1,6 @@
 <!-- GENERATED FILE — DO NOT EDIT. Rendered by `npm run context:render`.
 Source: sdd.config.json, docs/steering/, docs/specs/F-*/, docs/context/ASSUMPTIONS.md, docs/handoff/current.md.
-source_hash: e0c4458c8427a883871e6071a0a6e39abfc87c2025179086b78a6978284d7657 -->
+source_hash: a681eb625f753c6249024f0c1d8c3b3f8e85f35a2edc19f6aecff14f44629e1a -->
 
 # Brief
 
@@ -10,11 +10,11 @@ Project `BookMate Web`, tier `lite`. Rendered from sdd.config.json, docs/steerin
 
 ## Active
 Feature F-001 — Fondasi dan motion core (`implementing`, docs/specs/F-001-fondasi-motion-core/)
-Task T-005 — Integrasi dan verifikasi fondasi (`in_progress`); requirements: FR-001, FR-002, FR-003, FR-004, FR-005, FR-006; depends on: T-004
+Task T-005 — Integrasi dan verifikasi fondasi (`review`); requirements: FR-001, FR-002, FR-003, FR-004, FR-005, FR-006; depends on: T-004
 
 Halaman uji fondasi di `/` memakai token, font, Lenis, dan reveal. Verifikasi di Browser pane pada 360, 768, 1440 px, emulasi reduced motion, dan JavaScript dimatikan; CLS. AC-014: CI hijau di PR `feat/F-001-fondasi-motion-core` ke `main` (push butuh izin pemilik). Semua EV dicatat, handoff diperbarui.
 
-Progres 2026-10-18: clean install, semua cek, layout di tiga lebar, dan baseline bundle tercatat di EV-011. Sisa: lihat kelancaran Lenis dan Reveal serta CLS dengan Browser pane yang terlihat; cek manual AC-007 dan AC-013 oleh pemilik; repo GitHub, push, dan PR untuk AC-014 setelah pemilik mengizinkan.
+Progres 2026-10-18: clean install, semua cek, layout di tiga lebar, dan baseline bundle tercatat di EV-011. Repo private `VXerys/bookmate-web` dibuat dan [PR #1](https://github.com/VXerys/bookmate-web/pull/1) dibuka atas izin pemilik; CI hijau (EV-012, AC-014). Status `review`: semua cek yang bisa dijalankan agent sudah tercatat. Yang tersisa adalah cek manual pemilik, yaitu reduced motion (AC-007, AC-013) dan kesan gerak Lenis/Reveal serta CLS di browser yang terlihat; langkahnya ada di `verification.md`.
 
 Acceptance criteria:
 - AC-007: Given `prefers-reduced-motion: reduce`, when halaman dimuat, then Lenis tidak dibuat dan scroll native berjalan.
@@ -48,7 +48,7 @@ None.
 ## Handoff
 Next step:
 
-Dengan sesi terbuka dan Browser pane terlihat: muat `http://localhost:3101/`, lihat reveal judul dan paragraf, scroll dengan wheel untuk menilai Lenis, ukur CLS dengan PerformanceObserver di 375 dan 1440 px, catat sebagai EV-012. Lalu, setelah izin pemilik, buat repo GitHub, push `main` dan `feat/F-001-fondasi-motion-core`, buka PR, dan catat CI sebagai bukti AC-014.
+Pemilik membuka `http://localhost:3101/` di Chrome: nilai reveal dan scroll Lenis di 1440 px dan mode ponsel, lalu emulasikan `prefers-reduced-motion: reduce` untuk AC-007 dan AC-013. Jika lolos, set T-005 `done`, F-001 `implemented`, merge PR #1 (atas keputusan pemilik), lalu mulai F-002 (shell global) dengan membuat `docs/specs/F-002-shell-global/`.
 
 ## Other open tasks
 None.

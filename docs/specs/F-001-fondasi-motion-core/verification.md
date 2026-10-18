@@ -147,6 +147,19 @@ supersedes: null
 - commit: uncommitted on feat/F-001-fondasi-motion-core (base 3f9a8db)
 - covers: [AC-001, AC-003]
 
+### EV-012 — CI di PR pertama (T-005)
+- command: `gh run view 39099418106 --repo VXerys/bookmate-web (workflow CI on PR #1, feat/F-001-fondasi-motion-core -> main)`
+- output:
+  ```text
+  verify: success — Install, Lint, Typecheck, Test (content), Test (SDD tooling), Build, Validate context all success
+  tests 20 pass 0 fail; tests 34 pass 0 fail; ✓ Generating static pages (3/3)
+  Context validation passed: 0 error(s), 0 warning(s); 61 Markdown files, 1 feature(s), strict.
+  no allow-scripts warning in the CI install log; push run 39099370400 on main (fa6aab4) also success
+  ```
+- date: 2026-10-18
+- commit: 1ab19ce
+- covers: [AC-014]
+
 ## Coverage
 
 | Criterion | Evidence | Result |
@@ -162,12 +175,11 @@ supersedes: null
 | AC-011 | EV-010 | pass (logika tween dan trigger; ticker digerakkan manual, kelancaran visual belum dilihat) |
 | AC-012 | EV-009, EV-010 | pass (cek DOM yang melewati aria-hidden; screen reader nyata belum dijalankan) |
 | AC-013 | none | not_run (lihat di bawah) |
-| AC-014 | none | not_run (T-005, butuh PR pertama) |
+| AC-014 | EV-012 | pass ([PR #1](https://github.com/VXerys/bookmate-web/pull/1)) |
 
 ## Not run
 
 - AC-007 dan AC-013: Browser pane tidak bisa mengemulasikan `prefers-reduced-motion`, dan mengubah pengaturan animasi Windows adalah perubahan sistem. Cek manual oleh pemilik: Chrome DevTools > Rendering > Emulate CSS media feature `prefers-reduced-motion: reduce`, muat ulang `/`, lalu pastikan `document.documentElement.classList.contains("lenis")` bernilai `false`, scroll terasa native, dan semua judul serta paragraf langsung terlihat tanpa animasi. Secara kode, `SmoothScroll` keluar sebelum `new Lenis`, `Reveal` hanya memasang efek di cabang `MOTION_OK`, dan aturan CSS penyembunyi hanya berlaku di media `no-preference`.
-- Kelancaran visual Reveal dan Lenis (frame rate, kesan gerak) dan CLS setelah Reveal ditambahkan: belum, karena sampai 2026-10-18 sesi tidak terdeteksi terbuka di jendela sehingga Browser pane tersembunyi dan `requestAnimationFrame` berhenti (0 frame dalam 500 ms). Tetap jadi syarat penutupan T-005.
+- Kelancaran visual Reveal dan Lenis (frame rate, kesan gerak) dan CLS setelah Reveal ditambahkan: belum. Sampai 2026-10-18 app tetap melaporkan sesi tidak terbuka di jendela; `requestAnimationFrame` sempat jalan sekali (31 frame dalam 500 ms) lalu berhenti lagi di tengah pengukuran, jadi tidak ada angka yang layak dicatat. Cek oleh pemilik: buka `http://localhost:3101/` (server `next start`) di browser biasa, muat ulang di 1440 px dan di mode ponsel DevTools, lalu nilai reveal judul dan paragraf serta scroll wheel; DevTools Performance boleh dipakai untuk melihat frame yang jatuh.
 - Screen reader nyata (NVDA atau TalkBack) belum dijalankan; dijadwalkan di F-010.
 - Lighthouse belum dijalankan; CLS diukur dengan PerformanceObserver tanpa throttling jaringan. Ulangi di F-010.
-- Peringatan `allow-scripts` untuk `unrs-resolver` saat `npm ci`: cek di CI.

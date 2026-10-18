@@ -25,14 +25,15 @@ Commit T-004 dan tandai selesai, lalu kerjakan T-005: integrasi dan verifikasi f
 ## Completed
 
 - T-004 di-commit `3f9a8db` dan `done`.
-- T-005 (masih `in_progress`): clean install, lint, typecheck, test 20/20, test SDD 34/34, build, layout di 1440, 768, 360 px tanpa overflow, CTA 223 x 51 px, baseline bundle JS 223,7 KB gzip dan CSS 4,4 KB gzip (EV-011).
+- T-005 (`review`): clean install, lint, typecheck, test 20/20, test SDD 34/34, build, layout di 1440, 768, 360 px tanpa overflow, CTA 223 x 51 px, baseline bundle JS 223,7 KB gzip dan CSS 4,4 KB gzip (EV-011).
+- Repo private `VXerys/bookmate-web` dibuat; `main` dan `feat/F-001-fondasi-motion-core` di-push; [PR #1](https://github.com/VXerys/bookmate-web/pull/1) dibuka; CI hijau di run 39099418106 (EV-012, AC-014).
 
 ## Requirement coverage
 
 - AC-001 sampai AC-006, AC-008 sampai AC-012: pass.
+- AC-014: pass (EV-012).
 - AC-007, AC-013: cek manual pemilik di DevTools.
-- AC-014: butuh repo GitHub, push, dan PR.
-- Kelancaran Lenis dan Reveal serta CLS setelah Reveal: belum, pane tersembunyi.
+- Kelancaran Lenis dan Reveal serta CLS setelah Reveal: belum; rAF di pane tidak stabil karena app tidak mendeteksi sesi di jendela.
 
 ## Changed files
 
@@ -62,8 +63,7 @@ Fondasi lengkap secara kode: token, font, Lenis, state intro, boot script, Revea
 
 ## Blockers
 
-- Browser pane tersembunyi: app melaporkan sesi ini tidak terbuka di jendela mana pun, jadi `requestAnimationFrame` berhenti dan cek visual tidak bisa jujur.
-- AC-014 menunggu izin pemilik untuk membuat repo GitHub, push, dan membuka PR.
+- Browser pane tersembunyi: app melaporkan sesi ini tidak terbuka di jendela mana pun, jadi `requestAnimationFrame` berhenti dan cek visual tidak bisa jujur. Cek visual dialihkan ke pemilik.
 
 ## Decisions made during session
 
@@ -76,12 +76,12 @@ Fondasi lengkap secara kode: token, font, Lenis, state intro, boot script, Revea
 
 ## Exact next step
 
-Dengan sesi terbuka dan Browser pane terlihat: muat `http://localhost:3101/`, lihat reveal judul dan paragraf, scroll dengan wheel untuk menilai Lenis, ukur CLS dengan PerformanceObserver di 375 dan 1440 px, catat sebagai EV-012. Lalu, setelah izin pemilik, buat repo GitHub, push `main` dan `feat/F-001-fondasi-motion-core`, buka PR, dan catat CI sebagai bukti AC-014.
+Pemilik membuka `http://localhost:3101/` di Chrome: nilai reveal dan scroll Lenis di 1440 px dan mode ponsel, lalu emulasikan `prefers-reduced-motion: reduce` untuk AC-007 dan AC-013. Jika lolos, set T-005 `done`, F-001 `implemented`, merge PR #1 (atas keputusan pemilik), lalu mulai F-002 (shell global) dengan membuat `docs/specs/F-002-shell-global/`.
 
 ## Do not do next
 
 - Jangan menilai kelancaran animasi dari pane yang tersembunyi.
-- Jangan push atau membuat repo tanpa izin pemilik.
+- Jangan merge PR #1 atau mengaktifkan auto-merge tanpa keputusan pemilik.
 
 ## Validity
 

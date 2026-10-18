@@ -55,14 +55,14 @@ Scope: `src/components/motion/reveal.tsx` (mode `lines` dan `words`), dipakai di
 Hasil: `src/lib/motion/reveal-strategy.ts` + test memilih nama aksesibel (heading lewat `aria-label`, selain heading lewat salinan `sr-only` yang dibuat saat split, bukan di HTML server); konten dengan tautan atau kontrol hanya di-fade. Split dibuat setelah `whenIntroDone` agar baris diukur dengan font final. CSS menyembunyikan `[data-reveal]` hanya di bawah `html.js` dan media `no-preference` sampai `data-reveal-ready`. Temuan ikut diperbaiki: React memperingatkan tag `<script>` boot di dev; diganti `src/components/site/inline-script.tsx` (pola dari guide Next 16 "preventing flash before hydration"). Handle dev kini juga mengekspos `gsap` untuk menggerakkan ticker saat pane tersembunyi. AC-013 menunggu cek manual pemilik bersama AC-007.
 
 ### T-005 — Integrasi dan verifikasi fondasi
-- status: in_progress
+- status: review
 - requirements: [FR-001, FR-002, FR-003, FR-004, FR-005, FR-006]
 - depends_on: [T-004]
-- evidence: [EV-011]
+- evidence: [EV-011, EV-012]
 
 Halaman uji fondasi di `/` memakai token, font, Lenis, dan reveal. Verifikasi di Browser pane pada 360, 768, 1440 px, emulasi reduced motion, dan JavaScript dimatikan; CLS. AC-014: CI hijau di PR `feat/F-001-fondasi-motion-core` ke `main` (push butuh izin pemilik). Semua EV dicatat, handoff diperbarui.
 
-Progres 2026-10-18: clean install, semua cek, layout di tiga lebar, dan baseline bundle tercatat di EV-011. Sisa: lihat kelancaran Lenis dan Reveal serta CLS dengan Browser pane yang terlihat; cek manual AC-007 dan AC-013 oleh pemilik; repo GitHub, push, dan PR untuk AC-014 setelah pemilik mengizinkan.
+Progres 2026-10-18: clean install, semua cek, layout di tiga lebar, dan baseline bundle tercatat di EV-011. Repo private `VXerys/bookmate-web` dibuat dan [PR #1](https://github.com/VXerys/bookmate-web/pull/1) dibuka atas izin pemilik; CI hijau (EV-012, AC-014). Status `review`: semua cek yang bisa dijalankan agent sudah tercatat. Yang tersisa adalah cek manual pemilik, yaitu reduced motion (AC-007, AC-013) dan kesan gerak Lenis/Reveal serta CLS di browser yang terlihat; langkahnya ada di `verification.md`.
 
 ## Deferred
 
