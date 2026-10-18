@@ -2,7 +2,7 @@
 id: F-002
 title: "Shell global: sampul, header, slice transition, menu, cursor, footer"
 type: requirements
-status: approved
+status: implementing
 tier: full
 owner: "M Sechan Alfarisi"
 created: 2026-10-18
@@ -61,6 +61,7 @@ Navigasi antar bab dari header, menu, atau tautan internal harus memakai transis
 - AC-009: Given motion diizinkan, when pengguna mengaktifkan tautan ke `#id` sebuah section, then 5 irisan vertikal menutup layar berurutan, label bab tujuan terlihat, halaman melompat ke target saat tertutup, lalu irisan membuka.
 - AC-010: Given transisi selesai atau reduced motion, when target tercapai, then fokus pindah ke heading section target dan URL hash berubah ke `#id` tanpa memicu lompatan kedua dari browser.
 - AC-011: Given transisi sedang berjalan, when tautan lain diaktifkan, then klik kedua diabaikan sampai transisi selesai.
+- AC-020: Given dua overlay memegang kunci scroll (contoh menu lalu slice, EC-001), when overlay pertama selesai lebih dulu, then scroll tetap terkunci sampai pemegang terakhir melepas kuncinya.
 
 ### FR-004 — Menu mobile
 

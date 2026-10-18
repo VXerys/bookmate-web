@@ -34,7 +34,7 @@ T-001 selesai: Next 16.4.2, React 19.3, Tailwind v4 lewat `@tailwindcss/turbopac
 | `src/components/motion/intro-gate.tsx` | baru: `completeIntro()` (set `data-intro="done"`, refresh, `finishIntro`) dan `IntroGate` (selesai saat `fonts.ready`) | penanda intro sampai sampul F-002 |
 | `src/lib/color/contrast.ts` | baru: rasio kontras WCAG murni | dipakai test token |
 | `src/content/palette.ts` | baru: hex token + pasangan teks/latar yang diizinkan | sumber data test kontras |
-| `src/components/motion/smooth-scroll.tsx` | baru: Lenis singleton, `setScrollLocked`, `scrollToTarget`, `jumpToTarget` | smooth scroll |
+| `src/components/motion/smooth-scroll.tsx` | baru: Lenis singleton, `setScrollLocked` (diganti `lockScroll`/`unlockScroll` per pemilik di F-002 T-001), `scrollToTarget`, `jumpToTarget` | smooth scroll |
 | `src/components/motion/reveal.tsx` | baru: SplitText `mask: "lines"`, `autoSplit`, dibuat setelah `whenIntroDone`; mode `words` dan `lines` | reveal judul dan paragraf |
 | `src/lib/motion/reveal-strategy.ts` | baru: `accessibleCopyFor(tag)` (`label` untuk heading, `duplicate` selain itu), `INTERACTIVE_SELECTOR` | aturan aksesibilitas reveal, dites |
 | `src/components/site/inline-script.tsx` | baru: script `text/javascript` di server, `text/plain` di klien | boot script tanpa peringatan React |

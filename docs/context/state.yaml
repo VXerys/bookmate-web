@@ -70,19 +70,21 @@ features:
           - EV-012
   - id: F-002
     title: "Shell global: sampul, header, slice transition, menu, cursor, footer"
-    status: approved
-    phase: not_started
+    status: implementing
+    phase: in_progress
     spec_path: docs/specs/F-002-shell-global
     tasks:
       - id: T-001
         title: Kunci scroll per pemilik
-        status: planned
+        status: review
         requirements:
           - FR-001
           - FR-003
           - FR-004
         depends_on: []
-        evidence: []
+        evidence:
+          - EV-001
+          - EV-002
       - id: T-002
         title: Model navigasi dan section stub
         status: planned
@@ -182,5 +184,5 @@ assumptions_open:
     feature: null
     title: Analytics yang dipakai
 blockers: []
-generated_at: 2026-10-18T06:28:52.414Z
-source_hash: 5c7c9acd67d6741343fe1a3b4a99ac72c0fe8136838cd19b86d4297db6c8a94d
+generated_at: 2026-10-18T06:41:16.013Z
+source_hash: 2feebab76df5e916e3f41649d3bf64090052e245cea27c5589344b1980c92368

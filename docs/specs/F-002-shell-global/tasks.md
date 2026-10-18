@@ -2,7 +2,7 @@
 id: F-002
 title: "Shell global: sampul, header, slice transition, menu, cursor, footer"
 type: tasks
-status: approved
+status: implementing
 tier: full
 owner: "M Sechan Alfarisi"
 created: 2026-10-18
@@ -21,12 +21,14 @@ Branch `feat/F-002-shell-global`, dibuat dari `feat/F-001-fondasi-motion-core` k
 ## Tasks
 
 ### T-001 — Kunci scroll per pemilik
-- status: planned
+- status: review
 - requirements: [FR-001, FR-003, FR-004]
 - depends_on: []
-- evidence: []
+- evidence: [EV-001, EV-002]
 
-`src/lib/motion/scroll-lock.ts` + test, `smooth-scroll.tsx` memakai `lockScroll(owner)` dan `unlockScroll(owner)`; handle dev ikut diperbarui. Acceptance: EC-001. Tidak mengubah perilaku Lenis lainnya.
+`src/lib/motion/scroll-lock.ts` + test, `smooth-scroll.tsx` memakai `lockScroll(owner)` dan `unlockScroll(owner)`; handle dev ikut diperbarui. Acceptance: EC-001, diformalkan sebagai AC-020 agar bisa dilacak oleh evidence. Tidak mengubah perilaku Lenis lainnya.
+
+Hasil: `ScrollLockOwner = "sampul" | "menu" | "slice"` mencegah salah ketik pemilik; listener hanya dipanggil saat transisi terkunci/terbuka, jadi Lenis tidak di-stop/start berulang. Dokumen yang menggambarkan keadaan sekarang ikut diperbarui (`docs/architecture/overview.md`, design dan arsitektur F-001).
 
 ### T-002 — Model navigasi dan section stub
 - status: planned

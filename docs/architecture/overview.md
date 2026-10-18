@@ -66,7 +66,7 @@ Tidak ada siklus. `content` tidak mengimpor komponen.
 
 | State | Owner | Source of truth | Mutation path | Invalidation or sync |
 |---|---|---|---|---|
-| Posisi dan kunci scroll | `smooth-scroll.tsx` | instance Lenis | `setScrollLocked`, `scrollToTarget`, `jumpToTarget` | `ScrollTrigger.update` per scroll |
+| Posisi dan kunci scroll | `smooth-scroll.tsx` (kunci: registry `src/lib/motion/scroll-lock.ts`) | instance Lenis; himpunan pemilik kunci | `lockScroll(owner)`, `unlockScroll(owner)`, `scrollToTarget`, `jumpToTarget` | `ScrollTrigger.update` per scroll; scroll terkunci selama ada pemilik |
 | Intro selesai | `src/lib/motion/intro-state.ts` | flag modul | `finishIntro()` | `ScrollTrigger.refresh()` |
 | Intro sudah diputar di tab ini | sampul (F-002) | `sessionStorage` | set setelah intro | dibaca saat boot |
 

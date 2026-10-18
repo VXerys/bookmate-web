@@ -3,7 +3,7 @@ status: active
 owner: M Sechan Alfarisi
 session_date: 2026-10-18
 branch: feat/F-002-shell-global
-base_commit: 50f05c2
+base_commit: 816573d
 current_commit: uncommitted
 feature_id: F-002
 task_id: T-001
@@ -16,75 +16,76 @@ Current coding session delta. It does not replace product docs, architecture, AD
 
 ## Session objective
 
-Lanjut setelah PR #1: tulis spec F-002 (shell global) sambil F-001 T-005 menunggu cek manual pemilik.
+Spec F-002 disetujui pemilik: commit spec, set `approved` lalu `implementing`, dan kerjakan T-001 (kunci scroll per pemilik).
 
 ## Context used
 
-- `docs/product/art-direction.md` (Sampul, katalog dan aturan motion), `docs/product/roadmap.md` (M1)
-- `docs/specs/F-001-fondasi-motion-core/{design,system-architecture}.md`, `src/components/motion/smooth-scroll.tsx`
+- `docs/specs/F-002-shell-global/{requirements,system-architecture,design,tasks}.md`
+- `src/components/motion/smooth-scroll.tsx`
 
 ## Completed
 
-- Branch `feat/F-002-shell-global` dibuat dari `50f05c2` (ujung branch F-001, karena PR #1 belum di-merge).
-- Spec F-002 tier full: `requirements.md` (6 FR, 19 AC, 5 EC, 3 NFR), `system-architecture.md` (kunci scroll per pemilik, sesi sampul, fokus setelah navigasi), `design.md`, `tasks.md` (T-001 sampai T-009, semua `planned`), `verification.md` (kosong).
-- Registry dan feature map PRD: F-002 `review`.
+- Spec F-002 `approved` dan di-commit `816573d`; lalu semua file spec `implementing`.
+- T-001 `review`: `src/lib/motion/scroll-lock.ts` + 5 unit test, `smooth-scroll.tsx` memakai `lockScroll(owner)` dan `unlockScroll(owner)` (`ScrollLockOwner = "sampul" | "menu" | "slice"`), handle dev diperbarui, `setScrollLocked` dihapus.
+- EC-001 diformalkan sebagai AC-020 di FR-003 agar evidence bisa menunjuk AC.
+- Dokumen keadaan sekarang diperbarui: `docs/architecture/overview.md`, design dan arsitektur F-001.
 
 ## Requirement coverage
 
-- F-002: belum ada; implementasi menunggu persetujuan spec.
-- F-001: T-005 `review`; AC-007, AC-013, dan kesan gerak menunggu cek manual pemilik (langkah di `docs/specs/F-001-fondasi-motion-core/verification.md`).
+- AC-020: pass di tingkat registry dan penerapan (EV-001, EV-002); alur end-to-end menu lalu slice dicek di T-006.
+- F-001: T-005 masih `review`, menunggu cek manual pemilik.
 
 ## Changed files
 
 | File | Change | State |
 |---|---|---|
-| `docs/specs/F-002-shell-global/*` | spec baru | Complete, status review |
-| `docs/specs/_index.md`, `docs/product/prd.md` | F-002 ke `review` | Complete |
+| `src/lib/motion/scroll-lock.ts`, `.test.ts` | registry kunci per pemilik | Complete |
+| `src/components/motion/smooth-scroll.tsx` | `lockScroll`, `unlockScroll`, handle dev | Complete |
+| `docs/specs/F-002-shell-global/*`, `docs/architecture/overview.md`, `docs/specs/F-001-fondasi-motion-core/{design,system-architecture}.md` | status, AC-020, evidence, API baru | Complete |
 
 ## Commands executed
 
 ```bash
-npm run context:render && npm run context:validate -- --strict
+npm test && npm run test:sdd && npm run lint && npm run typecheck && npm run build && npm run context:validate -- --strict
 ```
 
 Result:
 
 ```text
+tests 25 pass; SDD 34 pass; lint exit 0; typecheck exit 0; build exit 0; dev handle absent from .next/static
 Context validation passed: 0 error(s), 0 warning(s); 66 Markdown files, 2 feature(s), strict.
 ```
 
 ## Current implementation state
 
-Kode sama dengan PR #1. Belum ada kode F-002.
+Kunci scroll siap dipakai sampul, menu, dan slice. Belum ada komponen shell.
 
 ## Uncommitted work
 
-- Spec F-002 dan pembaruan registry di branch `feat/F-002-shell-global`.
+- T-001 dan pembaruan dokumen di branch `feat/F-002-shell-global`.
 
 ## Blockers
 
-- F-002: persetujuan spec pemilik.
-- F-001: hasil cek manual reduced motion dan kesan gerak. Browser pane sesi ini tetap tersembunyi, jadi agent tidak bisa menilainya.
+- Tidak ada untuk F-002. F-001 T-005 menunggu cek manual pemilik.
 
 ## Decisions made during session
 
-- Kunci scroll F-001 (`setScrollLocked(boolean)`) akan diganti kunci per pemilik (T-001 F-002), karena sampul, menu, dan slice bisa bertumpuk.
-- Sampul diputar sekali per tab; keputusannya di boot script agar tidak berkedip.
-- `intro-gate.tsx` akan digantikan `sampul.tsx` sebagai satu-satunya pemanggil `completeIntro()`.
+- AC-020 ditambahkan sebagai klarifikasi EC-001, bukan perubahan scope.
+- Server produksi dihentikan sebelum `next build`, karena build menulis ulang `.next`.
 
 ## Context updates
 
-- Validasi harus dicek lewat exit code, bukan `| tail`, sebelum commit; sebelumnya satu commit lolos dengan validasi gagal (diperbaiki di `50f05c2`).
+- Dev server `bookmate-web` (port 3100) sedang berjalan; server produksi port 3101 dihentikan.
 
 ## Exact next step
 
-Setelah pemilik menyetujui spec F-002: set status spec F-002 ke `approved` lalu `implementing`, commit spec, dan kerjakan T-001 (`src/lib/motion/scroll-lock.ts` + test, `smooth-scroll.tsx`). Verifikasi: `npm test && npm run lint && npm run typecheck && npm run build`.
+Pemilik commit T-001 dan set `done` dengan hash. Lalu kerjakan T-002 (`src/content/navigation.ts` + test, section stub ber-id di `src/app/page.tsx`) dan T-003 (sampul + keputusan sesi di boot script). Verifikasi: `npm test && npm run lint && npm run typecheck && npm run build`, cek exit code satu per satu.
 
 ## Do not do next
 
-- Jangan mulai kode F-002 sebelum spec disetujui.
-- Jangan merge PR #1 tanpa keputusan pemilik.
+- Jangan memanggil `lockScroll` tanpa `unlockScroll` di cleanup unmount.
+- Jangan menjalankan `npm ci` atau `next build` saat server yang memakai `.next` atau `node_modules` sedang hidup.
 
 ## Validity
 
-Berlaku sampai 2026-11-17 atau sampai T-001 F-002 dimulai.
+Berlaku sampai 2026-11-17 atau sampai T-002 dimulai.

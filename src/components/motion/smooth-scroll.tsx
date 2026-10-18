@@ -5,18 +5,28 @@ import { useEffect } from "react";
 
 import { gsap, MOTION_OK, ScrollTrigger } from "@/lib/motion/gsap";
 import { whenIntroDone } from "@/lib/motion/intro-state";
+import { createScrollLock } from "@/lib/motion/scroll-lock";
+
+export type ScrollLockOwner = "sampul" | "menu" | "slice";
 
 let instance: Lenis | null = null;
-let lockedBeforeStart = false;
+const scrollLock = createScrollLock();
 
-// The sampul (F-002) can ask for a lock before Lenis exists, so the request is remembered and applied on start.
 // overflow: hidden also blocks keyboard and native scrolling when Lenis never starts (reduced motion).
-export function setScrollLocked(locked: boolean) {
-  lockedBeforeStart = locked;
+// A lock taken before Lenis exists (the sampul mounts first) is applied when Lenis starts, via isLocked().
+scrollLock.subscribe((locked) => {
   document.documentElement.style.overflow = locked ? "hidden" : "";
   if (!instance) return;
   if (locked) instance.stop();
   else instance.start();
+});
+
+export function lockScroll(owner: ScrollLockOwner) {
+  scrollLock.lock(owner);
+}
+
+export function unlockScroll(owner: ScrollLockOwner) {
+  scrollLock.unlock(owner);
 }
 
 export function scrollToTarget(target: string | HTMLElement | number) {
@@ -45,7 +55,7 @@ export function SmoothScroll() {
 
     const lenis = new Lenis({ lerp: 0.09, smoothWheel: true });
     instance = lenis;
-    if (lockedBeforeStart) lenis.stop();
+    if (scrollLock.isLocked()) lenis.stop();
     lenis.on("scroll", ScrollTrigger.update);
     const tick = (time: number) => lenis.raf(time * 1000);
     gsap.ticker.add(tick);
@@ -57,7 +67,7 @@ export function SmoothScroll() {
     // gsap.ticker by hand when the pane is hidden and requestAnimationFrame is paused.
     // The NODE_ENV check is replaced at build time, so production bundles drop this branch.
     if (process.env.NODE_ENV === "development") {
-      Object.assign(window, { __bookmateMotion: { gsap, lenis, setScrollLocked, ScrollTrigger } });
+      Object.assign(window, { __bookmateMotion: { gsap, lenis, lockScroll, unlockScroll, scrollLock, ScrollTrigger } });
     }
 
     return () => {

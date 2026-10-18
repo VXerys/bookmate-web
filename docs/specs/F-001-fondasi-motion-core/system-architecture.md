@@ -60,7 +60,7 @@ Invarian: hanya `completeIntro()` yang menyatakan intro selesai; hanya `smooth-s
 
 ```text
 Muat halaman: boot script -> html.js + scrollRestoration manual -> hidrasi -> SmoothScroll (jika MOTION_OK) -> fonts.ready -> completeIntro -> refresh -> lagSmoothing(0)
-Kunci scroll: setScrollLocked(true) -> overflow hidden + lenis.stop -> setScrollLocked(false) -> overflow kosong + lenis.start
+Kunci scroll (F-001): setScrollLocked(true) -> overflow hidden + lenis.stop -> setScrollLocked(false) -> overflow kosong + lenis.start; diganti kunci per pemilik di F-002 T-001
 Gagal skrip: boot script -> 6 s tanpa data-intro="done" -> html.js dilepas -> konten terlihat tanpa animasi
 Reduced motion: SmoothScroll keluar sebelum new Lenis -> scroll native; efek memakai cabang state akhir
 ```
