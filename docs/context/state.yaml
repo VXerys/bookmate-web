@@ -45,7 +45,7 @@ features:
           - EV-008
       - id: T-004
         title: Primitive reveal teks
-        status: review
+        status: done
         requirements:
           - FR-005
         depends_on:
@@ -55,7 +55,7 @@ features:
           - EV-010
       - id: T-005
         title: Integrasi dan verifikasi fondasi
-        status: planned
+        status: in_progress
         requirements:
           - FR-001
           - FR-002
@@ -65,10 +65,11 @@ features:
           - FR-006
         depends_on:
           - T-004
-        evidence: []
+        evidence:
+          - EV-011
 active:
   feature_id: F-001
-  task_id: T-004
+  task_id: T-005
 assumptions_open:
   - id: A-001
     feature: null
@@ -92,5 +93,5 @@ assumptions_open:
     feature: null
     title: Analytics yang dipakai
 blockers: []
-generated_at: 2026-10-16T09:00:07.966Z
-source_hash: f644f740bddf16720cdd75c1d31f3366899eaaf57d380ef3a690313d7ad66e84
+generated_at: 2026-10-18T05:03:52.093Z
+source_hash: e0c4458c8427a883871e6071a0a6e39abfc87c2025179086b78a6978284d7657

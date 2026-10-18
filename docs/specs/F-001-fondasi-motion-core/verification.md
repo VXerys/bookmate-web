@@ -6,8 +6,8 @@ status: implementing
 tier: full
 owner: "M Sechan Alfarisi"
 created: 2026-10-16
-last_updated: 2026-10-16
-last_verified: 2026-10-16
+last_updated: 2026-10-18
+last_verified: 2026-10-18
 requirements: [FR-001, FR-002, FR-003, FR-004, FR-005, FR-006]
 supersedes: null
 ---
@@ -116,7 +116,7 @@ supersedes: null
   prerendered HTML: 0 sr-only copies (text appears once), boot script emitted as <script type="text/javascript">
   ```
 - date: 2026-10-16
-- commit: uncommitted on feat/F-001-fondasi-motion-core (base 242a2ba)
+- commit: 3f9a8db
 - covers: [AC-001, AC-012]
 
 ### EV-010 — Reveal di browser: posisi awal, trigger sekali, nama aksesibel (T-004)
@@ -131,16 +131,29 @@ supersedes: null
   console after Fast Refresh of layout: no "Encountered a script tag" error once InlineScript was used
   ```
 - date: 2026-10-16
-- commit: uncommitted on feat/F-001-fondasi-motion-core (base 242a2ba)
+- commit: 3f9a8db
 - covers: [AC-011, AC-012]
+
+### EV-011 — Integrasi: clean install, semua cek, layout tiga lebar, baseline bundle (T-005)
+- command: `npm ci && npm run lint && npm run typecheck && npm test && npm run test:sdd && npm run build; Browser pane resize 1440, 768, 360`
+- output:
+  ```text
+  eslint clean; tsc clean; tests 20 pass 0 fail; SDD 34 pass; build static 3/3; dev handle absent from .next/static
+  1440: h1 156.75px, no horizontal overflow; 768: h1 82.83px, Bab grid 3 columns, no overflow
+  360: h1 52px, no element past the viewport, CTA tap target 223 x 51 px
+  first-load home: JS 223.7 KB gzip in 8 files, CSS 4.4 KB gzip (baseline for the F-010 budget)
+  ```
+- date: 2026-10-18
+- commit: uncommitted on feat/F-001-fondasi-motion-core (base 3f9a8db)
+- covers: [AC-001, AC-003]
 
 ## Coverage
 
 | Criterion | Evidence | Result |
 |---|---|---|
-| AC-001 | EV-001, EV-002, EV-003, EV-004 | pass |
+| AC-001 | EV-001, EV-002, EV-003, EV-004, EV-011 | pass |
 | AC-002 | EV-002 | pass |
-| AC-003, AC-004 | EV-004, EV-005 | pass |
+| AC-003, AC-004 | EV-004, EV-005, EV-011 | pass |
 | AC-005 | EV-005 | pass (PerformanceObserver di localhost, bukan Lighthouse) |
 | AC-006, AC-008 | EV-007 | pass |
 | AC-007 | none | not_run (lihat di bawah) |
@@ -154,7 +167,7 @@ supersedes: null
 ## Not run
 
 - AC-007 dan AC-013: Browser pane tidak bisa mengemulasikan `prefers-reduced-motion`, dan mengubah pengaturan animasi Windows adalah perubahan sistem. Cek manual oleh pemilik: Chrome DevTools > Rendering > Emulate CSS media feature `prefers-reduced-motion: reduce`, muat ulang `/`, lalu pastikan `document.documentElement.classList.contains("lenis")` bernilai `false`, scroll terasa native, dan semua judul serta paragraf langsung terlihat tanpa animasi. Secara kode, `SmoothScroll` keluar sebelum `new Lenis`, `Reveal` hanya memasang efek di cabang `MOTION_OK`, dan aturan CSS penyembunyi hanya berlaku di media `no-preference`.
-- Kelancaran visual Reveal (frame rate, kesan gerak) belum dilihat langsung karena sesi tidak terbuka di jendela; dicek di T-005 saat pane terlihat.
+- Kelancaran visual Reveal dan Lenis (frame rate, kesan gerak) dan CLS setelah Reveal ditambahkan: belum, karena sampai 2026-10-18 sesi tidak terdeteksi terbuka di jendela sehingga Browser pane tersembunyi dan `requestAnimationFrame` berhenti (0 frame dalam 500 ms). Tetap jadi syarat penutupan T-005.
 - Screen reader nyata (NVDA atau TalkBack) belum dijalankan; dijadwalkan di F-010.
 - Lighthouse belum dijalankan; CLS diukur dengan PerformanceObserver tanpa throttling jaringan. Ulangi di F-010.
 - Peringatan `allow-scripts` untuk `unrs-resolver` saat `npm ci`: cek di CI.

@@ -1,13 +1,13 @@
 ---
 status: active
 owner: M Sechan Alfarisi
-session_date: 2026-10-16
+session_date: 2026-10-18
 branch: feat/F-001-fondasi-motion-core
-base_commit: 242a2ba
+base_commit: 3f9a8db
 current_commit: uncommitted
 feature_id: F-001
-task_id: T-004
-expires_after: 2026-11-15
+task_id: T-005
+expires_after: 2026-11-17
 ---
 
 # Session Handoff
@@ -16,83 +16,73 @@ Current coding session delta. It does not replace product docs, architecture, AD
 
 ## Session objective
 
-Commit T-003 dan tandai selesai, lalu kerjakan T-004: primitive reveal teks.
+Commit T-004 dan tandai selesai, lalu kerjakan T-005: integrasi dan verifikasi fondasi.
 
 ## Context used
 
-- `docs/specs/F-001-fondasi-motion-core/{requirements,design,system-architecture,tasks}.md`
-- `sechan-portfolio-marquee/src/components/motion/reveal.tsx` (pola), `node_modules/gsap/SplitText.js` (perilaku opsi `aria`)
-- `node_modules/next/dist/docs/01-app/02-guides/preventing-flash-before-hydration.md` (pola `InlineScript`)
+- `docs/context/BRIEF.md`, `docs/specs/F-001-fondasi-motion-core/{tasks,verification}.md`
 
 ## Completed
 
-- T-003 di-commit `242a2ba` dan `done`. AC-007 tetap menunggu cek manual pemilik.
-- T-004 `review`: `src/components/motion/reveal.tsx`, `src/lib/motion/reveal-strategy.ts` + test, aturan CSS `[data-reveal]`, `Reveal` dipakai di halaman uji untuk h1 dan dua paragraf.
-- Perbaikan yang ditemukan saat verifikasi: boot script lewat `src/components/site/inline-script.tsx` agar React tidak memperingatkan tag `<script>`; handle dev ditambah `gsap`.
+- T-004 di-commit `3f9a8db` dan `done`.
+- T-005 (masih `in_progress`): clean install, lint, typecheck, test 20/20, test SDD 34/34, build, layout di 1440, 768, 360 px tanpa overflow, CTA 223 x 51 px, baseline bundle JS 223,7 KB gzip dan CSS 4,4 KB gzip (EV-011).
 
 ## Requirement coverage
 
-- AC-011: pass untuk logika tween dan trigger (ticker digerakkan manual). Kelancaran visual belum dilihat langsung.
-- AC-012: pass lewat cek DOM yang melewati `aria-hidden`; screen reader nyata belum.
-- AC-007, AC-013: menunggu cek manual DevTools (langkah di `verification.md`). AC-014: T-005.
+- AC-001 sampai AC-006, AC-008 sampai AC-012: pass.
+- AC-007, AC-013: cek manual pemilik di DevTools.
+- AC-014: butuh repo GitHub, push, dan PR.
+- Kelancaran Lenis dan Reveal serta CLS setelah Reveal: belum, pane tersembunyi.
 
 ## Changed files
 
 | File | Change | State |
 |---|---|---|
-| `src/components/motion/reveal.tsx` | reveal words dan lines | Complete |
-| `src/lib/motion/reveal-strategy.ts`, `.test.ts` | aturan nama aksesibel | Complete |
-| `src/components/site/inline-script.tsx`, `src/app/layout.tsx` | boot script tanpa peringatan | Complete |
-| `src/app/globals.css`, `src/app/page.tsx` | aturan `[data-reveal]`, pemakaian di halaman uji | Complete |
-| `src/components/motion/smooth-scroll.tsx` | handle dev ditambah `gsap` | Complete |
-| `docs/specs/F-001-fondasi-motion-core/*` | evidence dan status T-004 | Complete |
+| `docs/specs/F-001-fondasi-motion-core/{tasks,verification}.md` | status T-004 dan T-005, EV-011 | Complete |
 
 ## Commands executed
 
 ```bash
-npm test && npm run test:sdd && npm run lint && npm run typecheck && npm run build && npm run context:validate -- --strict
+npm ci && npm run lint && npm run typecheck && npm test && npm run test:sdd && npm run build
 ```
 
 Result:
 
 ```text
-tests 20 pass 0 fail; SDD 34 pass; eslint clean; tsc clean; build static 3/3; dev handle absent from .next/static
-prerendered HTML: no sr-only copies; boot script emitted as text/javascript
+eslint clean; tsc clean; tests 20 pass; SDD 34 pass; build static 3/3; dev handle absent from .next/static
 ```
 
 ## Current implementation state
 
-Halaman uji fondasi memakai token, font, Lenis, dan Reveal. Belum ada sampul, header, atau cursor (F-002).
+Fondasi lengkap secara kode: token, font, Lenis, state intro, boot script, Reveal. Belum ada konten section final.
 
 ## Uncommitted work
 
-- Semua perubahan T-004 di branch `feat/F-001-fondasi-motion-core`.
+- Pembaruan dokumen T-005 di atas.
 
 ## Blockers
 
-- Tidak ada. AC-007 dan AC-013 menunggu cek manual dan tidak memblokir T-005.
+- Browser pane tersembunyi: app melaporkan sesi ini tidak terbuka di jendela mana pun, jadi `requestAnimationFrame` berhenti dan cek visual tidak bisa jujur.
+- AC-014 menunggu izin pemilik untuk membuat repo GitHub, push, dan membuka PR.
 
 ## Decisions made during session
 
-- Heading memakai `aria-label` dari SplitText; selain heading memakai salinan `sr-only` yang dibuat saat split, karena `aria-label` pada `<p>` tidak dibacakan secara konsisten.
-- Konten berisi tautan atau kontrol tidak di-split, hanya di-fade.
-- Split dibuat setelah intro selesai agar baris diukur dengan font final.
+- Tidak ada keputusan produk atau arsitektur baru.
 
 ## Context updates
 
-- Saat sesi tidak terbuka di jendela, Browser pane tersembunyi dan `requestAnimationFrame` berhenti. Gerakkan `window.__bookmateMotion.gsap.ticker.tick()` secara manual untuk menguji logika animasi; jangan pakai angka timing dari kondisi ini.
-- Tool `read_page` tidak menghormati `aria-hidden`; cek nama aksesibel lewat DOM.
-- Dev server Turbopack kadang menyajikan CSS lama setelah `globals.css` berubah; `rm -rf .next` lalu restart.
+- Jangan jalankan `npm ci` saat dev server hidup: di Windows, `lightningcss` terkunci dan `npm ci` gagal di tengah setelah menghapus sebagian `node_modules`. Hentikan server dulu; `npm ci` ulang memulihkan semuanya dari lockfile.
+- Server produksi `bookmate-web-prod` (port 3101) sedang berjalan untuk cek visual berikutnya.
 
 ## Exact next step
 
-Pemilik cek AC-007 dan AC-013 di DevTools, lalu commit T-004 dan set `done` dengan hash. Setelah itu `/sdd:task T-005`: verifikasi integrasi di Browser pane yang terlihat (360, 768, 1440 px), lihat kelancaran reveal secara langsung, lalu push branch dan buka PR ke `main` untuk membuktikan AC-014 (push dan PR butuh izin pemilik).
+Dengan sesi terbuka dan Browser pane terlihat: muat `http://localhost:3101/`, lihat reveal judul dan paragraf, scroll dengan wheel untuk menilai Lenis, ukur CLS dengan PerformanceObserver di 375 dan 1440 px, catat sebagai EV-012. Lalu, setelah izin pemilik, buat repo GitHub, push `main` dan `feat/F-001-fondasi-motion-core`, buka PR, dan catat CI sebagai bukti AC-014.
 
 ## Do not do next
 
-- Jangan membungkus tautan atau tombol dengan `Reveal` mode split; komponen akan jatuh ke fade.
-- Jangan menyembunyikan konten di CSS tanpa awalan `html.js` dan media `prefers-reduced-motion: no-preference`.
+- Jangan menilai kelancaran animasi dari pane yang tersembunyi.
+- Jangan push atau membuat repo tanpa izin pemilik.
 
 ## Validity
 
-Berlaku sampai 2026-11-15 atau sampai T-005 dimulai.
+Berlaku sampai 2026-11-17 atau sampai T-005 selesai.

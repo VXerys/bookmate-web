@@ -1,6 +1,6 @@
 <!-- GENERATED FILE — DO NOT EDIT. Rendered by `npm run context:render`.
 Source: sdd.config.json, docs/steering/, docs/specs/F-*/, docs/context/ASSUMPTIONS.md, docs/handoff/current.md.
-source_hash: f644f740bddf16720cdd75c1d31f3366899eaaf57d380ef3a690313d7ad66e84 -->
+source_hash: e0c4458c8427a883871e6071a0a6e39abfc87c2025179086b78a6978284d7657 -->
 
 # Brief
 
@@ -10,17 +10,16 @@ Project `BookMate Web`, tier `lite`. Rendered from sdd.config.json, docs/steerin
 
 ## Active
 Feature F-001 — Fondasi dan motion core (`implementing`, docs/specs/F-001-fondasi-motion-core/)
-Task T-004 — Primitive reveal teks (`review`); requirements: FR-005; depends on: T-003
+Task T-005 — Integrasi dan verifikasi fondasi (`in_progress`); requirements: FR-001, FR-002, FR-003, FR-004, FR-005, FR-006; depends on: T-004
 
-Scope: `src/components/motion/reveal.tsx` (mode `lines` dan `words`), dipakai di halaman uji. Acceptance: AC-011, AC-012, AC-013. Tidak men-split tautan atau markup inline bermakna.
+Halaman uji fondasi di `/` memakai token, font, Lenis, dan reveal. Verifikasi di Browser pane pada 360, 768, 1440 px, emulasi reduced motion, dan JavaScript dimatikan; CLS. AC-014: CI hijau di PR `feat/F-001-fondasi-motion-core` ke `main` (push butuh izin pemilik). Semua EV dicatat, handoff diperbarui.
 
-Hasil: `src/lib/motion/reveal-strategy.ts` + test memilih nama aksesibel (heading lewat `aria-label`, selain heading lewat salinan `sr-only` yang dibuat saat split, bukan di HTML server); konten dengan tautan atau kontrol hanya di-fade. Split dibuat setelah `whenIntroDone` agar baris diukur dengan font final. CSS menyembunyikan `[data-reveal]` hanya di bawah `html.js` dan media `no-preference` sampai `data-reveal-ready`. Temuan ikut diperbaiki: React memperingatkan tag `<script>` boot di dev; diganti `src/components/site/inline-script.tsx` (pola dari guide Next 16 "preventing flash before hydration"). Handle dev kini juga mengekspos `gsap` untuk menggerakkan ticker saat pane tersembunyi. AC-013 menunggu cek manual pemilik bersama AC-007.
+Progres 2026-10-18: clean install, semua cek, layout di tiga lebar, dan baseline bundle tercatat di EV-011. Sisa: lihat kelancaran Lenis dan Reveal serta CLS dengan Browser pane yang terlihat; cek manual AC-007 dan AC-013 oleh pemilik; repo GitHub, push, dan PR untuk AC-014 setelah pemilik mengizinkan.
 
 Acceptance criteria:
 - AC-007: Given `prefers-reduced-motion: reduce`, when halaman dimuat, then Lenis tidak dibuat dan scroll native berjalan.
-- AC-011: Given motion diizinkan, when judul masuk viewport, then baris muncul dari balik mask dengan stagger dan hanya sekali.
-- AC-012: Given screen reader, when membaca judul yang di-split, then teks utuh dibacakan satu kali.
 - AC-013: Given reduced motion, when judul masuk viewport, then teks langsung tampil tanpa animasi.
+- AC-014: Given pull request ke `main`, when CI berjalan, then lint, typecheck, test konten, test SDD, build, dan `context:validate --strict` dijalankan dan gagal jika salah satu gagal.
 
 ## Rules
 Stop conditions:
@@ -49,12 +48,12 @@ None.
 ## Handoff
 Next step:
 
-Pemilik cek AC-007 dan AC-013 di DevTools, lalu commit T-004 dan set `done` dengan hash. Setelah itu `/sdd:task T-005`: verifikasi integrasi di Browser pane yang terlihat (360, 768, 1440 px), lihat kelancaran reveal secara langsung, lalu push branch dan buka PR ke `main` untuk membuktikan AC-014 (push dan PR butuh izin pemilik).
+Dengan sesi terbuka dan Browser pane terlihat: muat `http://localhost:3101/`, lihat reveal judul dan paragraf, scroll dengan wheel untuk menilai Lenis, ukur CLS dengan PerformanceObserver di 375 dan 1440 px, catat sebagai EV-012. Lalu, setelah izin pemilik, buat repo GitHub, push `main` dan `feat/F-001-fondasi-motion-core`, buka PR, dan catat CI sebagai bukti AC-014.
 
 ## Other open tasks
-- T-005 — Integrasi dan verifikasi fondasi (`planned`)
+None.
 
 ## Features
 | Feature | Status | Phase | Done/Total |
 |---|---|---|---|
-| F-001 Fondasi dan motion core | implementing | in_progress | 3/5 |
+| F-001 Fondasi dan motion core | implementing | in_progress | 4/5 |

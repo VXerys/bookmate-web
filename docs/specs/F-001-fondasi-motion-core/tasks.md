@@ -6,7 +6,7 @@ status: implementing
 tier: full
 owner: "M Sechan Alfarisi"
 created: 2026-10-16
-last_updated: 2026-10-16
+last_updated: 2026-10-18
 last_verified: 2026-10-16
 requirements: [FR-001, FR-002, FR-003, FR-004, FR-005, FR-006]
 supersedes: null
@@ -45,7 +45,7 @@ Scope: `src/lib/motion/gsap.ts`, `src/lib/motion/intro-state.ts` + test, `src/co
 Hasil: boot script dipindah ke `src/lib/motion/boot-script.ts` agar string yang dikirim bisa dites; `intro-gate.tsx` (`completeIntro()`) menjadi satu-satunya penanda intro selesai sampai sampul F-002 ada; Flip dan ScrambleText belum didaftarkan. Temuan kecil ikut diperbaiki: `@import "tailwindcss" source("..")` membatasi pemindaian ke `src/` (CSS 17,7 KB menjadi 15,6 KB). AC-007 menunggu cek manual pemilik (lihat `verification.md`).
 
 ### T-004 — Primitive reveal teks
-- status: review
+- status: done
 - requirements: [FR-005]
 - depends_on: [T-003]
 - evidence: [EV-009, EV-010]
@@ -55,12 +55,14 @@ Scope: `src/components/motion/reveal.tsx` (mode `lines` dan `words`), dipakai di
 Hasil: `src/lib/motion/reveal-strategy.ts` + test memilih nama aksesibel (heading lewat `aria-label`, selain heading lewat salinan `sr-only` yang dibuat saat split, bukan di HTML server); konten dengan tautan atau kontrol hanya di-fade. Split dibuat setelah `whenIntroDone` agar baris diukur dengan font final. CSS menyembunyikan `[data-reveal]` hanya di bawah `html.js` dan media `no-preference` sampai `data-reveal-ready`. Temuan ikut diperbaiki: React memperingatkan tag `<script>` boot di dev; diganti `src/components/site/inline-script.tsx` (pola dari guide Next 16 "preventing flash before hydration"). Handle dev kini juga mengekspos `gsap` untuk menggerakkan ticker saat pane tersembunyi. AC-013 menunggu cek manual pemilik bersama AC-007.
 
 ### T-005 — Integrasi dan verifikasi fondasi
-- status: planned
+- status: in_progress
 - requirements: [FR-001, FR-002, FR-003, FR-004, FR-005, FR-006]
 - depends_on: [T-004]
-- evidence: []
+- evidence: [EV-011]
 
 Halaman uji fondasi di `/` memakai token, font, Lenis, dan reveal. Verifikasi di Browser pane pada 360, 768, 1440 px, emulasi reduced motion, dan JavaScript dimatikan; CLS. AC-014: CI hijau di PR `feat/F-001-fondasi-motion-core` ke `main` (push butuh izin pemilik). Semua EV dicatat, handoff diperbarui.
+
+Progres 2026-10-18: clean install, semua cek, layout di tiga lebar, dan baseline bundle tercatat di EV-011. Sisa: lihat kelancaran Lenis dan Reveal serta CLS dengan Browser pane yang terlihat; cek manual AC-007 dan AC-013 oleh pemilik; repo GitHub, push, dan PR untuk AC-014 setelah pemilik mengizinkan.
 
 ## Deferred
 
