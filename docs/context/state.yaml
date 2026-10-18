@@ -68,9 +68,97 @@ features:
         evidence:
           - EV-011
           - EV-012
+  - id: F-002
+    title: "Shell global: sampul, header, slice transition, menu, cursor, footer"
+    status: approved
+    phase: not_started
+    spec_path: docs/specs/F-002-shell-global
+    tasks:
+      - id: T-001
+        title: Kunci scroll per pemilik
+        status: planned
+        requirements:
+          - FR-001
+          - FR-003
+          - FR-004
+        depends_on: []
+        evidence: []
+      - id: T-002
+        title: Model navigasi dan section stub
+        status: planned
+        requirements:
+          - FR-002
+          - FR-003
+        depends_on: []
+        evidence: []
+      - id: T-003
+        title: Sampul dan keputusan sesi di boot script
+        status: planned
+        requirements:
+          - FR-001
+        depends_on:
+          - T-001
+        evidence: []
+      - id: T-004
+        title: Skip link, header, dan indikator bab
+        status: planned
+        requirements:
+          - FR-002
+        depends_on:
+          - T-002
+        evidence: []
+      - id: T-005
+        title: Slice transition, fokus, dan hash
+        status: planned
+        requirements:
+          - FR-003
+        depends_on:
+          - T-001
+          - T-002
+        evidence: []
+      - id: T-006
+        title: Menu mobile
+        status: planned
+        requirements:
+          - FR-004
+        depends_on:
+          - T-004
+          - T-005
+        evidence: []
+      - id: T-007
+        title: Custom cursor dan magnetic
+        status: planned
+        requirements:
+          - FR-005
+        depends_on: []
+        evidence: []
+      - id: T-008
+        title: Footer reveal
+        status: planned
+        requirements:
+          - FR-006
+        depends_on:
+          - T-004
+        evidence: []
+      - id: T-009
+        title: Integrasi dan verifikasi shell
+        status: planned
+        requirements:
+          - FR-001
+          - FR-002
+          - FR-003
+          - FR-004
+          - FR-005
+          - FR-006
+        depends_on:
+          - T-003
+          - T-006
+          - T-007
+          - T-008
+        evidence: []
 active:
-  feature_id: F-001
-  task_id: T-005
+  feature_id: F-002
+  task_id: T-001
 assumptions_open:
   - id: A-001
     feature: null
@@ -94,5 +182,5 @@ assumptions_open:
     feature: null
     title: Analytics yang dipakai
 blockers: []
-generated_at: 2026-10-18T05:10:21.645Z
-source_hash: 84287b3cba5c9c58c662ee14d6c76fac9188b780c1afffb6e0462c6c1feaa9ca
+generated_at: 2026-10-18T06:28:52.414Z
+source_hash: 5c7c9acd67d6741343fe1a3b4a99ac72c0fe8136838cd19b86d4297db6c8a94d

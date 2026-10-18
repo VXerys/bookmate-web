@@ -15,7 +15,7 @@ Task status belongs in each feature's `tasks.md`; `docs/context/state.yaml` and 
 | Feature ID | Feature | Spec path | Product priority | Lifecycle gate | Related milestone |
 |---|---|---|---|---|---|
 | `F-001` | Fondasi dan motion core | `docs/specs/F-001-fondasi-motion-core/` | P0 | review | M1 |
-| `F-002` | Shell global: sampul, header, slice transition, cursor, footer reveal | belum dibuat | P0 | draft | M1 |
+| `F-002` | Shell global: sampul, header, slice transition, menu, cursor, footer reveal | `docs/specs/F-002-shell-global/` | P0 | approved | M1 |
 | `F-003` | Prolog (hero) | belum dibuat | P0 | draft | M2 |
 | `F-004` | Manifesto dan buka aplikasi | belum dibuat | P0 | draft | M2 |
 | `F-005` | Bab horizontal | belum dibuat | P0 | draft | M2 |

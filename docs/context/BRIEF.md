@@ -1,6 +1,6 @@
 <!-- GENERATED FILE — DO NOT EDIT. Rendered by `npm run context:render`.
 Source: sdd.config.json, docs/steering/, docs/specs/F-*/, docs/context/ASSUMPTIONS.md, docs/handoff/current.md.
-source_hash: 84287b3cba5c9c58c662ee14d6c76fac9188b780c1afffb6e0462c6c1feaa9ca -->
+source_hash: 5c7c9acd67d6741343fe1a3b4a99ac72c0fe8136838cd19b86d4297db6c8a94d -->
 
 # Brief
 
@@ -9,17 +9,21 @@ BookMate Web adalah situs pemasaran untuk aplikasi BookMate yang mengajak pembac
 Project `BookMate Web`, tier `lite`. Rendered from sdd.config.json, docs/steering/, docs/specs/F-*/, docs/context/ASSUMPTIONS.md, docs/handoff/current.md.
 
 ## Active
-Feature F-001 — Fondasi dan motion core (`implementing`, docs/specs/F-001-fondasi-motion-core/)
-Task T-005 — Integrasi dan verifikasi fondasi (`review`); requirements: FR-001, FR-002, FR-003, FR-004, FR-005, FR-006; depends on: T-004
+Feature F-002 — Shell global: sampul, header, slice transition, menu, cursor, footer (`approved`, docs/specs/F-002-shell-global/)
+Task T-001 — Kunci scroll per pemilik (`planned`); requirements: FR-001, FR-003, FR-004; depends on: none
 
-Halaman uji fondasi di `/` memakai token, font, Lenis, dan reveal. Verifikasi di Browser pane pada 360, 768, 1440 px, emulasi reduced motion, dan JavaScript dimatikan; CLS. AC-014: CI hijau di PR `feat/F-001-fondasi-motion-core` ke `main` (push butuh izin pemilik). Semua EV dicatat, handoff diperbarui.
-
-Progres 2026-10-18: clean install, semua cek, layout di tiga lebar, dan baseline bundle tercatat di EV-011. Repo private `VXerys/bookmate-web` dibuat dan [PR #1](https://github.com/VXerys/bookmate-web/pull/1) dibuka atas izin pemilik; CI hijau (EV-012, AC-014). Status `review`: semua cek yang bisa dijalankan agent sudah tercatat. Yang tersisa adalah cek manual pemilik, yaitu reduced motion (AC-007, AC-013) dan kesan gerak Lenis/Reveal serta CLS di browser yang terlihat; langkahnya ada di `verification.md`.
+`src/lib/motion/scroll-lock.ts` + test, `smooth-scroll.tsx` memakai `lockScroll(owner)` dan `unlockScroll(owner)`; handle dev ikut diperbarui. Acceptance: EC-001. Tidak mengubah perilaku Lenis lainnya.
 
 Acceptance criteria:
-- AC-007: Given `prefers-reduced-motion: reduce`, when halaman dimuat, then Lenis tidak dibuat dan scroll native berjalan.
-- AC-013: Given reduced motion, when judul masuk viewport, then teks langsung tampil tanpa animasi.
-- AC-014: Given pull request ke `main`, when CI berjalan, then lint, typecheck, test konten, test SDD, build, dan `context:validate --strict` dijalankan dan gagal jika salah satu gagal.
+- AC-001: Given kunjungan pertama di tab dengan motion diizinkan, when halaman dimuat, then sampul terlihat sejak paint pertama, scroll terkunci, dan counter naik sampai 100.
+- AC-002: Given sampul berjalan, when font dan event `load` selesai, then sampul terbuka paling cepat 2,0 detik dan paling lambat 4,5 detik sejak boot, lalu `completeIntro()` dipanggil sekali dan scroll dilepas.
+- AC-003: Given sampul sudah diputar di tab ini, when halaman dimuat ulang, then sampul tidak muncul sama sekali, termasuk tidak berkedip di paint pertama.
+- AC-004: Given reduced motion atau JavaScript mati, when halaman dimuat, then tidak ada overlay sampul dan konten langsung terlihat.
+- AC-009: Given motion diizinkan, when pengguna mengaktifkan tautan ke `#id` sebuah section, then 5 irisan vertikal menutup layar berurutan, label bab tujuan terlihat, halaman melompat ke target saat tertutup, lalu irisan membuka.
+- AC-010: Given transisi selesai atau reduced motion, when target tercapai, then fokus pindah ke heading section target dan URL hash berubah ke `#id` tanpa memicu lompatan kedua dari browser.
+- AC-011: Given transisi sedang berjalan, when tautan lain diaktifkan, then klik kedua diabaikan sampai transisi selesai.
+- AC-012: Given lebar di bawah 768 px, when tombol "Menu" diaktifkan, then panel layar penuh terbuka dengan curtain wipe, `aria-expanded="true"`, scroll terkunci, dan fokus berpindah ke tautan pertama.
+- AC-013: Given menu terbuka, when pengguna menekan Tab di tautan terakhir, then fokus kembali ke tombol tutup; when Esc ditekan atau tautan dipilih, then menu tertutup, scroll dilepas, dan fokus kembali ke tombol "Menu" (kecuali fokus dipindah ke target oleh slice transition).
 
 ## Rules
 Stop conditions:
@@ -48,12 +52,20 @@ None.
 ## Handoff
 Next step:
 
-Pemilik membuka `http://localhost:3101/` di Chrome: nilai reveal dan scroll Lenis di 1440 px dan mode ponsel, lalu emulasikan `prefers-reduced-motion: reduce` untuk AC-007 dan AC-013. Jika lolos, set T-005 `done`, F-001 `implemented`, merge PR #1 (atas keputusan pemilik), lalu mulai F-002 (shell global) dengan membuat folder spec F-002 dari `docs/specs/_templates/`.
+Setelah pemilik menyetujui spec F-002: set status spec F-002 ke `approved` lalu `implementing`, commit spec, dan kerjakan T-001 (`src/lib/motion/scroll-lock.ts` + test, `smooth-scroll.tsx`). Verifikasi: `npm test && npm run lint && npm run typecheck && npm run build`.
 
 ## Other open tasks
-None.
+- T-002 — Model navigasi dan section stub (`planned`)
+- T-003 — Sampul dan keputusan sesi di boot script (`planned`)
+- T-004 — Skip link, header, dan indikator bab (`planned`)
+- T-005 — Slice transition, fokus, dan hash (`planned`)
+- T-006 — Menu mobile (`planned`)
+- T-007 — Custom cursor dan magnetic (`planned`)
+- T-008 — Footer reveal (`planned`)
+- T-009 — Integrasi dan verifikasi shell (`planned`)
 
 ## Features
 | Feature | Status | Phase | Done/Total |
 |---|---|---|---|
 | F-001 Fondasi dan motion core | implementing | in_progress | 4/5 |
+| F-002 Shell global: sampul, header, slice transition, menu, cursor, footer | approved | not_started | 0/9 |

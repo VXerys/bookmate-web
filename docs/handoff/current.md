@@ -2,11 +2,11 @@
 status: active
 owner: M Sechan Alfarisi
 session_date: 2026-10-18
-branch: feat/F-001-fondasi-motion-core
-base_commit: 3f9a8db
+branch: feat/F-002-shell-global
+base_commit: 50f05c2
 current_commit: uncommitted
-feature_id: F-001
-task_id: T-005
+feature_id: F-002
+task_id: T-001
 expires_after: 2026-11-17
 ---
 
@@ -16,73 +16,75 @@ Current coding session delta. It does not replace product docs, architecture, AD
 
 ## Session objective
 
-Commit T-004 dan tandai selesai, lalu kerjakan T-005: integrasi dan verifikasi fondasi.
+Lanjut setelah PR #1: tulis spec F-002 (shell global) sambil F-001 T-005 menunggu cek manual pemilik.
 
 ## Context used
 
-- `docs/context/BRIEF.md`, `docs/specs/F-001-fondasi-motion-core/{tasks,verification}.md`
+- `docs/product/art-direction.md` (Sampul, katalog dan aturan motion), `docs/product/roadmap.md` (M1)
+- `docs/specs/F-001-fondasi-motion-core/{design,system-architecture}.md`, `src/components/motion/smooth-scroll.tsx`
 
 ## Completed
 
-- T-004 di-commit `3f9a8db` dan `done`.
-- T-005 (`review`): clean install, lint, typecheck, test 20/20, test SDD 34/34, build, layout di 1440, 768, 360 px tanpa overflow, CTA 223 x 51 px, baseline bundle JS 223,7 KB gzip dan CSS 4,4 KB gzip (EV-011).
-- Repo private `VXerys/bookmate-web` dibuat; `main` dan `feat/F-001-fondasi-motion-core` di-push; [PR #1](https://github.com/VXerys/bookmate-web/pull/1) dibuka; CI hijau di run 39099418106 (EV-012, AC-014).
+- Branch `feat/F-002-shell-global` dibuat dari `50f05c2` (ujung branch F-001, karena PR #1 belum di-merge).
+- Spec F-002 tier full: `requirements.md` (6 FR, 19 AC, 5 EC, 3 NFR), `system-architecture.md` (kunci scroll per pemilik, sesi sampul, fokus setelah navigasi), `design.md`, `tasks.md` (T-001 sampai T-009, semua `planned`), `verification.md` (kosong).
+- Registry dan feature map PRD: F-002 `review`.
 
 ## Requirement coverage
 
-- AC-001 sampai AC-006, AC-008 sampai AC-012: pass.
-- AC-014: pass (EV-012).
-- AC-007, AC-013: cek manual pemilik di DevTools.
-- Kelancaran Lenis dan Reveal serta CLS setelah Reveal: belum; rAF di pane tidak stabil karena app tidak mendeteksi sesi di jendela.
+- F-002: belum ada; implementasi menunggu persetujuan spec.
+- F-001: T-005 `review`; AC-007, AC-013, dan kesan gerak menunggu cek manual pemilik (langkah di `docs/specs/F-001-fondasi-motion-core/verification.md`).
 
 ## Changed files
 
 | File | Change | State |
 |---|---|---|
-| `docs/specs/F-001-fondasi-motion-core/{tasks,verification}.md` | status T-004 dan T-005, EV-011 | Complete |
+| `docs/specs/F-002-shell-global/*` | spec baru | Complete, status review |
+| `docs/specs/_index.md`, `docs/product/prd.md` | F-002 ke `review` | Complete |
 
 ## Commands executed
 
 ```bash
-npm ci && npm run lint && npm run typecheck && npm test && npm run test:sdd && npm run build
+npm run context:render && npm run context:validate -- --strict
 ```
 
 Result:
 
 ```text
-eslint clean; tsc clean; tests 20 pass; SDD 34 pass; build static 3/3; dev handle absent from .next/static
+Context validation passed: 0 error(s), 0 warning(s); 66 Markdown files, 2 feature(s), strict.
 ```
 
 ## Current implementation state
 
-Fondasi lengkap secara kode: token, font, Lenis, state intro, boot script, Reveal. Belum ada konten section final.
+Kode sama dengan PR #1. Belum ada kode F-002.
 
 ## Uncommitted work
 
-- Pembaruan dokumen T-005 di atas.
+- Spec F-002 dan pembaruan registry di branch `feat/F-002-shell-global`.
 
 ## Blockers
 
-- Browser pane tersembunyi: app melaporkan sesi ini tidak terbuka di jendela mana pun, jadi `requestAnimationFrame` berhenti dan cek visual tidak bisa jujur. Cek visual dialihkan ke pemilik.
+- F-002: persetujuan spec pemilik.
+- F-001: hasil cek manual reduced motion dan kesan gerak. Browser pane sesi ini tetap tersembunyi, jadi agent tidak bisa menilainya.
 
 ## Decisions made during session
 
-- Tidak ada keputusan produk atau arsitektur baru.
+- Kunci scroll F-001 (`setScrollLocked(boolean)`) akan diganti kunci per pemilik (T-001 F-002), karena sampul, menu, dan slice bisa bertumpuk.
+- Sampul diputar sekali per tab; keputusannya di boot script agar tidak berkedip.
+- `intro-gate.tsx` akan digantikan `sampul.tsx` sebagai satu-satunya pemanggil `completeIntro()`.
 
 ## Context updates
 
-- Jangan jalankan `npm ci` saat dev server hidup: di Windows, `lightningcss` terkunci dan `npm ci` gagal di tengah setelah menghapus sebagian `node_modules`. Hentikan server dulu; `npm ci` ulang memulihkan semuanya dari lockfile.
-- Server produksi `bookmate-web-prod` (port 3101) sedang berjalan untuk cek visual berikutnya.
+- Validasi harus dicek lewat exit code, bukan `| tail`, sebelum commit; sebelumnya satu commit lolos dengan validasi gagal (diperbaiki di `50f05c2`).
 
 ## Exact next step
 
-Pemilik membuka `http://localhost:3101/` di Chrome: nilai reveal dan scroll Lenis di 1440 px dan mode ponsel, lalu emulasikan `prefers-reduced-motion: reduce` untuk AC-007 dan AC-013. Jika lolos, set T-005 `done`, F-001 `implemented`, merge PR #1 (atas keputusan pemilik), lalu mulai F-002 (shell global) dengan membuat folder spec F-002 dari `docs/specs/_templates/`.
+Setelah pemilik menyetujui spec F-002: set status spec F-002 ke `approved` lalu `implementing`, commit spec, dan kerjakan T-001 (`src/lib/motion/scroll-lock.ts` + test, `smooth-scroll.tsx`). Verifikasi: `npm test && npm run lint && npm run typecheck && npm run build`.
 
 ## Do not do next
 
-- Jangan menilai kelancaran animasi dari pane yang tersembunyi.
-- Jangan merge PR #1 atau mengaktifkan auto-merge tanpa keputusan pemilik.
+- Jangan mulai kode F-002 sebelum spec disetujui.
+- Jangan merge PR #1 tanpa keputusan pemilik.
 
 ## Validity
 
-Berlaku sampai 2026-11-17 atau sampai T-005 selesai.
+Berlaku sampai 2026-11-17 atau sampai T-001 F-002 dimulai.

@@ -1,6 +1,6 @@
 <!-- GENERATED FILE — DO NOT EDIT. Rendered by `npm run context:render`.
 Source: sdd.config.json, docs/steering/, docs/specs/F-*/, docs/context/ASSUMPTIONS.md, docs/handoff/current.md.
-source_hash: 84287b3cba5c9c58c662ee14d6c76fac9188b780c1afffb6e0462c6c1feaa9ca -->
+source_hash: 5c7c9acd67d6741343fe1a3b4a99ac72c0fe8136838cd19b86d4297db6c8a94d -->
 
 # Project Progress
 
@@ -13,3 +13,17 @@ source_hash: 84287b3cba5c9c58c662ee14d6c76fac9188b780c1afffb6e0462c6c1feaa9ca --
 | T-003 Hub GSAP, Lenis, state intro, dan boot script | done | FR-003, FR-004 | T-002 | EV-006, EV-007, EV-008 |
 | T-004 Primitive reveal teks | done | FR-005 | T-003 | EV-009, EV-010 |
 | T-005 Integrasi dan verifikasi fondasi | review | FR-001, FR-002, FR-003, FR-004, FR-005, FR-006 | T-004 | EV-011, EV-012 |
+
+## F-002 — Shell global: sampul, header, slice transition, menu, cursor, footer (`approved`, not_started)
+
+| Task | Status | Requirements | Depends on | Evidence |
+|---|---|---|---|---|
+| T-001 Kunci scroll per pemilik | planned | FR-001, FR-003, FR-004 |  |  |
+| T-002 Model navigasi dan section stub | planned | FR-002, FR-003 |  |  |
+| T-003 Sampul dan keputusan sesi di boot script | planned | FR-001 | T-001 |  |
+| T-004 Skip link, header, dan indikator bab | planned | FR-002 | T-002 |  |
+| T-005 Slice transition, fokus, dan hash | planned | FR-003 | T-001, T-002 |  |
+| T-006 Menu mobile | planned | FR-004 | T-004, T-005 |  |
+| T-007 Custom cursor dan magnetic | planned | FR-005 |  |  |
+| T-008 Footer reveal | planned | FR-006 | T-004 |  |
+| T-009 Integrasi dan verifikasi shell | planned | FR-001, FR-002, FR-003, FR-004, FR-005, FR-006 | T-003, T-006, T-007, T-008 |  |
