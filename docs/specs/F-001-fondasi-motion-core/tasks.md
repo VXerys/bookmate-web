@@ -35,7 +35,7 @@ Scope: `package.json` (stack sama dengan `sechan-portfolio`, `"type": "module"`)
 Scope: `src/content/palette.ts`, `src/lib/color/contrast.ts` + test, `@theme` di `globals.css`, `next/font/google` (Newsreader dengan sumbu `opsz` dan italic, Inter, JetBrains Mono) di `layout.tsx`, kelas `.display`, `.statement`, `.label`, `.grain`, gaya fokus. Acceptance: AC-003, AC-004, AC-005. Stop jika pasangan warna dari art direction gagal kontras: laporkan, jangan ubah palet diam-diam.
 
 ### T-003 — Hub GSAP, Lenis, state intro, dan boot script
-- status: review
+- status: done
 - requirements: [FR-003, FR-004]
 - depends_on: [T-002]
 - evidence: [EV-006, EV-007, EV-008]
@@ -45,12 +45,14 @@ Scope: `src/lib/motion/gsap.ts`, `src/lib/motion/intro-state.ts` + test, `src/co
 Hasil: boot script dipindah ke `src/lib/motion/boot-script.ts` agar string yang dikirim bisa dites; `intro-gate.tsx` (`completeIntro()`) menjadi satu-satunya penanda intro selesai sampai sampul F-002 ada; Flip dan ScrambleText belum didaftarkan. Temuan kecil ikut diperbaiki: `@import "tailwindcss" source("..")` membatasi pemindaian ke `src/` (CSS 17,7 KB menjadi 15,6 KB). AC-007 menunggu cek manual pemilik (lihat `verification.md`).
 
 ### T-004 — Primitive reveal teks
-- status: planned
+- status: review
 - requirements: [FR-005]
 - depends_on: [T-003]
-- evidence: []
+- evidence: [EV-009, EV-010]
 
 Scope: `src/components/motion/reveal.tsx` (mode `lines` dan `words`), dipakai di halaman uji. Acceptance: AC-011, AC-012, AC-013. Tidak men-split tautan atau markup inline bermakna.
+
+Hasil: `src/lib/motion/reveal-strategy.ts` + test memilih nama aksesibel (heading lewat `aria-label`, selain heading lewat salinan `sr-only` yang dibuat saat split, bukan di HTML server); konten dengan tautan atau kontrol hanya di-fade. Split dibuat setelah `whenIntroDone` agar baris diukur dengan font final. CSS menyembunyikan `[data-reveal]` hanya di bawah `html.js` dan media `no-preference` sampai `data-reveal-ready`. Temuan ikut diperbaiki: React memperingatkan tag `<script>` boot di dev; diganti `src/components/site/inline-script.tsx` (pola dari guide Next 16 "preventing flash before hydration"). Handle dev kini juga mengekspos `gsap` untuk menggerakkan ticker saat pane tersembunyi. AC-013 menunggu cek manual pemilik bersama AC-007.
 
 ### T-005 — Integrasi dan verifikasi fondasi
 - status: planned

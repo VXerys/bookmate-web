@@ -53,10 +53,11 @@ export function SmoothScroll() {
     // ScrollTrigger read the same frame.
     const stopWaiting = whenIntroDone(() => gsap.ticker.lagSmoothing(0));
 
-    // Dev-only handle so the Browser pane can verify scroll lock and trigger sync (F-001 AC-006, AC-008).
+    // Dev-only handle so the Browser pane can verify scroll lock and trigger sync (F-001 AC-006, AC-008), and drive
+    // gsap.ticker by hand when the pane is hidden and requestAnimationFrame is paused.
     // The NODE_ENV check is replaced at build time, so production bundles drop this branch.
     if (process.env.NODE_ENV === "development") {
-      Object.assign(window, { __bookmateMotion: { lenis, setScrollLocked, ScrollTrigger } });
+      Object.assign(window, { __bookmateMotion: { gsap, lenis, setScrollLocked, ScrollTrigger } });
     }
 
     return () => {

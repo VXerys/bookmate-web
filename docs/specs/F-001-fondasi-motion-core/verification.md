@@ -78,7 +78,7 @@ supersedes: null
   grep "__bookmateMotion" .next/static -> none (dev handle not in production bundle)
   ```
 - date: 2026-10-16
-- commit: uncommitted on feat/F-001-fondasi-motion-core (base 879854e)
+- commit: 242a2ba
 - covers: [AC-001, AC-010]
 
 ### EV-007 — Lenis, sinkron ScrollTrigger, dan kunci scroll di browser (T-003)
@@ -92,7 +92,7 @@ supersedes: null
   unlocked: PageDown -> 517, wheel x3 -> 300
   ```
 - date: 2026-10-16
-- commit: uncommitted on feat/F-001-fondasi-motion-core (base 879854e)
+- commit: 242a2ba
 - covers: [AC-006, AC-008]
 
 ### EV-008 — Konten tanpa JavaScript (T-003)
@@ -103,8 +103,36 @@ supersedes: null
   hiding rules in CSS: only Tailwind preflight [hidden] and the .hidden utility; none tied to page content
   ```
 - date: 2026-10-16
-- commit: uncommitted on feat/F-001-fondasi-motion-core (base 879854e)
+- commit: 242a2ba
 - covers: [AC-009]
+
+### EV-009 — Strategi aksesibilitas Reveal dan HTML produksi (T-004)
+- command: `npm test && npm run lint && npm run typecheck && npm run build; grep .next/server/app/index.html`
+- output:
+  ```text
+  ✔ headings keep their own accessible name through aria-label; ✔ non-heading text gets a visually hidden duplicate
+  ✔ interactive selector covers links, buttons, form fields, and focusable elements; tests 20 pass 0 fail
+  eslint clean; tsc clean; build static 3/3; dev handle absent from .next/static
+  prerendered HTML: 0 sr-only copies (text appears once), boot script emitted as <script type="text/javascript">
+  ```
+- date: 2026-10-16
+- commit: uncommitted on feat/F-001-fondasi-motion-core (base 242a2ba)
+- covers: [AC-001, AC-012]
+
+### EV-010 — Reveal di browser: posisi awal, trigger sekali, nama aksesibel (T-004)
+- command: `Browser pane on next dev; pane hidden so gsap.ticker.tick() driven by hand every 16 ms via window.__bookmateMotion`
+- output:
+  ```text
+  probe [data-reveal] under html.js: visibility hidden until data-reveal-ready, then visible
+  below-fold paragraph: 5 masked lines at y 34 px before scroll; after scroll into view 34 -> 29 -> 23 ... 1 -> 0 (expo out)
+  scroll away to top and back: lines stay at 0 (no replay)
+  exposed text skipping aria-hidden: h1 "Satu halaman lagi, bareng teman." via aria-label (13 aria-hidden pieces);
+  each paragraph read once from its sr-only copy, split copy aria-hidden
+  console after Fast Refresh of layout: no "Encountered a script tag" error once InlineScript was used
+  ```
+- date: 2026-10-16
+- commit: uncommitted on feat/F-001-fondasi-motion-core (base 242a2ba)
+- covers: [AC-011, AC-012]
 
 ## Coverage
 
@@ -118,11 +146,15 @@ supersedes: null
 | AC-007 | none | not_run (lihat di bawah) |
 | AC-009 | EV-008 | pass |
 | AC-010 | EV-006 | pass (unit test atas string boot script yang dikirim) |
-| AC-011 to AC-013 | none | not_run (T-004) |
+| AC-011 | EV-010 | pass (logika tween dan trigger; ticker digerakkan manual, kelancaran visual belum dilihat) |
+| AC-012 | EV-009, EV-010 | pass (cek DOM yang melewati aria-hidden; screen reader nyata belum dijalankan) |
+| AC-013 | none | not_run (lihat di bawah) |
 | AC-014 | none | not_run (T-005, butuh PR pertama) |
 
 ## Not run
 
-- AC-007: Browser pane tidak bisa mengemulasikan `prefers-reduced-motion`, dan mengubah pengaturan animasi Windows adalah perubahan sistem. Cek manual oleh pemilik: Chrome DevTools > Rendering > Emulate CSS media feature `prefers-reduced-motion: reduce`, muat ulang `/`, lalu pastikan `document.documentElement.classList.contains("lenis")` bernilai `false` dan scroll terasa native. Secara kode, `SmoothScroll` keluar sebelum `new Lenis` saat `MOTION_OK` tidak cocok.
+- AC-007 dan AC-013: Browser pane tidak bisa mengemulasikan `prefers-reduced-motion`, dan mengubah pengaturan animasi Windows adalah perubahan sistem. Cek manual oleh pemilik: Chrome DevTools > Rendering > Emulate CSS media feature `prefers-reduced-motion: reduce`, muat ulang `/`, lalu pastikan `document.documentElement.classList.contains("lenis")` bernilai `false`, scroll terasa native, dan semua judul serta paragraf langsung terlihat tanpa animasi. Secara kode, `SmoothScroll` keluar sebelum `new Lenis`, `Reveal` hanya memasang efek di cabang `MOTION_OK`, dan aturan CSS penyembunyi hanya berlaku di media `no-preference`.
+- Kelancaran visual Reveal (frame rate, kesan gerak) belum dilihat langsung karena sesi tidak terbuka di jendela; dicek di T-005 saat pane terlihat.
+- Screen reader nyata (NVDA atau TalkBack) belum dijalankan; dijadwalkan di F-010.
 - Lighthouse belum dijalankan; CLS diukur dengan PerformanceObserver tanpa throttling jaringan. Ulangi di F-010.
 - Peringatan `allow-scripts` untuk `unrs-resolver` saat `npm ci`: cek di CI.

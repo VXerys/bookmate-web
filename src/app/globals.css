@@ -96,6 +96,14 @@ html.lenis body {
   transition-behavior: allow-discrete;
 }
 
+/* Reveal text waits hidden only while JS is present and motion is allowed, until it has been split; visibility keeps
+   its layout so SplitText measures real lines. No JS, the boot fallback, or reduced motion all leave it visible. */
+@media (prefers-reduced-motion: no-preference) {
+  html.js [data-reveal]:not([data-reveal-ready]) {
+    visibility: hidden;
+  }
+}
+
 @layer components {
   .display {
     font-family: var(--font-serif);

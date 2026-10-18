@@ -3,6 +3,7 @@ import { Inter, JetBrains_Mono, Newsreader } from "next/font/google";
 
 import { IntroGate } from "@/components/motion/intro-gate";
 import { SmoothScroll } from "@/components/motion/smooth-scroll";
+import { InlineScript } from "@/components/site/inline-script";
 import { palette } from "@/content/palette";
 import { site } from "@/content/site";
 import { bootScript } from "@/lib/motion/boot-script";
@@ -45,7 +46,7 @@ export default function RootLayout({ children }: LayoutProps<"/">) {
     // The boot script adds html.js before hydration, so React must not flag the class difference.
     <html lang="id" className={`${newsreader.variable} ${inter.variable} ${jetbrains.variable}`} suppressHydrationWarning>
       <head>
-        <script dangerouslySetInnerHTML={{ __html: bootScript }} />
+        <InlineScript html={bootScript} />
       </head>
       <body>
         <SmoothScroll />

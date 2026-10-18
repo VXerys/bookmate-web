@@ -1,6 +1,6 @@
 <!-- GENERATED FILE — DO NOT EDIT. Rendered by `npm run context:render`.
 Source: sdd.config.json, docs/steering/, docs/specs/F-*/, docs/context/ASSUMPTIONS.md, docs/handoff/current.md.
-source_hash: fa754734bf1d1bff8c41abd1d484308d98fe75757ed4b05f7012531fb24d3b7b -->
+source_hash: f644f740bddf16720cdd75c1d31f3366899eaaf57d380ef3a690313d7ad66e84 -->
 
 # Brief
 
@@ -10,16 +10,17 @@ Project `BookMate Web`, tier `lite`. Rendered from sdd.config.json, docs/steerin
 
 ## Active
 Feature F-001 — Fondasi dan motion core (`implementing`, docs/specs/F-001-fondasi-motion-core/)
-Task T-003 — Hub GSAP, Lenis, state intro, dan boot script (`review`); requirements: FR-003, FR-004; depends on: T-002
+Task T-004 — Primitive reveal teks (`review`); requirements: FR-005; depends on: T-003
 
-Scope: `src/lib/motion/gsap.ts`, `src/lib/motion/intro-state.ts` + test, `src/components/motion/smooth-scroll.tsx`, boot script di `layout.tsx`, CSS Lenis, `scrollbar-gutter: stable`, blok `prefers-reduced-motion`. Acceptance: AC-006 sampai AC-010. Referensi pola: `sechan-portfolio/src/components/motion/smooth-scroll.tsx`.
+Scope: `src/components/motion/reveal.tsx` (mode `lines` dan `words`), dipakai di halaman uji. Acceptance: AC-011, AC-012, AC-013. Tidak men-split tautan atau markup inline bermakna.
 
-Hasil: boot script dipindah ke `src/lib/motion/boot-script.ts` agar string yang dikirim bisa dites; `intro-gate.tsx` (`completeIntro()`) menjadi satu-satunya penanda intro selesai sampai sampul F-002 ada; Flip dan ScrambleText belum didaftarkan. Temuan kecil ikut diperbaiki: `@import "tailwindcss" source("..")` membatasi pemindaian ke `src/` (CSS 17,7 KB menjadi 15,6 KB). AC-007 menunggu cek manual pemilik (lihat `verification.md`).
+Hasil: `src/lib/motion/reveal-strategy.ts` + test memilih nama aksesibel (heading lewat `aria-label`, selain heading lewat salinan `sr-only` yang dibuat saat split, bukan di HTML server); konten dengan tautan atau kontrol hanya di-fade. Split dibuat setelah `whenIntroDone` agar baris diukur dengan font final. CSS menyembunyikan `[data-reveal]` hanya di bawah `html.js` dan media `no-preference` sampai `data-reveal-ready`. Temuan ikut diperbaiki: React memperingatkan tag `<script>` boot di dev; diganti `src/components/site/inline-script.tsx` (pola dari guide Next 16 "preventing flash before hydration"). Handle dev kini juga mengekspos `gsap` untuk menggerakkan ticker saat pane tersembunyi. AC-013 menunggu cek manual pemilik bersama AC-007.
 
 Acceptance criteria:
-- AC-006: Given motion diizinkan, when halaman dimuat, then satu instance Lenis berjalan dan `ScrollTrigger.update` dipanggil pada setiap event scroll Lenis.
 - AC-007: Given `prefers-reduced-motion: reduce`, when halaman dimuat, then Lenis tidak dibuat dan scroll native berjalan.
-- AC-010: Given skrip boot berjalan tetapi intro tidak pernah menandai selesai dalam 6 detik, when batas waktu lewat, then kelas `js` dilepas dan konten terlihat.
+- AC-011: Given motion diizinkan, when judul masuk viewport, then baris muncul dari balik mask dengan stagger dan hanya sekali.
+- AC-012: Given screen reader, when membaca judul yang di-split, then teks utuh dibacakan satu kali.
+- AC-013: Given reduced motion, when judul masuk viewport, then teks langsung tampil tanpa animasi.
 
 ## Rules
 Stop conditions:
@@ -48,13 +49,12 @@ None.
 ## Handoff
 Next step:
 
-Pemilik cek AC-007 di DevTools dan commit T-003. Setelah itu set T-003 `done` dengan hash commit, lalu `/sdd:task T-004` (reveal teks): `src/components/motion/reveal.tsx` dengan SplitText `mask: "lines"`, `aria: "auto"`, `autoSplit`, hanya menyembunyikan saat `html.js` ada dan motion diizinkan. Verifikasi: `npm test && npm run lint && npm run typecheck && npm run build`, lalu Browser pane dan pemeriksaan aksesibilitas nama judul.
+Pemilik cek AC-007 dan AC-013 di DevTools, lalu commit T-004 dan set `done` dengan hash. Setelah itu `/sdd:task T-005`: verifikasi integrasi di Browser pane yang terlihat (360, 768, 1440 px), lihat kelancaran reveal secara langsung, lalu push branch dan buka PR ke `main` untuk membuktikan AC-014 (push dan PR butuh izin pemilik).
 
 ## Other open tasks
-- T-004 — Primitive reveal teks (`planned`)
 - T-005 — Integrasi dan verifikasi fondasi (`planned`)
 
 ## Features
 | Feature | Status | Phase | Done/Total |
 |---|---|---|---|
-| F-001 Fondasi dan motion core | implementing | in_progress | 2/5 |
+| F-001 Fondasi dan motion core | implementing | in_progress | 3/5 |
