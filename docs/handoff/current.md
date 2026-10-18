@@ -76,7 +76,7 @@ Fondasi lengkap secara kode: token, font, Lenis, state intro, boot script, Revea
 
 ## Exact next step
 
-Pemilik membuka `http://localhost:3101/` di Chrome: nilai reveal dan scroll Lenis di 1440 px dan mode ponsel, lalu emulasikan `prefers-reduced-motion: reduce` untuk AC-007 dan AC-013. Jika lolos, set T-005 `done`, F-001 `implemented`, merge PR #1 (atas keputusan pemilik), lalu mulai F-002 (shell global) dengan membuat `docs/specs/F-002-shell-global/`.
+Pemilik membuka `http://localhost:3101/` di Chrome: nilai reveal dan scroll Lenis di 1440 px dan mode ponsel, lalu emulasikan `prefers-reduced-motion: reduce` untuk AC-007 dan AC-013. Jika lolos, set T-005 `done`, F-001 `implemented`, merge PR #1 (atas keputusan pemilik), lalu mulai F-002 (shell global) dengan membuat folder spec F-002 dari `docs/specs/_templates/`.
 
 ## Do not do next
 

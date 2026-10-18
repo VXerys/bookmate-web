@@ -1,10 +1,10 @@
 <!-- GENERATED FILE — DO NOT EDIT. Rendered by `npm run context:render`.
 Source: sdd.config.json, docs/steering/, docs/specs/F-*/, docs/context/ASSUMPTIONS.md, docs/handoff/current.md.
-source_hash: a681eb625f753c6249024f0c1d8c3b3f8e85f35a2edc19f6aecff14f44629e1a -->
+source_hash: 84287b3cba5c9c58c662ee14d6c76fac9188b780c1afffb6e0462c6c1feaa9ca -->
 
 # Project State
 
-- Generated at: 2026-10-18T05:09:36.909Z
+- Generated at: 2026-10-18T05:10:21.645Z
 - Project: BookMate Web (tier `lite`)
 - Active: F-001 / T-005
 - Open assumptions: 7
@@ -20,14 +20,14 @@ source_hash: a681eb625f753c6249024f0c1d8c3b3f8e85f35a2edc19f6aecff14f44629e1a --
 ## Git
 
 - Branch: `feat/F-001-fondasi-motion-core`
-- HEAD: `1ab19ce`
+- HEAD: `d1be5a1`
 - Worktree: dirty
 
 Recent commits:
 
+- `d1be5a1 docs(F-001): record CI evidence for AC-014 and move T-005 to review`
 - `1ab19ce docs(F-001): T-005 integration progress and evidence`
 - `3f9a8db feat(F-001): T-004 accessible text reveal primitive`
 - `242a2ba feat(F-001): T-003 GSAP hub, Lenis smooth scroll, intro state, boot script`
 - `879854e feat(F-001): T-002 design tokens, fonts, and base styles`
-- `fa6aab4 chore: bootstrap BookMate Web from SDD template v2.0.0`
 <!-- GENERATED:GIT_FACTS:END -->
