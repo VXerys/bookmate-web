@@ -60,3 +60,4 @@ Halaman harus lulus lint, typecheck, test, build, tanpa overflow horizontal dan 
 - Instruksi pemilik 2026-10-19: pakai sampul buku dari data mock dan aset app; pengecualian atas aturan sampul komersial, dicatat sebagai pemblokir rilis (A-002).
 - Tiga penulis di mock app tidak cocok dengan sampulnya; situs memakai nama di sampul dan mencatat selisihnya.
 - Menggantikan F-013 untuk lapisan section.
+- Instruksi pemilik 2026-10-19: animasi pembuka diputar di setiap load dan reload (reload memakai versi singkat sekitar 1 detik). Ini menggantikan perilaku F-002 AC-003 yang melewati sampul setelah tampil sekali per tab.

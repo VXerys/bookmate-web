@@ -32,3 +32,10 @@ test("the intro reports done before the boot fallback would drop html.js", () =>
 test("the safety net only fires after a normal run would have ended", () => {
   assert.ok(SAMPUL_SAFETY_MS > SAMPUL_OPEN_MAX_MS + 1500);
 });
+
+test("a reload replays a short sampul that opens within about a second", () => {
+  const { min, max } = settleWaits(0, true);
+  assert.ok(min + SAMPUL_LEAD_MS <= 1000, `replay opens at ${min + SAMPUL_LEAD_MS} ms`);
+  assert.ok(max + SAMPUL_LEAD_MS <= 2500, `replay waits at most ${max + SAMPUL_LEAD_MS} ms`);
+  assert.ok(max >= min);
+});

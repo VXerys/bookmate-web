@@ -9,13 +9,13 @@ import { site } from "@/content/site";
 import { SAMPUL_SESSION_KEY } from "@/lib/motion/boot-script";
 import { gsap, ScrollTrigger, useGSAP } from "@/lib/motion/gsap";
 import { finishIntro, isIntroDone } from "@/lib/motion/intro-state";
-import { SAMPUL_INTRO_AFTER_OPEN_MS, SAMPUL_LEAD_MS, SAMPUL_OPEN_MAX_MS, SAMPUL_SAFETY_MS, settleWaits } from "@/lib/motion/sampul-timing";
+import { SAMPUL_INTRO_AFTER_OPEN_MS, SAMPUL_LEAD_MS, SAMPUL_OPEN_MAX_MS, SAMPUL_REPLAY_OPEN_MAX_MS, SAMPUL_SAFETY_MS, settleWaits } from "@/lib/motion/sampul-timing";
 
 const wait = (ms: number) => new Promise<void>((resolve) => window.setTimeout(resolve, ms));
 
 // Resolves once fonts and the load event are in and the opening window has started, or when the window closes.
-function pageSettled() {
-  const { min, max } = settleWaits(performance.now());
+function pageSettled(replay: boolean) {
+  const { min, max } = settleWaits(performance.now(), replay);
   const fonts = document.fonts?.ready.then(() => undefined) ?? Promise.resolve();
   const loaded =
     document.readyState === "complete"
@@ -68,6 +68,7 @@ export function Sampul() {
       };
     }
 
+    const replay = document.documentElement.dataset.sampul === "replay";
     window.scrollTo(0, 0);
     lockScroll("sampul");
     // Slows the timeline through long frames instead of skipping ahead; Lenis turns lag smoothing off after the intro.
@@ -95,9 +96,9 @@ export function Sampul() {
       if (counter.current) counter.current.textContent = String(Math.round(progress.value)).padStart(3, "0");
     };
     const pop = gsap.fromTo(q("[data-sampul-logo]"), { scale: 0, rotate: -64 }, { scale: 1, rotate: 0, duration: 0.65, delay: 0.1, ease: "elastic.out(1, 0.72)" });
-    const counting = gsap.to(progress, { value: 90, duration: SAMPUL_OPEN_MAX_MS / 1000, ease: "power2.out", onUpdate: renderCount });
+    const counting = gsap.to(progress, { value: 90, duration: (replay ? SAMPUL_REPLAY_OPEN_MAX_MS : SAMPUL_OPEN_MAX_MS) / 1000, ease: "power2.out", onUpdate: renderCount });
 
-    pageSettled().then(() => {
+    pageSettled(replay).then(() => {
       if (cancelled) return;
       counting.kill();
       const lead = SAMPUL_LEAD_MS / 1000;

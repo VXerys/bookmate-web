@@ -1,10 +1,10 @@
 <!-- GENERATED FILE — DO NOT EDIT. Rendered by `npm run context:render`.
 Source: sdd.config.json, docs/steering/, docs/specs/F-*/, docs/context/ASSUMPTIONS.md, docs/handoff/current.md.
-source_hash: 056e6aa7993334c7e412041fa9fc4c8e65f00f36cacb9ee953c5d0fe529571f6 -->
+source_hash: 8feffddf97fa08b00dbb0ae0df71e1032679f7c554201db5beb985674bd35ec9 -->
 
 # Project State
 
-- Generated at: 2026-10-19T09:29:39.438Z
+- Generated at: 2026-10-19T09:34:05.308Z
 - Project: BookMate Web (tier `lite`)
 - Active: F-014 / T-004
 - Open assumptions: 7
@@ -33,14 +33,14 @@ source_hash: 056e6aa7993334c7e412041fa9fc4c8e65f00f36cacb9ee953c5d0fe529571f6 --
 ## Git
 
 - Branch: `feat/F-014-cerita-aardvark`
-- HEAD: `7ba76d1`
+- HEAD: `6dc0a05`
 - Worktree: dirty
 
 Recent commits:
 
+- `6dc0a05 docs(F-014): spec, evidence EV-001, owner-changed AC-001 and AC-002, handoff`
 - `7ba76d1 feat(F-014): owner review pass 2: power-on phone scene, roomier shelf, footer sign-off`
 - `9a0fd26 feat(F-014): owner review pass: waves per chapter, new devices, Bricolage headings, refresh fixes`
 - `02d41f0 feat(F-014): story-led revamp with the app's own art, blue palette, curtain nav transition`
 - `dbbf9a7 Merge pull request #6 from VXerys/feat/F-013-gaya-aardvark`
-- `07f3323 docs(F-013): REA-validated reference, books-shelf requirement, evidence, superseded specs, handoff`
 <!-- GENERATED:GIT_FACTS:END -->

@@ -56,9 +56,9 @@ test("plays the sampul on the first load in a tab", () => {
   assert.equal(boot().before.sampul, "play");
 });
 
-test("skips the sampul once this tab has seen it", () => {
+test("plays the short replay on every reload once this tab has seen the sampul", () => {
   const storage = { getItem: (key: string) => (key === SAMPUL_SESSION_KEY ? "1" : null) };
-  assert.equal(boot({ storage }).before.sampul, "skip");
+  assert.equal(boot({ storage }).before.sampul, "replay");
 });
 
 test("blocked sessionStorage still boots and plays the sampul", () => {
