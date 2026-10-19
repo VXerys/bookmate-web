@@ -120,8 +120,26 @@ Evidence that acceptance criteria hold at a named commit. A claim without a comm
   header targets at 1024 px: BookMate 95x44, Fitur 54x44, Streak 66x44, Lencana 80x44, Komunitas 93x44, FAQ 51x44, Unduh 84x44
   ```
 - date: 2026-10-19
-- commit: uncommitted on feat/F-002-shell-global (base dda1721)
+- commit: 004b251
 - covers: [AC-005, AC-006, AC-007]
+
+### EV-008 — Slice transition, fokus, dan hash (T-005)
+- command: `npm test && npm run test:sdd && npm run lint && npm run typecheck && npm run build` (exit codes checked); Browser pane on next dev at 1440 px: real click on header "Streak", dispatched clicks for the rest, gsap.ticker driven by hand
+- output:
+  ```text
+  ✔ a plain left click on an in-page link travels to that section; ✔ new-tab clicks, other buttons, and handled events stay native
+  ✔ opted-out links, bare hashes, and other pages stay native; ✔ encoded ids are decoded and malformed ones are ignored
+  tests 41 pass; SDD 34 pass; lint, typecheck, build exit 0; dev handle absent from .next/static
+  click Streak: overlay on, lock owners [slice], label "05 — Api streak"; strips 100 -> 0 staggered (first 0, last 16 at 485 ms)
+  covered at ~1010 ms: scrollY 0 -> 2751, hash #streak; strips 0 -> -100; overlay hidden, lock owners [] at 1675 ms
+  second click to #faq at 206 ms ignored; final hash #streak, focus H2 "Api streak", indicator "05 — Api streak"
+  after cache-cleared restart: #kartu (down) and #bab (up) land 72 px below the viewport top (= scroll-margin-top);
+  going up the header bottom is 69 px, so the section is not covered; focus on each section heading
+  skip link: click not prevented by the slice handler, overlay opacity 0, no lock
+  ```
+- date: 2026-10-19
+- commit: uncommitted on feat/F-002-shell-global (base 004b251)
+- covers: [AC-009, AC-010, AC-011]
 
 ## Coverage
 
@@ -135,7 +153,8 @@ Evidence that acceptance criteria hold at a named commit. A claim without a comm
 | AC-021 | EV-003 | pass |
 | AC-005, AC-006, AC-007 | EV-007 | pass |
 | AC-008 | none | not_run (reduced motion, cek pemilik; secara kode logika sembunyi hanya ada di cabang `MOTION_OK`) |
-| AC-009 to AC-019 | none | not_run (T-005 sampai T-009) |
+| AC-009, AC-010, AC-011 | EV-008 | pass (AC-010 jalur reduced motion lewat kode: lompat langsung lalu fokus; cek pemilik) |
+| AC-012 to AC-019 | none | not_run (T-006 sampai T-009) |
 
 ## Not run
 

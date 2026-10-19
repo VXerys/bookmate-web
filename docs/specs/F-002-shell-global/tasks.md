@@ -51,7 +51,7 @@ Hasil: 10 bab sesuai urutan art direction; 5 punya `navLabel` untuk header. `<ma
 Hasil: `completeIntro()` pindah ke `sampul.tsx` dan `intro-gate.tsx` dihapus. Jendela waktu ada di `src/lib/motion/sampul-timing.ts` + test; karena sampul butuh 0,8 detik (counter ke 100, judul keluar) sebelum terbelah, penantian "halaman siap" berakhir 0,8 detik lebih awal, sehingga sampul mulai terbuka di 2,0 sampai 4,5 detik dan intro selesai sebelum fallback boot 6 detik. Copy shell di `src/content/shell.ts`. Kesan gerak dan reduced motion menunggu cek pemilik.
 
 ### T-004 — Skip link, header, dan indikator bab
-- status: review
+- status: done
 - requirements: [FR-002]
 - depends_on: [T-002]
 - evidence: [EV-007]
@@ -61,12 +61,14 @@ Hasil: `completeIntro()` pindah ke `sampul.tsx` dan `intro-gate.tsx` dihapus. Je
 Hasil: `main` diberi `tabIndex={-1}` agar skip link memindahkan fokus, bukan hanya posisi scroll; section diberi `scroll-margin-top` agar tidak tertutup header. Header memakai bar `bg-paper/90` (kontras teks terjamin di atas bab gelap), indikator berjalan juga di reduced motion, dan header muncul kembali saat ada fokus di dalamnya. Temuan saat verifikasi yang ikut diperbaiki: scope `useGSAP` membuat selector section kosong (indikator diam); `not-sr-only` Tailwind me-reset padding skip link; target nav di bawah 44 px. AC-008 menunggu cek reduced motion pemilik.
 
 ### T-005 — Slice transition, fokus, dan hash
-- status: planned
+- status: review
 - requirements: [FR-003]
 - depends_on: [T-001, T-002]
-- evidence: []
+- evidence: [EV-008]
 
 `slice-transition.tsx` dengan `navigateTo(id)`, delegasi klik tautan internal, `focusSection`, `history.pushState`. Acceptance: AC-009 sampai AC-011.
+
+Hasil: aturan klik mana yang dicegat ada di `src/lib/motion/in-page-link.ts` + test (modifier, tombol tengah, `data-slice="off"`, `#` kosong, halaman lain tetap native). `navigateTo(id, { onCovered })` disiapkan untuk menu T-006. Pengaman `setTimeout` 3 detik mendaratkan pengunjung bila ticker macet. Catatan verifikasi: Lenis 1.3 sudah menghormati `scroll-margin-top`, jadi offset manual yang sempat ditambahkan ke `jumpToTarget` dicabut lagi karena membuat jarak ganda (144 px).
 
 ### T-006 — Menu mobile
 - status: planned

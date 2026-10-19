@@ -107,7 +107,7 @@ features:
           - EV-006
       - id: T-004
         title: Skip link, header, dan indikator bab
-        status: review
+        status: done
         requirements:
           - FR-002
         depends_on:
@@ -116,13 +116,14 @@ features:
           - EV-007
       - id: T-005
         title: Slice transition, fokus, dan hash
-        status: planned
+        status: review
         requirements:
           - FR-003
         depends_on:
           - T-001
           - T-002
-        evidence: []
+        evidence:
+          - EV-008
       - id: T-006
         title: Menu mobile
         status: planned
@@ -165,7 +166,7 @@ features:
         evidence: []
 active:
   feature_id: F-002
-  task_id: T-004
+  task_id: T-005
 assumptions_open:
   - id: A-001
     feature: null
@@ -189,5 +190,5 @@ assumptions_open:
     feature: null
     title: Analytics yang dipakai
 blockers: []
-generated_at: 2026-10-19T02:12:53.474Z
-source_hash: a997e4b8f6650c6e36d776413359f83f1c403b82fd73e0763bd2a3a2b51ac5f0
+generated_at: 2026-10-19T02:25:54.813Z
+source_hash: fa2ae57f92f00dd938c5bbac1fc82874b5e39784b06107b311d97e6de30597fa

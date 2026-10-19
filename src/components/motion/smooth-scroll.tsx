@@ -41,6 +41,7 @@ export function scrollToTarget(target: string | HTMLElement | number) {
 // Instant jump, used behind the slice transition so the visitor never watches a long scroll.
 export function jumpToTarget(target: string | HTMLElement | number) {
   if (instance) {
+    // Lenis already honours scroll-margin-top (sections clear the fixed header), so no extra offset is added here.
     instance.scrollTo(target, { immediate: true, force: true });
     return;
   }

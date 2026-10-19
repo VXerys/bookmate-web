@@ -33,7 +33,8 @@ Dari F-001 (`3f9a8db`): `smooth-scroll.tsx` (Lenis, `setScrollLocked(boolean)`, 
 | `src/content/shell.ts` | baru: copy shell (sampul, tautan lewati, header; menu dan footer menyusul) + test | sumber teks shell (BR-001) |
 | `src/lib/motion/sampul-timing.ts` | baru: konstanta jendela buka 2,0 sampai 4,5 s, jeda 0,8 s sebelum terbelah, `settleWaits(elapsed)` + test | waktu sampul yang bisa dites |
 | `src/components/motion/sampul.tsx` | baru, menggantikan `intro-gate.tsx`: overlay dua belahan, counter, jendela dari `sampul-timing.ts`, `completeIntro()`, pengaman `setTimeout`; jalur lewati memakai `fonts.ready` | satu-satunya pemanggil `completeIntro()` |
-| `src/components/motion/slice-transition.tsx` | baru: overlay 5 irisan + label, `navigateTo(id)`, flag `busy`, delegasi klik `a[href^="#"]`, `focusSection(id)`, `history.pushState` | navigasi antar bab |
+| `src/components/motion/slice-transition.tsx` | baru: overlay 5 irisan + label, `navigateTo(id, { onCovered })`, flag `busy`, delegasi klik tautan internal, fokus ke heading target, `history.pushState`, pengaman `setTimeout` | navigasi antar bab |
+| `src/lib/motion/in-page-link.ts` | baru: `sliceTargetId(click)` + test | aturan klik yang dicegat |
 | `src/components/site/skip-link.tsx` | baru: "Lewati ke konten" ke `#konten` | AC-005 |
 | `src/components/site/header.tsx` | baru (client): wordmark, tautan bab, CTA magnetis, indikator bab, sembunyi saat scroll turun | AC-006 sampai AC-008 |
 | `src/components/site/menu.tsx` | baru (client): tombol "Menu", panel curtain, focus trap, Esc, tutup saat lebar ≥ 768 px | AC-012, AC-013 |

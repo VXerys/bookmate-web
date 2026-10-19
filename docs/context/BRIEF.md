@@ -1,6 +1,6 @@
 <!-- GENERATED FILE — DO NOT EDIT. Rendered by `npm run context:render`.
 Source: sdd.config.json, docs/steering/, docs/specs/F-*/, docs/context/ASSUMPTIONS.md, docs/handoff/current.md.
-source_hash: a997e4b8f6650c6e36d776413359f83f1c403b82fd73e0763bd2a3a2b51ac5f0 -->
+source_hash: fa2ae57f92f00dd938c5bbac1fc82874b5e39784b06107b311d97e6de30597fa -->
 
 # Brief
 
@@ -10,15 +10,15 @@ Project `BookMate Web`, tier `lite`. Rendered from sdd.config.json, docs/steerin
 
 ## Active
 Feature F-002 — Shell global: sampul, header, slice transition, menu, cursor, footer (`implementing`, docs/specs/F-002-shell-global/)
-Task T-004 — Skip link, header, dan indikator bab (`review`); requirements: FR-002; depends on: T-002
+Task T-005 — Slice transition, fokus, dan hash (`review`); requirements: FR-003; depends on: T-001, T-002
 
-`skip-link.tsx`, `header.tsx`, `<main id="konten">` di layout. Acceptance: AC-005 sampai AC-008.
+`slice-transition.tsx` dengan `navigateTo(id)`, delegasi klik tautan internal, `focusSection`, `history.pushState`. Acceptance: AC-009 sampai AC-011.
 
-Hasil: `main` diberi `tabIndex={-1}` agar skip link memindahkan fokus, bukan hanya posisi scroll; section diberi `scroll-margin-top` agar tidak tertutup header. Header memakai bar `bg-paper/90` (kontras teks terjamin di atas bab gelap), indikator berjalan juga di reduced motion, dan header muncul kembali saat ada fokus di dalamnya. Temuan saat verifikasi yang ikut diperbaiki: scope `useGSAP` membuat selector section kosong (indikator diam); `not-sr-only` Tailwind me-reset padding skip link; target nav di bawah 44 px. AC-008 menunggu cek reduced motion pemilik.
+Hasil: aturan klik mana yang dicegat ada di `src/lib/motion/in-page-link.ts` + test (modifier, tombol tengah, `data-slice="off"`, `#` kosong, halaman lain tetap native). `navigateTo(id, { onCovered })` disiapkan untuk menu T-006. Pengaman `setTimeout` 3 detik mendaratkan pengunjung bila ticker macet. Catatan verifikasi: Lenis 1.3 sudah menghormati `scroll-margin-top`, jadi offset manual yang sempat ditambahkan ke `jumpToTarget` dicabut lagi karena membuat jarak ganda (144 px).
 
 Acceptance criteria:
-- AC-005: Given halaman dimuat, when pengguna menekan Tab pertama kali, then tautan "Lewati ke konten" muncul dan memindahkan fokus ke `<main>`.
-- AC-008: Given reduced motion, when pengguna scroll, then header tetap terlihat tanpa animasi.
+- AC-009: Given motion diizinkan, when pengguna mengaktifkan tautan ke `#id` sebuah section, then 5 irisan vertikal menutup layar berurutan, label bab tujuan terlihat, halaman melompat ke target saat tertutup, lalu irisan membuka.
+- AC-011: Given transisi sedang berjalan, when tautan lain diaktifkan, then klik kedua diabaikan sampai transisi selesai.
 
 ## Rules
 Stop conditions:
@@ -47,10 +47,9 @@ None.
 ## Handoff
 Next step:
 
-Pemilik commit T-004 dan set `done`. Lalu T-005: `src/components/motion/slice-transition.tsx` dengan `navigateTo(id)`, delegasi klik `a[href^="#"]` (kecuali `data-slice="off"`), fokus ke heading target, `history.pushState`, kunci `slice`. Verifikasi seperti biasa, lalu uji keyboard dan hash di Browser pane.
+Pemilik commit T-005 dan set `done`. Lalu T-006: `src/components/site/menu.tsx` (tombol "Menu" di bawah 768 px, panel curtain, kunci `menu`, focus trap, Esc, tutup saat lebar ≥ 768 px, pilih tautan memanggil `navigateTo(id, { onCovered: close })`), copy menu di `src/content/shell.ts`. Ini juga menguji AC-020 end-to-end (menu lalu slice).
 
 ## Other open tasks
-- T-005 — Slice transition, fokus, dan hash (`planned`)
 - T-006 — Menu mobile (`planned`)
 - T-007 — Custom cursor dan magnetic (`planned`)
 - T-008 — Footer reveal (`planned`)
@@ -60,4 +59,4 @@ Pemilik commit T-004 dan set `done`. Lalu T-005: `src/components/motion/slice-tr
 | Feature | Status | Phase | Done/Total |
 |---|---|---|---|
 | F-001 Fondasi dan motion core | implementing | in_progress | 4/5 |
-| F-002 Shell global: sampul, header, slice transition, menu, cursor, footer | implementing | in_progress | 3/9 |
+| F-002 Shell global: sampul, header, slice transition, menu, cursor, footer | implementing | in_progress | 4/9 |
