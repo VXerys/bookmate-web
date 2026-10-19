@@ -1,162 +1,129 @@
 import type { PaletteToken } from "./palette.ts";
 import type { ScreenId } from "./screens.ts";
 
-// Story copy for / (F-012 Marginalia: one reader's day). Product facts come from the BookMate app repo (AGENTS.md,
-// prd.md, lib/features); nothing here is a metric or a user claim. Margin notes ("note") are illustrative scribbles of
-// a club member, shown decoratively, never as testimonials or quotes from real people.
+// Story copy for / (F-013). Product facts come from the BookMate app repo (AGENTS.md, prd.md, lib/features); nothing
+// here is a metric or a user claim. Handwritten notes are illustrative scribbles shown decoratively, never testimonials.
+
+// Card and pill colours: every tone here carries ink text (palette.test.ts and story.test.ts check the pairs).
+export type Tone = Extract<PaletteToken, "highlight" | "ember" | "green" | "coral" | "gold" | "sky" | "blue" | "peach">;
 
 export const prolog = {
-  kicker: "Klub baca komunitas di Android",
   headlineLead: "Satu halaman lagi,",
   headlineEmphasis: "bareng teman.",
-  body: "Catat progres bacaan, jaga streak harian, bedah buku bareng komunitas, dan pinjam buku fisik dari sesama pembaca.",
-  secondary: "Lihat satu harinya",
+  body: "Klub baca komunitas di Android. Catat progres, jaga streak, bedah buku bareng, dan pinjam buku fisik dari sesama pembaca.",
+  secondary: "Lihat fiturnya",
+  note: "Gratis di Google Play",
   screen: "onboarding" satisfies ScreenId,
-  notes: {
-    cta: "mulai dari sini!",
-    page: "hal. 128, dikit lagi",
-    club: "bedah bab 3 malam ini ya",
-  },
 } as const;
 
-// Segments let the manifesto strike out the problem and circle the answer without splitting words by hand.
-export type ManifestoMark = "strike" | "circle";
-export const manifesto = {
-  kicker: "Kenapa BookMate",
-  segments: [
-    { text: "Membaca sendirian gampang berhenti di tengah jalan. Catatan tercecer di " },
-    { text: "spreadsheet", mark: "strike" },
-    { text: ", semangat hilang di " },
-    { text: "grup obrolan yang sepi", mark: "strike" },
-    { text: ". BookMate mengumpulkan progres, diskusi, dan teman baca di " },
-    { text: "satu tempat", mark: "circle" },
-    { text: ", supaya selalu ada alasan untuk membuka satu halaman lagi." },
-  ] as readonly { text: string; mark?: ManifestoMark }[],
-  note: "relate banget.",
+// The books shelf shows the app's own demo data (src/content/books.ts); the label says so, so no visitor reads it as
+// live listings.
+export const buku = {
+  title: "Buku di rak teman",
+  lead: "Intip rak anggota: lihat kondisinya, cek yang tersedia, lalu ajukan pinjam lewat aplikasi.",
+  note: "contoh dari data demo aplikasi",
+  demoLabel: "Data demo",
+  previous: "Buku sebelumnya",
+  next: "Buku berikutnya",
 } as const;
 
-export const buka = {
-  kicker: "Buka aplikasinya",
-  // Split around the phone: the lead sits above it and the tail below, so the sentence reads across the device.
-  statementLead: "Semua bacaanmu,",
-  statementTail: "satu rak.",
-  screen: "bukuSaya" satisfies ScreenId,
-  note: "rak digitalmu",
+export type Feature = {
+  id: string;
+  title: string;
+  body: string;
+  tags: readonly string[];
+  screen: ScreenId;
+  tone: Tone;
+};
+
+export const fitur = {
+  title: "Semua yang kamu butuh buat baca bareng",
+  lead: "Satu aplikasi untuk mencatat, menjaga semangat, dan ngobrolin buku dengan komunitasmu.",
+  note: "geser buat lihat semua",
+  previous: "Fitur sebelumnya",
+  next: "Fitur berikutnya",
+  items: [
+    {
+      id: "catat",
+      title: "Catat Bacaan",
+      body: "Catat per halaman, bab, persen, atau catatan bebas. Buku selesai saat kamu sendiri menekan Selesai.",
+      tags: ["Progres", "Catatan"],
+      screen: "catatBacaan",
+      tone: "coral",
+    },
+    {
+      id: "streak",
+      title: "Streak Harian",
+      body: "Check-in setiap hari dan lihat kalender bacaanmu terisi. Api streak menjaga kebiasaan tetap menyala.",
+      tags: ["Kebiasaan", "Kalender"],
+      screen: "beranda",
+      tone: "highlight",
+    },
+    {
+      id: "bedah",
+      title: "Bedah Buku",
+      body: "Tulis refleksi dengan rating beberapa aspek, kutipan favorit, dan video bedah buku langsung di aplikasi.",
+      tags: ["Refleksi", "Rating"],
+      screen: "bedahBuku",
+      tone: "green",
+    },
+    {
+      id: "komunitas",
+      title: "Komunitas",
+      body: "Gabung komunitas baca di sekitarmu, buka thread diskusi, buat polling, dan beri reaksi.",
+      tags: ["Thread", "Polling"],
+      screen: "komunitas",
+      tone: "sky",
+    },
+    {
+      id: "pinjam",
+      title: "Pinjam Buku",
+      body: "Pinjam buku fisik dari sesama anggota. Ruang obrolan terbuka begitu permintaanmu diterima.",
+      tags: ["Buku fisik", "Chat"],
+      screen: "chatPinjam",
+      tone: "ember",
+    },
+    {
+      id: "rak-buku",
+      title: "Buku Saya",
+      body: "Kumpulkan buku milikmu di satu rak dan tandai mana yang tersedia untuk dipinjam teman.",
+      tags: ["Koleksi", "Ketersediaan"],
+      screen: "bukuSaya",
+      tone: "gold",
+    },
+  ] as readonly Feature[],
 } as const;
 
 export type Moment = "pagi" | "siang" | "sore" | "malam" | "besok";
 
-export type Spread = {
+export type Hour = {
   id: Moment;
   time: string;
   when: string;
   title: string;
   body: string;
-  points: readonly string[];
-  note: string;
-  screen: ScreenId;
-  // The colour of the room around the book at that hour; text outside the book follows `outsideText`.
-  outside: PaletteToken;
+  tone: Tone;
 };
 
 export const hari = {
-  kicker: "Satu hari pembaca",
-  title: "Dari kopi pagi sampai buku pindah tangan.",
-  pageLabel: "hal.",
-  spreads: [
-    {
-      id: "pagi",
-      time: "06.30",
-      when: "Pagi",
-      title: "Streak Harian",
-      body: "Check-in setiap hari dan lihat kalender bacaanmu terisi. Api streak menjaga kebiasaan tetap menyala.",
-      points: ["Check-in sekali sehari", "Kalender bacaan terisi", "Api streak ikut tumbuh"],
-      note: "jangan sampai putus!",
-      screen: "beranda",
-      outside: "sky",
-    },
-    {
-      id: "siang",
-      time: "12.15",
-      when: "Siang",
-      title: "Catat Bacaan",
-      body: "Catat per halaman, bab, persen, atau catatan bebas. Buku baru dihitung selesai saat kamu sendiri menekan Selesai.",
-      points: ["Per halaman, bab, atau persen", "Catatan bebas", "Selesai saat kamu bilang selesai"],
-      note: "istirahat makan = 12 halaman",
-      screen: "catatBacaan",
-      outside: "peach-pale",
-    },
-    {
-      id: "sore",
-      time: "16.00",
-      when: "Sore",
-      title: "Bedah Buku",
-      body: "Tulis refleksi mendalam dengan rating beberapa aspek, kutipan favorit, dan video bedah buku langsung di aplikasi.",
-      points: ["Rating beberapa aspek", "Kutipan favorit", "Video bedah buku"],
-      note: "kutipan ini wajib dibahas",
-      screen: "bedahBuku",
-      outside: "peach",
-    },
-    {
-      id: "malam",
-      time: "20.00",
-      when: "Malam",
-      title: "Komunitas",
-      body: "Gabung komunitas baca di sekitarmu, buka thread diskusi, buat polling, dan beri reaksi.",
-      points: ["Thread diskusi", "Polling", "Reaksi"],
-      note: "bulan depan baca apa?",
-      screen: "komunitas",
-      outside: "plum",
-    },
-    {
-      id: "besok",
-      time: "09.00",
-      when: "Besok",
-      title: "Pinjam Buku",
-      body: "Pinjam buku fisik dari sesama anggota. Ruang obrolan terbuka begitu permintaanmu diterima.",
-      points: ["Pinjam dari sesama anggota", "Chat terbuka saat diterima"],
-      note: "nanti kubalikin, janji",
-      screen: "chatPinjam",
-      outside: "sky",
-    },
-  ] as readonly Spread[],
+  title: "Satu hari bareng BookMate",
+  lead: "Dari kopi pagi sampai buku pindah tangan.",
+  note: "begini harinya pembaca",
+  hours: [
+    { id: "pagi", time: "06.30", when: "Pagi", title: "Check-in streak", body: "Buka aplikasi, check-in, dan api streak-mu bertambah satu hari.", tone: "sky" },
+    { id: "siang", time: "12.15", when: "Siang", title: "Catat bacaan", body: "Istirahat makan siang, catat sampai halaman berapa kamu membaca.", tone: "highlight" },
+    { id: "sore", time: "16.00", when: "Sore", title: "Bedah buku", body: "Tulis refleksi, beri rating, dan simpan kutipan favoritmu.", tone: "ember" },
+    { id: "malam", time: "20.00", when: "Malam", title: "Ngobrol di komunitas", body: "Balas thread, ikut polling, dan beri reaksi di klub bacamu.", tone: "blue" },
+    { id: "besok", time: "09.00", when: "Besok", title: "Pinjam ke teman", body: "Ajukan pinjam buku fisik; chat terbuka begitu diterima.", tone: "green" },
+  ] as readonly Hour[],
 } as const;
 
-// Text colour for labels that sit outside the book, on the room colour of each hour (palette.test.ts checks pairs).
-export const outsideText: Partial<Record<PaletteToken, PaletteToken>> = {
-  sky: "ink",
-  "peach-pale": "ink",
-  peach: "ink",
-  plum: "paper",
-};
-
-export const rak = {
-  kicker: "Rak lencana",
-  statement: "Setiap kebiasaan membuka satu lencana.",
-  summary: "30 lencana dalam 6 kategori.",
-  hint: "Tarik satu buku dari rak untuk melihat syaratnya.",
-  tierLabel: "Tier",
-  criteriaLabel: "Syarat",
-  note: "aku lagi ngejar yang ini",
-} as const;
-
-export const papan = {
-  kicker: "Papan komunitas",
-  statement: "Bacaan terasa lebih seru kalau dibicarakan.",
-  notes: [
-    { id: "thread", title: "Thread diskusi", body: "Buka topik di komunitasmu dan balas langsung di bawahnya." },
-    { id: "polling", title: "Polling", body: "Tanya pendapat anggota: buku apa yang dibaca bulan depan?" },
-    { id: "reaksi", title: "Reaksi", body: "Beri reaksi pada thread tanpa perlu mengetik panjang." },
-    { id: "chat", title: "Chat pinjam buku", body: "Ruang obrolan terbuka begitu permintaan pinjam diterima." },
-  ],
-  // Labels inside the illustrated poll; an example, not real votes.
-  pollExample: { label: "contoh", options: ["Fiksi", "Nonfiksi", "Puisi"] },
-  marquee: ["Catat Bacaan", "Streak Harian", "Bedah Buku", "Komunitas", "Pinjam Buku", "Lencana Pembaca"],
-} as const;
-
-export const mulai = {
-  kicker: "Cara mulai",
-  screen: "onboardingPinjam" satisfies ScreenId,
+export const buka = {
+  // Split around the phone: the lead sits above it and the tail below, so the sentence reads across the device.
+  statementLead: "Semua bacaanmu,",
+  statementTail: "satu rak.",
+  screen: "bukuSaya" satisfies ScreenId,
+  stepsTitle: "Mulai dalam tiga langkah",
   steps: [
     { title: "Unduh BookMate", body: "Pasang dari Google Play di ponsel Android kamu." },
     { title: "Masuk", body: "Daftar dengan email atau akun Google." },
@@ -165,9 +132,34 @@ export const mulai = {
   note: "cuma tiga langkah",
 } as const;
 
+export const daftar = {
+  kicker: "Pilih caramu membaca",
+  note: "ada fitur untuk setiap pembaca",
+} as const;
+
+// Each pill states a fact with its source in the app repo, so the page never claims more than the app does.
+export const manfaat = {
+  title: "Kenapa BookMate",
+  pills: [
+    { label: "Gratis", tone: "coral", source: "marketing_assets/threads/post_01_update_v1.1.0/content.md" },
+    { label: "Untuk Android", tone: "ember", source: "RELEASE_NOTES.md" },
+    { label: "Klub baca komunitas", tone: "sky", source: "AGENTS.md" },
+    { label: "Pinjam buku fisik", tone: "green", source: "lib/features" },
+    { label: "30 lencana", tone: "gold", source: "reading_achievement_resolver.dart" },
+  ] as readonly { label: string; tone: Tone; source: string }[],
+} as const;
+
+export const rak = {
+  title: "Setiap kebiasaan membuka satu lencana",
+  lead: "30 lencana dalam 6 kategori. Balik kartunya untuk melihat syaratnya.",
+  note: "aku lagi ngejar yang ini",
+  tierLabel: "Tier",
+  criteriaLabel: "Syarat",
+  flipLabel: "Balik kartu",
+} as const;
+
 // Every answer cites where it comes from in the BookMate app repo, so the page never states an unverified fact.
 export const faq = {
-  kicker: "Indeks",
   title: "Pertanyaan yang sering muncul",
   note: "masih bingung? tanya di komunitas",
   items: [

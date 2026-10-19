@@ -1,139 +1,105 @@
 "use client";
 
-import { useRef, useState } from "react";
+import { useRef, useState, type CSSProperties } from "react";
 
-import { BookSpine, type BookPattern, type BookTone } from "@/components/art/books";
-import { CurvedArrow, Tape } from "@/components/art/doodles";
+import { BookCover, type BookPattern, type BookTone } from "@/components/art/books";
+import { Ribbon } from "@/components/art/ribbon";
+import { HandNote } from "@/components/motion/hand-note";
+import { PopTitle } from "@/components/motion/pop-title";
 import { badges } from "@/content/badges";
 import { rak } from "@/content/story";
-import { drawDoodle, prepareDoodles, revealDoodles } from "@/lib/motion/draw";
-import { EASE_OUT, gsap, MOTION_OK, useGSAP } from "@/lib/motion/gsap";
+import { gsap, MOTION_OK, useGSAP } from "@/lib/motion/gsap";
 
-// One tier I badge per category stands on the shelf; names and criteria come straight from the app (badges.ts).
+// One tier I badge per category; names and criteria come straight from the app (badges.ts).
 const shelf = [...new Set(badges.map((badge) => badge.group))].map(
   (group) => badges.find((badge) => badge.group === group && badge.tier === "I")!,
 );
 const groupName = (group: string) => group.replace(/\s*\(.*\)$/, "");
 
-// Literal looks per spine so the shelf reads as six different books, not a repeated component.
-const LOOKS: { tone: BookTone; pattern: BookPattern; height: string; width: string }[] = [
-  { tone: "blue", pattern: "waves", height: "h-[92%]", width: "w-[4.2rem]" },
-  { tone: "ember", pattern: "dots", height: "h-[78%]", width: "w-[3.7rem]" },
-  { tone: "plum", pattern: "stripes", height: "h-full", width: "w-[4.6rem]" },
-  { tone: "highlight", pattern: "grid", height: "h-[84%]", width: "w-[3.9rem]" },
-  { tone: "forest", pattern: "arches", height: "h-[95%]", width: "w-[4.3rem]" },
-  { tone: "peach", pattern: "sun", height: "h-[74%]", width: "w-[4rem]" },
+const LOOKS: { tone: BookTone; pattern: BookPattern; ribbon: string }[] = [
+  { tone: "blue", pattern: "waves", ribbon: "coral" },
+  { tone: "coral", pattern: "dots", ribbon: "blue" },
+  { tone: "green", pattern: "stripes", ribbon: "ember" },
+  { tone: "ember", pattern: "sun", ribbon: "green" },
+  { tone: "gold", pattern: "arches", ribbon: "blue" },
+  { tone: "sky", pattern: "grid", ribbon: "coral" },
 ];
-const LABEL_ON_DARK = new Set<BookTone>(["blue", "plum", "forest"]);
+const TILT = [-3, 2, -2, 3, -1, 2] as const;
 
-// The badge deck as a bookshelf (F-012 FR-004): spines drop onto the shelf, a pointer pulls one up, and choosing one
-// opens its note. Buttons with aria-expanded keep it usable by keyboard and screen reader (AC-007).
+// The badge shelf as cards on a yellow capsule (F-013, reference "members' choice"): cards drop in with a spring and
+// each turns over to show its philosophy and criteria. Real buttons with aria-pressed keep it usable by keyboard.
 export function Rak() {
   const root = useRef<HTMLElement>(null);
-  const [open, setOpen] = useState(0);
-  const badge = shelf[open];
+  const [flipped, setFlipped] = useState<Record<string, boolean>>({});
 
-  const { contextSafe } = useGSAP(
+  useGSAP(
     () => {
       const section = root.current;
       if (!section) return;
       const mm = gsap.matchMedia();
       mm.add(MOTION_OK, () => {
-        prepareDoodles(section);
-        const spines = gsap.utils.toArray<HTMLElement>("[data-spine]", section);
-        gsap
-          .timeline({ scrollTrigger: { trigger: "[data-shelf]", start: "top 75%", once: true } })
-          .from(spines, {
-            y: -220,
-            rotation: (i: number) => (i % 2 ? 14 : -10),
-            autoAlpha: 0,
-            duration: 1.1,
-            ease: EASE_OUT,
-            stagger: 0.08,
-            clearProps: "transform",
-          })
-          .from("[data-rak-note]", { y: 40, rotation: 6, autoAlpha: 0, duration: 1, ease: EASE_OUT }, 0.3)
-          .add(drawDoodle(section.querySelector("[data-rak-arrow]")!, { duration: 0.6 }), 0.9);
-        return () => revealDoodles(section);
+        gsap.from("[data-badge-card]", {
+          yPercent: 120,
+          rotation: (i: number) => TILT[i] * 4,
+          autoAlpha: 0,
+          duration: 1.05,
+          ease: "elastic.out(1, 0.75)",
+          stagger: 0.088,
+          scrollTrigger: { trigger: "[data-badge-grid]", start: "top 85%", once: true },
+        });
       });
       return () => mm.revert();
     },
     { scope: root },
   );
 
-  const choose = contextSafe((index: number) => {
-    setOpen(index);
-    if (window.matchMedia(MOTION_OK).matches) {
-      gsap.fromTo("[data-rak-note-body]", { autoAlpha: 0, y: 12 }, { autoAlpha: 1, y: 0, duration: 0.5, ease: EASE_OUT });
-    }
-  });
-
   return (
-    <section ref={root} id="rak" data-chapter="rak" className="slab overflow-hidden bg-paper px-4 py-24 md:px-10">
-      <div className="flex max-w-4xl flex-col gap-4">
-        <h2 className="label text-slate">{rak.kicker}</h2>
-        <p className="statement">{rak.statement}</p>
-        <p className="text-slate">
-          {rak.summary} {rak.hint}
-        </p>
-      </div>
-
-      <div className="mt-14 grid items-end gap-14 lg:grid-cols-[minmax(0,1fr)_minmax(18rem,26rem)]">
-        <div className="relative min-w-0">
-          <div data-shelf className="flex h-[min(56svh,26rem)] items-end gap-2.5 overflow-x-auto px-2 pt-10 sm:gap-3.5">
-            {shelf.map((item, index) => {
-              const look = LOOKS[index % LOOKS.length];
-              const expanded = open === index;
-              return (
+    <div className="bg-white">
+      <section ref={root} id="rak" data-chapter="rak" className="shape-capsule overflow-hidden bg-highlight px-6 py-28 lg:px-10">
+        <div className="mx-auto flex max-w-3xl flex-col items-center gap-5 text-center">
+          <PopTitle className="heading">{rak.title}</PopTitle>
+          <p className="lead">{rak.lead}</p>
+          <HandNote decorative className="-rotate-2">
+            {rak.note}
+          </HandNote>
+        </div>
+        <ul data-badge-grid className="mx-auto mt-16 grid max-w-6xl gap-6 sm:grid-cols-2 lg:grid-cols-3">
+          {shelf.map((badge, index) => {
+            const look = LOOKS[index % LOOKS.length];
+            const isFlipped = Boolean(flipped[badge.code]);
+            return (
+              <li key={badge.code} data-badge-card className="[perspective:1400px] sm:[rotate:var(--tilt)]" style={{ "--tilt": `${TILT[index]}deg` } as CSSProperties}>
                 <button
-                  key={item.code}
                   type="button"
-                  data-spine
-                  aria-expanded={expanded}
-                  aria-controls="rak-catatan"
-                  onClick={() => choose(index)}
-                  className={`spine relative shrink-0 ${look.height} ${look.width} cursor-pointer text-left focus-visible:outline-offset-4`}
+                  aria-pressed={isFlipped}
+                  aria-label={`${rak.flipLabel}: ${badge.title}`}
+                  onClick={() => setFlipped((all) => ({ ...all, [badge.code]: !isFlipped }))}
+                  className="flip-inner relative block h-[26rem] w-full text-left"
+                  data-flipped={isFlipped || undefined}
                 >
-                  <BookSpine tone={look.tone} pattern={look.pattern} id={item.code}>
-                    <span
-                      className={`absolute inset-0 flex items-center justify-center px-1 font-display text-lg font-bold [writing-mode:vertical-rl] ${LABEL_ON_DARK.has(look.tone) ? "text-paper" : "text-ink"}`}
-                    >
-                      <span className="rotate-180 rounded-full px-1.5 py-2" style={{ background: `var(--color-${look.tone})` }}>
-                        {groupName(item.group)}
-                      </span>
+                  <span className="flip-face absolute inset-0 flex flex-col gap-4 rounded-3xl bg-peach-pale p-4" aria-hidden={isFlipped}>
+                    <Ribbon tone={look.ribbon} className="absolute -top-3 right-6 h-16 w-6" />
+                    <span className="label px-2 pt-2">
+                      {rak.tierLabel} {badge.tier} · {groupName(badge.group)}
                     </span>
-                  </BookSpine>
+                    <span className="mx-auto w-[46%] -rotate-3">
+                      <BookCover tone={look.tone} pattern={look.pattern} id={`rak-${badge.code}`} className="w-full" />
+                    </span>
+                    <span className="statement mt-auto px-2 pb-2">{badge.title}</span>
+                  </span>
+                  <span className="flip-face flip-back absolute inset-0 flex flex-col justify-between gap-4 rounded-3xl p-6" style={{ background: `var(--color-${look.tone === "blue" ? "sky" : look.tone})` }} aria-hidden={!isFlipped}>
+                    <span className="lead">“{badge.philosophy}”</span>
+                    <span className="flex flex-col gap-1">
+                      <span className="label">{rak.criteriaLabel}</span>
+                      <span className="font-display text-2xl font-bold">{badge.criteria}</span>
+                    </span>
+                  </span>
                 </button>
-              );
-            })}
-          </div>
-          {/* The shelf plank and its two brackets. */}
-          <div className="h-4 rounded-sm border-[3px] border-ink bg-peach" aria-hidden="true" />
-          <div className="flex justify-between px-10" aria-hidden="true">
-            <span className="h-8 w-4 border-x-[3px] border-b-[3px] border-ink bg-peach" />
-            <span className="h-8 w-4 border-x-[3px] border-b-[3px] border-ink bg-peach" />
-          </div>
-        </div>
-
-        <div data-rak-note id="rak-catatan" aria-live="polite" className="relative rotate-1 rounded-sm bg-peach-pale p-7 pt-10 text-ink shadow-[6px_8px_0_var(--color-ink)]">
-          <Tape className="absolute -top-3 left-1/2 w-24 -translate-x-1/2 -rotate-2" />
-          <div data-rak-note-body className="flex flex-col gap-4">
-            <p className="label">
-              {rak.tierLabel} {badge.tier} · {groupName(badge.group)}
-            </p>
-            <p className="font-serif text-4xl italic">{badge.title}</p>
-            <p className="text-slate">“{badge.philosophy}”</p>
-            <p>
-              <span className="label block">{rak.criteriaLabel}</span>
-              <span className="text-xl font-medium">{badge.criteria}</span>
-            </p>
-          </div>
-          <div className="pointer-events-none absolute -top-16 right-2 hidden items-center gap-1 lg:flex" aria-hidden="true">
-            <CurvedArrow data-rak-arrow="" className="h-14 w-16 rotate-[150deg] text-ink" />
-            <p className="hand -rotate-3 text-2xl text-blue">{rak.note}</p>
-          </div>
-        </div>
-      </div>
-    </section>
+              </li>
+            );
+          })}
+        </ul>
+      </section>
+    </div>
   );
 }

@@ -2,19 +2,26 @@
 
 import { useRef } from "react";
 
-import { CurvedArrow, Highlight } from "@/components/art/doodles";
-import { Magnetic } from "@/components/motion/magnetic";
-import { CtaLink } from "@/components/site/cta-link";
-import { PrologLayers } from "@/components/motion/prolog-layers";
+import { Book3D } from "@/components/art/book3d";
+import { Blobs } from "@/components/motion/blobs";
+import { HandNote } from "@/components/motion/hand-note";
+import { PopTitle } from "@/components/motion/pop-title";
+import { ButtonAlt } from "@/components/site/button-alt";
+import { PhoneFrame } from "@/components/site/phone-frame";
 import { shell } from "@/content/shell";
 import { site } from "@/content/site";
 import { prolog } from "@/content/story";
-import { drawDoodle, prepareDoodles, revealDoodles, sweepHighlight } from "@/lib/motion/draw";
-import { EASE_OUT, gsap, MOTION_OK, useGSAP } from "@/lib/motion/gsap";
+import { ENERGY, gsap, LAND, MOTION_OK, POINTER_MOTION, useGSAP } from "@/lib/motion/gsap";
 import { whenIntroDone } from "@/lib/motion/intro-state";
 
-// The opening page of the book (F-012): the headline rises line by line, a friend's highlighter sweeps under
-// "bareng teman.", and an arrow with a margin note points at the download button.
+const HERO_BLOBS = [
+  { d: "M1140 120 C1290 40 1480 120 1500 300 C1520 470 1380 560 1240 520 C1100 480 1010 380 1030 260 C1040 190 1080 150 1140 120 Z", color: "var(--color-peach)" },
+  { d: "M-60 640 C80 560 260 600 330 720 C400 840 330 960 180 980 C40 1000 -90 900 -110 790 C-120 720 -100 670 -60 640 Z", color: "var(--color-peach)" },
+  { d: "M760 760 C820 700 930 710 970 790 C1010 870 960 950 870 960 C790 970 720 910 720 850 C720 810 735 785 760 760 Z", color: "var(--color-ember)" },
+] as const;
+
+// The yellow cover of the story (F-013): the background opens from the bottom-right corner, the title lands word by
+// word, and a phone with two hardcovers tumbles in, then drifts as the page scrolls (reference-aardvark.md, hero).
 export function Prolog() {
   const root = useRef<HTMLElement>(null);
 
@@ -22,93 +29,108 @@ export function Prolog() {
     () => {
       const section = root.current;
       if (!section) return;
-      const copy = section.querySelector<HTMLElement>("[data-hero-copy]");
+      const bg = section.querySelector<HTMLElement>("[data-hero-bg]");
+      const visual = section.querySelector<HTMLElement>("[data-hero-visual]");
+      const fades = section.querySelectorAll<HTMLElement>("[data-hero-fade]");
       const mm = gsap.matchMedia();
+
       mm.add(MOTION_OK, () => {
-        if (!copy || !document.documentElement.classList.contains("js")) return;
-        prepareDoodles(section);
-        gsap.set("[data-hero-line]", { yPercent: 110 });
-        gsap.set("[data-hero-fade]", { autoAlpha: 0, y: 24 });
-        copy.dataset.revealReady = "";
+        if (!document.documentElement.classList.contains("js")) return;
+        const wide = window.matchMedia("(min-width: 992px)").matches;
+        if (bg && wide) gsap.set(bg, { clipPath: "ellipse(20% 0% at 100% 100%)" });
+        gsap.set(fades, { autoAlpha: 0, y: "-0.75em" });
+        if (visual) gsap.set(visual, { autoAlpha: 0, y: "5em", rotate: -43 });
+        section.dataset.heroReady = "";
 
         // The intro callback can fire outside this context (from completeIntro), so its timeline is killed by hand.
         let intro: gsap.core.Timeline | undefined;
-        const stopWaiting = whenIntroDone(() => {
-          intro = gsap
-            .timeline({ defaults: { ease: EASE_OUT }, delay: 0.15 })
-            .to("[data-hero-line]", { yPercent: 0, duration: 1.2, stagger: 0.12 })
-            .add(sweepHighlight(section.querySelector("[data-highlight]")!, { duration: 0.7 }), 0.75)
-            .to("[data-hero-fade]", { autoAlpha: 1, y: 0, duration: 1, stagger: 0.08 }, 0.7)
-            .add(drawDoodle(section.querySelector("[data-hero-arrow]")!, { duration: 0.7 }), 1.25)
-            .from("[data-hero-note]", { autoAlpha: 0, y: 8, rotate: -6, duration: 0.6 }, 1.55);
+        const stop = whenIntroDone(() => {
+          intro = gsap.timeline();
+          if (bg && wide) intro.to(bg, { clipPath: "ellipse(150% 130% at 100% 100%)", duration: 1.1, ease: "circ.out" }, 0);
+          intro.to(fades, { autoAlpha: 1, y: 0, duration: 0.35, ease: ENERGY, stagger: 0.075 }, 0.45);
+          if (visual) intro.to(visual, { autoAlpha: 1, y: 0, rotate: 0, duration: 1.2, ease: LAND }, 0.3);
         });
+
+        // Once on screen, the visual drifts up and turns a little as the hero scrolls away.
+        const drift = visual?.querySelector("[data-hero-drift]");
+        if (drift) {
+          gsap.to(drift, { yPercent: -18, rotate: 6, ease: "none", scrollTrigger: { trigger: section, start: "top top", end: "bottom top", scrub: 0.8 } });
+        }
         return () => {
-          stopWaiting();
+          stop();
           intro?.kill();
-          gsap.set(section.querySelectorAll("[data-hero-line], [data-hero-fade], [data-hero-note]"), { clearProps: "transform,opacity,visibility" });
-          revealDoodles(section);
-          delete copy.dataset.revealReady;
+          gsap.set([bg, visual, ...fades].filter(Boolean), { clearProps: "clipPath,opacity,visibility,transform" });
+          delete section.dataset.heroReady;
         };
       });
+
+      // The books and the phone lean toward the pointer at different depths.
+      mm.add(`${POINTER_MOTION} and (min-width: 992px)`, () => {
+        const layers = gsap.utils.toArray<HTMLElement>("[data-hero-depth]", section).map((layer) => ({
+          x: gsap.quickTo(layer, "x", { duration: 0.9, ease: "power3" }),
+          y: gsap.quickTo(layer, "y", { duration: 0.9, ease: "power3" }),
+          depth: Number(layer.dataset.heroDepth),
+        }));
+        const onMove = (event: PointerEvent) => {
+          const nx = event.clientX / window.innerWidth - 0.5;
+          const ny = event.clientY / window.innerHeight - 0.5;
+          layers.forEach((layer) => {
+            layer.x(nx * 60 * layer.depth);
+            layer.y(ny * 40 * layer.depth);
+          });
+        };
+        window.addEventListener("pointermove", onMove);
+        return () => window.removeEventListener("pointermove", onMove);
+      });
+
       return () => mm.revert();
     },
     { scope: root },
   );
 
   return (
-    <section
-      ref={root}
-      id="prolog"
-      data-chapter="prolog"
-      className="relative grid min-h-svh items-center gap-10 overflow-hidden bg-highlight px-4 pt-28 pb-20 md:grid-cols-[1.1fr_0.9fr] md:px-10"
-    >
-      {/* Paler waves rolling across the yellow, like the light on a page. */}
-      <svg viewBox="0 0 1440 900" preserveAspectRatio="xMidYMid slice" className="pointer-events-none absolute inset-0 h-full w-full" aria-hidden="true">
-        <path d="M-40 300 C220 160 420 420 720 300 S1180 120 1480 260 V-40 H-40 Z" fill="var(--color-paper)" opacity="0.28" />
-        <path d="M-40 760 C260 600 520 860 860 700 S1280 560 1480 660 V940 H-40 Z" fill="var(--color-paper)" opacity="0.32" />
-        <path data-hero-wave d="M-40 520 C300 420 560 640 900 520 S1300 400 1480 470" fill="none" stroke="var(--color-paper)" strokeOpacity="0.55" strokeWidth="56" strokeLinecap="round" />
-      </svg>
-      <div data-hero-copy data-reveal="" className="relative z-10 flex flex-col gap-7">
-        <p data-hero-fade className="label w-fit rounded-full border-[2.5px] border-ink bg-paper px-3 py-1.5">
-          {prolog.kicker}
-        </p>
-        <h1 className="display relative isolate text-[clamp(3rem,8.4vw,9.5rem)]">
-          <span className="block overflow-hidden pb-[0.06em]">
-            <span data-hero-line className="block">
-              {prolog.headlineLead}
-            </span>
-          </span>{" "}
-          <span className="relative block w-fit">
-            <Highlight tone="paper" className="absolute -inset-x-[0.12em] bottom-[0.04em] -z-10 h-[0.62em] w-[calc(100%+0.24em)]" />
-            <span className="block overflow-hidden pb-[0.08em]">
-              <span data-hero-line className="block">
-                <em>{prolog.headlineEmphasis}</em>
-              </span>
-            </span>
-          </span>
-        </h1>
-        <p data-hero-fade className="max-w-md text-lg">
-          {prolog.body}
-        </p>
-        <div data-hero-fade className="relative flex flex-wrap items-center gap-x-6 gap-y-3">
-          <Magnetic>
-            <CtaLink href={site.app.playStoreUrl} cursorLabel={shell.header.cta}>
+    <section ref={root} id="prolog" data-chapter="prolog" className="shape-bottom relative isolate min-h-[min(100svh,66rem)] overflow-hidden">
+      <div data-hero-bg className="absolute inset-0 -z-10 bg-highlight">
+        <Blobs blobs={HERO_BLOBS} className="absolute inset-0 h-full w-full" />
+      </div>
+
+      <div className="mx-auto grid min-h-[inherit] max-w-[90rem] items-center gap-10 px-6 pt-32 pb-24 lg:grid-cols-[1.25fr_0.75fr] lg:px-10">
+        <div className="flex flex-col items-start gap-7">
+          <PopTitle as="h1" intro className="display">
+            {prolog.headlineLead} <em>{prolog.headlineEmphasis}</em>
+          </PopTitle>
+          <p data-hero-fade className="lead max-w-md">
+            {prolog.body}
+          </p>
+          <div data-hero-fade className="flex flex-wrap items-center gap-3">
+            <ButtonAlt href={site.app.playStoreUrl} cursorLabel={shell.header.cta} size="lg">
               {shell.footer.download}
-            </CtaLink>
-          </Magnetic>
-          <a href="#hari" className="inline-flex min-h-11 items-center rounded-full border-[2.5px] border-ink bg-paper px-5 font-semibold transition-colors hover:bg-sky">
-            {prolog.secondary}
-          </a>
-          {/* A note in the empty margin beside the buttons, its arrow curling back toward them. */}
-          <div className="pointer-events-none absolute top-1/2 left-[25rem] hidden -translate-y-1/2 items-center gap-2 xl:flex" aria-hidden="true">
-            <CurvedArrow data-hero-arrow="" className="h-16 w-20 rotate-90 text-ink" />
-            <p data-hero-note className="hand -rotate-6 text-3xl whitespace-nowrap text-ink">
-              {prolog.notes.cta}
-            </p>
+            </ButtonAlt>
+            <a href="#fitur" className="inline-flex h-14 items-center rounded-md bg-white px-6 font-bold transition-colors hover:bg-peach-pale">
+              {prolog.secondary}
+            </a>
           </div>
         </div>
+
+        <div data-hero-visual className="relative mx-auto h-[min(70svh,36rem)] w-full max-w-[32rem]">
+          <div data-hero-drift className="absolute inset-0">
+            <div data-hero-depth="1.3" className="absolute top-[6%] left-[2%] text-[clamp(9px,1vw,14px)]">
+              <Book3D tone="blue" pattern="waves" id="hero-a" pose="rotateX(14deg) rotateY(-34deg) rotateZ(-16deg)" />
+            </div>
+            <div data-hero-depth="0.4" className="absolute inset-0 flex items-center justify-center">
+              <div className="w-[min(56vw,15.5rem)] rotate-[6deg]">
+                <PhoneFrame screen={prolog.screen} eager decorative sizes="(min-width: 992px) 248px, 56vw" />
+              </div>
+            </div>
+            <div data-hero-depth="0.9" className="absolute right-[0%] bottom-[4%] text-[clamp(8px,0.9vw,13px)]">
+              <Book3D tone="coral" pattern="dots" id="hero-b" pose="rotateX(-10deg) rotateY(32deg) rotateZ(18deg)" />
+            </div>
+          </div>
+          <HandNote intro delay={0.5} className="absolute -top-4 right-0 -rotate-6 text-[clamp(1.5rem,2.2vw,2rem)]">
+            {prolog.note}
+          </HandNote>
+        </div>
       </div>
-      <PrologLayers />
     </section>
   );
 }

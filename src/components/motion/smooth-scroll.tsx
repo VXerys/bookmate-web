@@ -57,7 +57,8 @@ export function SmoothScroll() {
     // Under reduced motion the browser's native scroll is the final state; Lenis never starts.
     if (!window.matchMedia(MOTION_OK).matches) return;
 
-    const lenis = new Lenis({ lerp: 0.09, smoothWheel: true });
+    // lerp 0.2 matches the reference's snappier smoothing (reference-aardvark.md, validated with REA).
+    const lenis = new Lenis({ lerp: 0.2, smoothWheel: true });
     instance = lenis;
     if (scrollLock.isLocked()) lenis.stop();
     lenis.on("scroll", ScrollTrigger.update);

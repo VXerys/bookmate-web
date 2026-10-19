@@ -6,7 +6,7 @@ import { createPortal } from "react-dom";
 import { navigateTo } from "@/components/motion/slice-transition";
 import { lockScroll, unlockScroll } from "@/components/motion/smooth-scroll";
 import { chapterNumber, navChapters } from "@/content/navigation";
-import { CtaLink } from "@/components/site/cta-link";
+import { ButtonAlt } from "@/components/site/button-alt";
 import { shell } from "@/content/shell";
 import { site } from "@/content/site";
 import { EASE_OUT, gsap, MOTION_OK } from "@/lib/motion/gsap";
@@ -106,7 +106,7 @@ export function Menu() {
         aria-expanded={open}
         aria-controls="menu-panel"
         onClick={() => setOpen(true)}
-        className="inline-flex min-h-11 min-w-11 items-center justify-center rounded-full border-[2.5px] border-ink bg-paper px-4 text-sm font-semibold md:hidden"
+        className="inline-flex h-11 min-w-11 items-center justify-center rounded-3xl bg-peach-pale px-4 text-sm font-bold md:hidden"
       >
         {shell.menu.open}
       </button>
@@ -126,7 +126,7 @@ export function Menu() {
                 <button
                   type="button"
                   onClick={() => close()}
-                  className="inline-flex min-h-11 min-w-11 items-center justify-center rounded-full border-[2.5px] border-ink bg-paper px-4 text-sm font-semibold"
+                  className="inline-flex h-11 min-w-11 items-center justify-center rounded-3xl bg-white px-4 text-sm font-bold"
                 >
                   {shell.menu.close}
                 </button>
@@ -142,7 +142,7 @@ export function Menu() {
                         className="flex min-h-11 items-baseline gap-4 py-1"
                       >
                         <span className="label">{chapterNumber(chapter.id)}</span>
-                        <span className="display text-[clamp(3rem,14vw,5rem)]">{chapter.navLabel}</span>
+                        <span className="font-display text-[clamp(3rem,14vw,5rem)] leading-[0.9] font-extrabold">{chapter.navLabel}</span>
                       </a>
                     </li>
                   ))}
@@ -150,9 +150,9 @@ export function Menu() {
               </nav>
               {/* The header hides its download pill below 640px, so the menu carries it. */}
               <div className="mt-8">
-                <CtaLink href={site.app.playStoreUrl} size="lg">
+                <ButtonAlt href={site.app.playStoreUrl} tone="highlight" size="lg">
                   {shell.footer.download}
-                </CtaLink>
+                </ButtonAlt>
               </div>
             </div>,
           document.body,

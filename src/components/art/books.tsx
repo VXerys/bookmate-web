@@ -2,7 +2,7 @@ import type { ReactNode } from "react";
 
 // Abstract covers and spines: colour and pattern only, never a title or artwork that could pass for a real book
 // (rules.md bans commercial covers). Tones are palette tokens, so the colours stay the app's own.
-export type BookTone = "blue" | "ember" | "plum" | "forest" | "peach" | "highlight" | "ink" | "sky";
+export type BookTone = "blue" | "ember" | "plum" | "forest" | "peach" | "highlight" | "ink" | "sky" | "coral" | "green" | "gold";
 export type BookPattern = "stripes" | "dots" | "waves" | "sun" | "arches" | "grid";
 
 const ACCENT: Record<BookTone, string> = {
@@ -14,12 +14,15 @@ const ACCENT: Record<BookTone, string> = {
   highlight: "var(--color-blue)",
   ink: "var(--color-ember)",
   sky: "var(--color-blue)",
+  coral: "var(--color-highlight)",
+  green: "var(--color-highlight)",
+  gold: "var(--color-blue)",
 };
 
 // Trig results can differ in the last digit between server and browser; rounding keeps hydration identical.
 const r2 = (value: number) => Math.round(value * 100) / 100;
 
-function Pattern({ pattern, color, id }: { pattern: BookPattern; color: string; id: string }) {
+export function Pattern({ pattern, color, id }: { pattern: BookPattern; color: string; id: string }) {
   switch (pattern) {
     case "stripes":
       return (

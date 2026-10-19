@@ -1,5 +1,5 @@
 import type { Metadata, Viewport } from "next";
-import { Bricolage_Grotesque, Caveat, Inter, JetBrains_Mono, Newsreader } from "next/font/google";
+import { Caveat, Plus_Jakarta_Sans, Rubik } from "next/font/google";
 
 import { Cursor } from "@/components/motion/cursor";
 import { Sampul } from "@/components/motion/sampul";
@@ -14,20 +14,19 @@ import { site } from "@/content/site";
 import { bootScript } from "@/lib/motion/boot-script";
 import "./globals.css";
 
-// The app's own serif; opsz lets large display sizes switch to the tighter optical cut.
-const newsreader = Newsreader({
-  variable: "--font-newsreader",
+// Rubik's heavy, softly rounded grotesk stands in for the reference's licensed display face (F-013 Q2).
+const rubik = Rubik({
+  variable: "--font-rubik",
   subsets: ["latin"],
-  style: ["normal", "italic"],
-  axes: ["opsz"],
+  weight: ["600", "700", "800", "900"],
   display: "swap",
 });
 
-// Display face for every big heading; opsz and wdth let one file serve both the chunky hero and calmer statements.
-const bricolage = Bricolage_Grotesque({
-  variable: "--font-bricolage",
+// Body text from an Indonesian foundry (Tokotype).
+const jakarta = Plus_Jakarta_Sans({
+  variable: "--font-jakarta",
   subsets: ["latin"],
-  axes: ["opsz", "wdth"],
+  weight: ["500", "600", "700", "800"],
   display: "swap",
 });
 
@@ -35,20 +34,7 @@ const bricolage = Bricolage_Grotesque({
 const caveat = Caveat({
   variable: "--font-caveat",
   subsets: ["latin"],
-  display: "swap",
-  preload: false,
-});
-
-const inter = Inter({
-  variable: "--font-inter",
-  subsets: ["latin"],
-  display: "swap",
-});
-
-// Labels only, never above the fold's main text, so it is not worth a preload request.
-const jetbrains = JetBrains_Mono({
-  variable: "--font-jetbrains",
-  subsets: ["latin"],
+  weight: ["600", "700"],
   display: "swap",
   preload: false,
 });
@@ -78,7 +64,7 @@ export const viewport: Viewport = {
 export default function RootLayout({ children }: LayoutProps<"/">) {
   return (
     // The boot script adds html.js and data-sampul before hydration, so React must not flag the attribute difference.
-    <html lang="id" className={`${bricolage.variable} ${newsreader.variable} ${caveat.variable} ${inter.variable} ${jetbrains.variable}`} suppressHydrationWarning>
+    <html lang="id" className={`${rubik.variable} ${jakarta.variable} ${caveat.variable}`} suppressHydrationWarning>
       <head>
         <InlineScript html={bootScript} />
       </head>
@@ -92,7 +78,7 @@ export default function RootLayout({ children }: LayoutProps<"/">) {
         <Header />
         {/* tabIndex -1 lets the skip link and in-page jumps move focus here, not only the scroll position. */}
         {/* The page layer sits above the sticky footer, so scrolling past the last chapter reveals it (F-002 FR-006). */}
-        <div className="relative z-10 bg-paper">
+        <div className="relative z-10">
           <main id="konten" tabIndex={-1} className="focus:outline-none">
             {children}
           </main>

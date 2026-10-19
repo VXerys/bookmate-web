@@ -3,15 +3,13 @@
 import { useRef, useState } from "react";
 
 import { chapterNumber, chapters, navChapters } from "@/content/navigation";
-import { Magnetic } from "@/components/motion/magnetic";
-import { CtaLink } from "@/components/site/cta-link";
+import { ButtonAlt } from "@/components/site/button-alt";
+import { LogoMark } from "@/components/site/logo";
 import { Menu } from "@/components/site/menu";
 import { shell } from "@/content/shell";
 import { site } from "@/content/site";
-import { EASE_OUT, gsap, MOTION_OK, useGSAP } from "@/lib/motion/gsap";
-
-// Past this scroll depth the header may slide away on downward scroll (AC-006).
-const HIDE_AFTER_PX = 120;
+import { ENERGY, gsap, MOTION_OK, useGSAP } from "@/lib/motion/gsap";
+import { whenIntroDone } from "@/lib/motion/intro-state";
 
 export function Header() {
   const root = useRef<HTMLElement>(null);
@@ -40,39 +38,18 @@ export function Header() {
       window.addEventListener("scroll", readChapter, { passive: true });
       window.addEventListener("resize", readChapter);
 
+      // The header stays put while scrolling, like the reference (validated with REA); it only drops in with the intro.
+      // The intro callback can fire outside this context, so its tween is killed by hand.
       const mm = gsap.matchMedia();
       mm.add(MOTION_OK, () => {
-        let hidden = false;
-        let focused = false;
-        const slide = (hide: boolean) => {
-          const next = hide && !focused;
-          if (next === hidden) return;
-          hidden = next;
-          gsap.to(header, { yPercent: next ? -110 : 0, duration: 0.6, ease: EASE_OUT, overwrite: true });
-        };
-        // A plain scroll listener: Lenis drives native scroll, and no trigger range can go stale as pins resize the page.
-        let lastY = window.scrollY;
-        const onScroll = () => {
-          const y = window.scrollY;
-          if (y !== lastY) slide(y > HIDE_AFTER_PX && y > lastY);
-          lastY = y;
-        };
-        window.addEventListener("scroll", onScroll, { passive: true });
-        // A keyboard user tabbing into a hidden header must see where focus is (AC-006).
-        const onFocusIn = () => {
-          focused = true;
-          slide(false);
-        };
-        const onFocusOut = (event: FocusEvent) => {
-          if (!header.contains(event.relatedTarget as Node | null)) focused = false;
-        };
-        header.addEventListener("focusin", onFocusIn);
-        header.addEventListener("focusout", onFocusOut);
+        let drop: gsap.core.Tween | undefined;
+        const stop = whenIntroDone(() => {
+          drop = gsap.fromTo(header, { yPercent: -100 }, { yPercent: 0, duration: 0.5, ease: ENERGY, delay: 0.1 });
+        });
         return () => {
-          window.removeEventListener("scroll", onScroll);
-          header.removeEventListener("focusin", onFocusIn);
-          header.removeEventListener("focusout", onFocusOut);
-          gsap.set(header, { yPercent: 0 });
+          stop();
+          drop?.kill();
+          gsap.set(header, { clearProps: "transform" });
         };
       });
 
@@ -86,25 +63,19 @@ export function Header() {
   );
 
   return (
-    <header
-      ref={root}
-      className="pointer-events-none fixed inset-x-0 top-0 z-50 will-change-transform"
-    >
-      {/* Floating pills instead of a bar, so every coloured section shows through around them. */}
-      <div className="flex items-center gap-3 px-3 py-3 md:px-6">
+    <header ref={root} className="pointer-events-none fixed inset-x-0 top-0 z-50 will-change-transform">
+      {/* Floating controls instead of a bar, so every coloured block shows through around them. */}
+      <div className="flex items-center gap-3 px-4 py-4 lg:px-8">
         <a
           href="#prolog"
-          className="pointer-events-auto inline-flex min-h-11 items-center gap-2 rounded-full border-[2.5px] border-ink bg-paper px-4 font-display text-xl font-extrabold tracking-tight"
+          className="pointer-events-auto inline-flex min-h-11 items-center gap-2 font-display text-2xl font-extrabold tracking-tight"
           aria-label={`${site.name}, ${shell.header.homeLabel}`}
         >
-          <svg viewBox="0 0 24 24" className="size-6 text-blue" aria-hidden="true">
-            <path d="M5 4 h10 a3 3 0 0 1 3 3 v13 h-11 a2 2 0 0 1 -2 -2 Z" fill="currentColor" stroke="var(--color-ink)" strokeWidth="2" strokeLinejoin="round" />
-            <path d="M8 4 v12 M18 16 h-11 a2 2 0 0 0 0 4" fill="none" stroke="var(--color-ink)" strokeWidth="2" strokeLinecap="round" />
-          </svg>
+          <LogoMark className="size-8 text-blue" />
           {site.name}
         </a>
-        <p className="label pointer-events-auto hidden rounded-full border-[2.5px] border-ink bg-paper px-3 py-2 lg:block" aria-hidden="true">
-          {chapterNumber(active)} — {activeLabel}
+        <p className="label pointer-events-auto hidden rounded-full bg-white/85 px-3 py-2 xl:block" aria-hidden="true">
+          {chapterNumber(active)} · {activeLabel}
         </p>
         <nav aria-label={shell.header.navLabel} className="pointer-events-auto mx-auto hidden md:block">
           <ul className="flex items-center gap-1.5">
@@ -113,7 +84,7 @@ export function Header() {
                 <a
                   href={`#${chapter.id}`}
                   aria-current={active === chapter.id ? "location" : undefined}
-                  className="inline-flex min-h-11 min-w-11 items-center justify-center rounded-full border-[2.5px] border-ink bg-paper px-4 text-sm font-semibold transition-colors hover:bg-sky aria-[current=location]:bg-ink aria-[current=location]:text-paper"
+                  className="inline-flex h-11 min-w-11 items-center justify-center rounded-3xl bg-peach-pale px-4 text-sm font-bold transition-colors hover:bg-white aria-[current=location]:bg-ink aria-[current=location]:text-white"
                 >
                   {chapter.navLabel}
                 </a>
@@ -123,11 +94,9 @@ export function Header() {
         </nav>
         {/* Below 640px the menu carries the download link, so the bar fits a 360px phone. */}
         <div className="pointer-events-auto ml-auto hidden sm:block md:ml-0">
-          <Magnetic>
-            <CtaLink href={site.app.playStoreUrl} cursorLabel={shell.header.cta} size="sm">
-              {shell.header.cta}
-            </CtaLink>
-          </Magnetic>
+          <ButtonAlt href={site.app.playStoreUrl} cursorLabel={shell.header.cta} size="sm">
+            {shell.header.cta}
+          </ButtonAlt>
         </div>
         <div className="pointer-events-auto ml-auto sm:ml-0">
           <Menu />

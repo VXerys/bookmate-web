@@ -13,22 +13,39 @@
   --color-blue: #3b6ff5;
   --color-sky: #e8eefe;
   --color-highlight: #ffd700;
+  --color-white: #ffffff;
+  --color-pale-orange: #ffecd8;
+  --color-green: #4caf50;
+  --color-soft-green: #e5f6e5;
+  --color-coral: #ff4d4d;
+  --color-soft-red: #ffd8d8;
+  --color-gold: #ffb300;
   --color-plum: #52405a;
   --color-forest: #19382b;
   --color-slate: #64748b;
 
-  --font-serif: var(--font-newsreader), ui-serif, Georgia, serif;
-  --font-sans: var(--font-inter), ui-sans-serif, system-ui, sans-serif;
-  --font-mono: var(--font-jetbrains), ui-monospace, monospace;
-  --font-display: var(--font-bricolage), ui-sans-serif, system-ui, sans-serif;
+  --font-sans: var(--font-jakarta), ui-sans-serif, system-ui, sans-serif;
+  --font-display: var(--font-rubik), ui-sans-serif, system-ui, sans-serif;
   --font-hand: var(--font-caveat), "Comic Sans MS", cursive;
 
   --ease-expo: cubic-bezier(0.16, 1, 0.3, 1);
 }
 
 @layer base {
+  :root {
+    --shape-r: 3rem;
+    --shape-i: 0.5rem;
+  }
+
+  @media (min-width: 768px) {
+    :root {
+      --shape-r: 7.5rem;
+      --shape-i: 1.125rem;
+    }
+  }
+
   html {
-    background: var(--color-paper);
+    background: var(--color-white);
     color: var(--color-ink);
     color-scheme: light;
     /* Reserves the scrollbar lane, so locking scroll during the sampul does not reflow the page and stale every trigger. */
@@ -36,10 +53,11 @@
   }
 
   body {
-    background: var(--color-paper);
+    background: var(--color-white);
     font-family: var(--font-sans);
     font-size: 1.0625rem;
-    line-height: 1.6;
+    font-weight: 500;
+    line-height: 1.45;
     -webkit-font-smoothing: antialiased;
     text-rendering: optimizeLegibility;
   }
@@ -103,26 +121,6 @@ html.lenis body {
   transition-property: overflow;
   transition-duration: 1ms;
   transition-behavior: allow-discrete;
-}
-
-/* Hari (F-012): the pinned book needs JS, a wide screen, and motion; everyone else reads the stacked pages. */
-.hari-book,
-.hari-sky {
-  display: none;
-}
-
-@media (min-width: 1024px) and (prefers-reduced-motion: no-preference) {
-  html.js .hari-book {
-    display: flex;
-  }
-
-  html.js .hari-sky {
-    display: block;
-  }
-
-  html.js .hari-stack {
-    display: none;
-  }
 }
 
 /* Book3D (F-012 FR-006): six faces of a hardcover in preserve-3d; sizes come from --w, --h, --d on the wrapper. */
@@ -196,36 +194,79 @@ html.lenis body {
   transform: rotateX(-90deg) translateZ(calc(var(--h) / 2 - 0.2em));
 }
 
-/* Colour slabs (F-012 FR-006): each coloured section rounds its top corners and overlaps the one before, so the page
-   reads as a stack of cards. Later slabs paint above earlier ones because they come later in the flow. */
-.slab {
-  position: relative;
-  margin-top: -3rem;
-  border-radius: 3rem 3rem 0 0;
+/* Section shapes (F-013, docs/product/reference-aardvark.md): clip-path instead of border-radius, so a section can
+   round only its bottom corners, become a full capsule, or float inset from the viewport edge like a sticker. */
+.shape-bottom {
+  clip-path: inset(0 round 0 0 var(--shape-r) var(--shape-r));
 }
 
-@media (max-width: 767px) {
-  .slab {
-    margin-top: -1.75rem;
-    border-radius: 1.75rem 1.75rem 0 0;
-  }
+.shape-capsule {
+  clip-path: inset(0 round var(--shape-r));
 }
 
-/* Rak (F-012): a pointer lifts a spine and the open one stands proud; translate and rotate compose with the GSAP
-   transform used for the drop-in, so the two never fight. */
-.spine {
-  transition:
-    translate 0.45s var(--ease-expo),
-    rotate 0.45s var(--ease-expo);
+.shape-inset {
+  clip-path: inset(var(--shape-i) round var(--shape-r));
 }
 
-.spine:hover {
-  translate: 0 -14px;
+/* Buka (F-013): stacked by default; once the section pins (wide screens, motion allowed) the sentence wraps around
+   the phone and the start steps wait to the right of centre. */
+.buka .buka-gap {
+  display: none;
 }
 
-.spine[aria-expanded="true"] {
-  translate: 0 -28px;
-  rotate: -2deg;
+.buka[data-pinned] .buka-statement {
+  position: absolute;
+  inset-inline: 1.5rem;
+  top: 50%;
+  translate: 0 -50%;
+}
+
+.buka[data-pinned] .buka-gap {
+  display: block;
+  height: var(--buka-phone);
+  margin-block: 2svh;
+}
+
+.buka[data-pinned] .buka-stage {
+  position: absolute;
+  inset: 0;
+  max-width: none;
+  justify-content: center;
+}
+
+.buka[data-pinned] .buka-steps {
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  translate: 0 -50%;
+}
+
+/* Horizontal shelves scroll natively; the bar is hidden because the round buttons and the cut-off card already show
+   there is more. */
+.no-scrollbar {
+  scrollbar-width: none;
+}
+
+.no-scrollbar::-webkit-scrollbar {
+  display: none;
+}
+
+/* Rak (F-013): a badge card turns over; instant under reduced motion through the global transition override. */
+.flip-inner {
+  transform-style: preserve-3d;
+  transition: transform 0.8s cubic-bezier(0.625, 0.05, 0, 1);
+}
+
+.flip-inner[data-flipped] {
+  transform: rotateY(180deg);
+}
+
+.flip-face {
+  backface-visibility: hidden;
+}
+
+.flip-back {
+  transform: rotateY(180deg);
 }
 
 /* Ring states for the custom cursor; the GSAP-moved wrapper keeps x/y, the inner circle owns the scale. */
@@ -283,73 +324,70 @@ html.lenis body {
 }
 
 @layer components {
-  /* Bricolage at its largest optical size and a slightly narrow width: chunky like the Play Store listing art. */
+  /* Rubik at its heaviest with a leading under 1, like the reference's 120/96 and 78/62 headings. */
   .display {
     font-family: var(--font-display);
     font-weight: 800;
-    font-variation-settings: "opsz" 96, "wdth" 88;
-    font-size: clamp(3rem, 10vw, 11.5rem);
-    line-height: 0.9;
-    letter-spacing: -0.035em;
+    font-size: clamp(3rem, 6.4vw, 6.75rem);
+    line-height: 0.82;
+    letter-spacing: -0.02em;
+    text-wrap: balance;
+  }
+
+  .heading {
+    font-family: var(--font-display);
+    font-weight: 800;
+    font-size: clamp(2.6rem, 5.4vw, 4.875rem);
+    line-height: 0.84;
+    letter-spacing: -0.015em;
     text-wrap: balance;
   }
 
   .statement {
     font-family: var(--font-display);
-    font-weight: 650;
-    font-variation-settings: "opsz" 48, "wdth" 94;
-    font-size: clamp(1.75rem, 3.8vw, 3.6rem);
-    line-height: 1.05;
-    letter-spacing: -0.02em;
-    text-wrap: pretty;
-  }
-
-  /* The app's serif carries the one or two emphasised words of a heading. */
-  .display em,
-  .statement em {
-    font-family: var(--font-serif);
-    font-style: italic;
-    font-weight: 400;
+    font-weight: 700;
+    font-size: clamp(1.6rem, 2.4vw, 2rem);
+    line-height: 0.92;
     letter-spacing: -0.01em;
   }
 
-  /* Faint ruled lines, like a notebook page under the hero. */
-  .ruled {
-    background-image: repeating-linear-gradient(to bottom, transparent 0 47px, rgb(3 4 10 / 0.06) 47px 48px);
+  .display em,
+  .heading em,
+  .statement em {
+    font-style: normal;
   }
 
-  /* A pen stroke through a phrase; GSAP tweens --strike, and without JS or motion the stroke is simply there. */
-  .mark-strike {
-    background-image: linear-gradient(var(--color-ember), var(--color-ember));
-    background-repeat: no-repeat;
-    background-position: 0 60%;
-    background-size: var(--strike, 100%) 0.1em;
-    box-decoration-break: clone;
-    -webkit-box-decoration-break: clone;
-  }
-
-  /* A club member's margin note. */
-  .hand {
-    font-family: var(--font-hand);
+  .lead {
     font-weight: 600;
-    line-height: 1.05;
+    font-size: clamp(1.125rem, 1.6vw, 1.5rem);
+    line-height: 1.2;
+    letter-spacing: -0.02em;
   }
 
   .label {
-    font-family: var(--font-mono);
+    font-weight: 700;
     font-size: 0.75rem;
     line-height: 1.4;
-    letter-spacing: 0.14em;
+    letter-spacing: 0.08em;
     text-transform: uppercase;
   }
 
-  /* Static paper texture; multiply keeps it visible on paper without greying dark chapters. */
+  /* A club member's handwriting: always BookMate blue, like the reference's violet. */
+  .hand {
+    font-family: var(--font-hand);
+    font-weight: 600;
+    font-size: clamp(1.4rem, 1.8vw, 1.6rem);
+    line-height: 1;
+    color: var(--color-blue);
+  }
+
+  /* Static paper texture; multiply keeps it visible on light blocks without greying dark ones. */
   .grain {
     pointer-events: none;
     position: fixed;
     inset: 0;
     z-index: 60;
-    opacity: 0.07;
+    opacity: 0.05;
     mix-blend-mode: multiply;
     background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='160' height='160'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='2' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
   }

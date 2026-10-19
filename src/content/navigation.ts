@@ -9,19 +9,20 @@ export type Chapter = {
 
 export const chapters: readonly Chapter[] = [
   { id: "prolog", label: "Prolog" },
-  { id: "manifesto", label: "Kenapa BookMate" },
+  { id: "buku", label: "Buku di rak teman", navLabel: "Buku" },
+  { id: "fitur", label: "Fitur", navLabel: "Fitur" },
+  { id: "hari", label: "Satu hari", navLabel: "Satu hari" },
   { id: "buka", label: "Buka aplikasinya" },
-  { id: "hari", label: "Satu hari pembaca", navLabel: "Fitur" },
+  { id: "daftar", label: "Pilih fitur" },
+  { id: "manfaat", label: "Kenapa BookMate" },
   { id: "rak", label: "Rak lencana", navLabel: "Lencana" },
-  { id: "papan", label: "Papan komunitas", navLabel: "Komunitas" },
-  { id: "mulai", label: "Cara mulai" },
-  { id: "indeks", label: "Indeks", navLabel: "FAQ" },
+  { id: "indeks", label: "Pertanyaan", navLabel: "FAQ" },
   { id: "epilog", label: "Epilog" },
 ];
 
 export const navChapters = chapters.filter((chapter): chapter is Chapter & { navLabel: string } => Boolean(chapter.navLabel));
 
-// "01".."09", the number printed beside a label in the indicator and slice transition.
+// "01".."10", the number printed beside a label in the indicator and slice transition.
 export function chapterNumber(id: string): string {
   const index = chapters.findIndex((chapter) => chapter.id === id);
   if (index === -1) throw new Error(`Unknown chapter "${id}"`);

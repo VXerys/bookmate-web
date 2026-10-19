@@ -3,50 +3,53 @@ import { test } from "node:test";
 
 import { textPairs } from "./palette.ts";
 import { screens } from "./screens.ts";
-import { buka, epilog, faq, hari, manifesto, mulai, outsideText, papan, prolog, rak } from "./story.ts";
+import { buka, epilog, faq, fitur, hari, manfaat, prolog, rak, type Tone } from "./story.ts";
 
 const filled = (value: string) => value.trim().length > 0;
+const inkOn = (tone: Tone) => textPairs.some((p) => p.text === "ink" && p.background === tone && p.size === "normal");
 
-test("prolog, manifesto, and buka copy is filled in", () => {
-  for (const value of [prolog.kicker, prolog.headlineLead, prolog.headlineEmphasis, prolog.body, prolog.secondary]) {
+test("hero copy is filled in", () => {
+  for (const value of [prolog.headlineLead, prolog.headlineEmphasis, prolog.body, prolog.secondary, prolog.note]) {
     assert.ok(filled(value));
   }
-  for (const value of Object.values(prolog.notes)) assert.ok(filled(value));
-  const text = manifesto.segments.map((segment) => segment.text).join("");
-  assert.ok(text.split(" ").length > 20, "manifesto needs enough words to fill on scroll");
-  assert.ok(manifesto.segments.some((segment) => segment.mark === "strike"));
-  assert.ok(manifesto.segments.some((segment) => segment.mark === "circle"));
-  assert.ok(filled(buka.statementLead) && filled(buka.statementTail));
 });
 
-test("the reader's day runs through five hours in order with copy and a screen", () => {
+test("six feature cards with a screen, tags, and an ink-readable colour", () => {
+  assert.equal(fitur.items.length, 6);
+  assert.equal(new Set(fitur.items.map((item) => item.id)).size, 6);
+  for (const item of fitur.items) {
+    assert.ok(filled(item.title) && filled(item.body), item.id);
+    assert.ok(item.tags.length >= 1, item.id);
+    assert.ok(item.screen in screens, item.id);
+    assert.ok(inkOn(item.tone), `ink on ${item.tone}`);
+  }
+});
+
+test("the reader's day runs through five hours in order", () => {
   assert.deepEqual(
-    hari.spreads.map((spread) => spread.id),
+    hari.hours.map((hour) => hour.id),
     ["pagi", "siang", "sore", "malam", "besok"],
   );
-  for (const spread of hari.spreads) {
-    assert.match(spread.time, /^\d{2}\.\d{2}$/, spread.id);
-    assert.ok(filled(spread.title) && filled(spread.body) && filled(spread.note), spread.id);
-    assert.ok(spread.points.length >= 2, spread.id);
-    assert.ok(spread.screen in screens, spread.id);
+  for (const hour of hari.hours) {
+    assert.match(hour.time, /^\d{2}\.\d{2}$/, hour.id);
+    assert.ok(filled(hour.title) && filled(hour.body), hour.id);
+    assert.ok(inkOn(hour.tone), `ink on ${hour.tone}`);
   }
 });
 
-test("labels outside the book stay readable on every hour's room colour", () => {
-  for (const spread of hari.spreads) {
-    const text = outsideText[spread.outside];
-    assert.ok(text, `no text colour for ${spread.outside}`);
-    const pair = textPairs.find((p) => p.text === text && p.background === spread.outside && p.size === "normal");
-    assert.ok(pair, `${text} on ${spread.outside} is not an allowed normal-size pair`);
+test("every benefit pill cites a source and reads in ink", () => {
+  assert.ok(manfaat.pills.length >= 4);
+  for (const pill of manfaat.pills) {
+    assert.ok(filled(pill.label) && filled(pill.source), pill.label);
+    assert.ok(inkOn(pill.tone), `ink on ${pill.tone}`);
   }
 });
 
-test("rak, papan, mulai, and epilog copy is filled in", () => {
-  for (const value of [rak.statement, rak.hint, rak.criteriaLabel, papan.statement, mulai.note, epilog.statementLead]) {
+test("buka, rak, and epilog copy is filled in", () => {
+  assert.equal(buka.steps.length, 3);
+  for (const value of [buka.statementLead, buka.statementTail, rak.title, rak.criteriaLabel, epilog.statementLead]) {
     assert.ok(filled(value));
   }
-  assert.equal(papan.notes.length, 4);
-  assert.equal(mulai.steps.length, 3);
 });
 
 test("every FAQ answer cites a source in the app repo", () => {
@@ -58,7 +61,7 @@ test("every FAQ answer cites a source in the app repo", () => {
 });
 
 test("every phone frame points at a screen with alt text", () => {
-  for (const id of [prolog.screen, buka.screen, mulai.screen, ...hari.spreads.map((spread) => spread.screen)]) {
+  for (const id of [prolog.screen, buka.screen, ...fitur.items.map((item) => item.screen)]) {
     assert.ok(id in screens, id);
   }
   for (const [id, screen] of Object.entries(screens)) {

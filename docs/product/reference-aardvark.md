@@ -15,6 +15,8 @@ supersedes: null
 
 Diukur 2026-10-19 dari halaman publik di viewport 1440 x 900: computed style, DOM, dan script `slater.app/18601/54937.js`. Hanya untuk referensi gaya; aset, font, dan copy Aardvark tidak dipakai.
 
+Divalidasi ulang 2026-10-19 dengan REA (`rea-agents@6.7.0 analyze-javascript-application --format json` pada bundle dan HTML yang diunduh ke scratchpad). REA memetakan 16 script, sekitar 150 fungsi, timer, dan listener, tetapi tidak mengekstrak parameter tween (3.904 unknown semantik, coverage "unknown"). Parameter gerak di bawah diverifikasi dengan membaca kode langsung. Klaim yang bergantung pada CSS eksternal (font, ukuran, hex, radius, grid) diukur dari computed style di browser dan tidak diperiksa REA.
+
 ## Stack
 
 Webflow + Barba (transisi halaman) + GSAP (ScrollTrigger, SplitText, CustomEase, InertiaPlugin, DrawSVG) + Lenis + smooothy (slider). Semua modul dipicu atribut `data-*` (contoh `data-button-alt`, `data-call-out`, `data-handwritten-text-inview`).
@@ -42,24 +44,27 @@ Section tidak memakai border-radius. Semuanya `clip-path: inset()`:
 
 | Token | Nilai | Dipakai untuk |
 |---|---|---|
-| `osmo` (default) | cubic-bezier 0.625, 0.05, 0, 1 | semua tween umum |
-| `energy` | M0,0 C0.32,0.72 0,1 1,1 | paragraf, tombol, logo |
-| `elastic.out(1, 0.72)` / `(1, 0.75)` | pegas | judul, kartu, label, huruf tulisan tangan |
+| `osmo` (default) | cubic-bezier 0.625, 0.05, 0, 1; `gsap.defaults` durasi 0.6 | tween umum |
+| `energy` | M0,0 C0.32,0.72 0,1 1,1 (37 pemakaian) | paragraf, tombol, header masuk, intro FAQ dan halaman buku |
+| `elastic.out(1, 0.72)` / `(1, 0.75)` | pegas | judul, kartu, label, huruf tulisan tangan, logo masuk |
+| `elastic.out(1, 0.4)`, `elastic.in(1, 0.72)` | pegas lentur, pegas keluar | huruf tombol saat hover, logo keluar |
 | `circ.out` | | clip ellipse hero |
-| durasi | 0.35 sampai 1.25 s, stagger 0.016 (huruf) sampai 0.088 (kata, kartu) | |
+| durasi | 0.35 sampai 1.25 s (reset hover 0.2, blob 3, emoji 0.8 sampai 1.8); stagger 0.011 sampai 0.088, juga `amount: 0.225` | |
+| Lenis | lerp 0.2, autoRaf, anchors; scroll memanggil ScrollTrigger.update | |
 
 Pola khas:
 
-1. Transisi halaman: satu path coretan raksasa (viewBox 1080, `stroke-width: 70%`) di-DrawSVG dari `0% 100%` ke `100% 100%` (terhapus dari ujung) selama 1.25 s, sambil logo pop `scale 0 -> 1, rotate -64 -> 0` dengan elastic.
-2. Intro hero: latar dibuka `clipPath: ellipse(20% 0% at 100% 100%) -> ellipse(150% 130% at 100% 100%)` (circ.out, 1.1 s). Kata judul masuk dengan keyframes `xPercent 40, scaleY 0.1, rotate 8 -> 0` dan elastic, stagger 0.088.
+1. Transisi halaman: satu path coretan raksasa (viewBox 1080, `stroke-width: 70%`). Saat pergi: DrawSVG `0% 0% -> 0% 100%` (keyframe 90%) dengan stroke 8% ke 70%, 1.25 s. Saat datang: `0% 100% -> 100% 100%` (terhapus dari ujung), stroke menyempit ke 8% di keyframe 95% (circ.out), 1.25 s. Logo pop `scale 0 -> 1, rotate -64 -> 0` (elastic, delay 0.5) lalu keluar `scale 0, rotate 64` (elastic.in, 0.45 sampai 0.6 s). Header turun `yPercent -100 -> 0`, 0.5 s energy.
+2. Intro hero (>= 992px): latar dibuka `clipPath: ellipse(20% 0% at 100% 100%) -> ellipse(150% 130% at 100% 100%)` (circ.out, 1.1 s, delay 0.2). Kata judul: `yPercent -10, xPercent 40, scaleY 0.1, scaleX 0.85, rotate 8`, origin kiri atas, opacity 1 di keyframe 10%, elastic.out(1, 0.72), 0.875 s, stagger 0.088, delay 0.25. Paragraf dan tombol `y -0.75em`, 0.35 s energy, delay 0.45 dan 0.525. Visual `y 5em, rotate -43 -> -21`, 0.75 s elastic.
 3. Tulisan tangan: SplitText huruf, `opacity 0, rotate 22, x -0.25em, y 0.5em -> 0`, elastic.out(1, 0.75), stagger 0.016, saat masuk viewport (top 95%).
 4. Tombol `button-alt`: dua kapsul terpisah (teks + kotak panah) warna sama, radius 6px. Hover: tiap huruf turun dan gepeng (`yPercent 55, scaleY 0.3, rotate 17`) lalu memantul kembali (elastic.out(1, 0.4)).
 5. Latar "bernapas": blob SVG (fill dan stroke warna sama) berdenyut `stroke-width 0 <-> 60` dan `rotate 0 <-> 2` per 3 s (sine), hanya saat terlihat.
-6. Kartu callout: posisi dan rotasi acak kecil, masuk dari `yPercent +150` dengan elastic, stagger 0.088; mengikuti posisi mouse.
-7. Label benefit: kapsul raksasa warna-warni (radius 60px) muncul `scale 0, rotate acak ±33 -> 0` dengan elastic; hover berbasis momentum (InertiaPlugin, kecepatan pointer jadi dorongan dan putaran).
-8. Image sequence: hero dan box memutar puluhan frame render 3D di `<canvas>` mengikuti scroll (`scrub: true`).
-9. Footer parallax: konten turun dari `y -12.5em`, visual berputar masuk (`rotate 30, xPercent -35`), scrub 0.2.
-10. Plop-in, emoji rain (perayaan), tagline melengkung di jalur SVG, marquee badge promo.
+6. Kartu callout: mulai di posisi acak (xPercent dan yPercent ±5, rotasi ±7.5), masuk dari `yPercent +150` (elastic.out(1, 0.75), 1.05 s, stagger 0.088, sekali, top 85%). Mouse tidak diikuti: lebar baris dibagi rata, kartu aktif = `ceil(mouseX / lebar x N)` dan menjadi `x, y, rotasi 0, scale 1.075` (0.85 s, elastic.out(1, 0.75)); kartu sebelumnya kembali ke posisi acak (rotasi ±10).
+7. Label benefit: kapsul raksasa warna-warni (radius 60px) muncul `scale 0, rotate acak ±33 -> 0` (satu nilai acak untuk semua), elastic.out(1, 0.75), 0.85 s, stagger 0.072, top 25%. Hover momentum (InertiaPlugin, hanya hover + pointer halus): pengali xy 25, rotasi 15, resistance 160, clamp xy ±1080 dan rotasi ±60, torsi = offsetX·velY − offsetY·velX dibagi jarak, kecepatan diambil per frame.
+8. Image sequence: masing-masing 120 frame webp di `<canvas>`. Hero: loop 24 fps yang diputar saat terlihat (>= 992px), bukan scrub. Box: scrub `top 85%` sampai `bottom 80%` di dalam wrapper CSS sticky (bukan pin GSAP); tulisan tangan muncul di progres 0.3, judul dan tombol di 0.81. Frame dimuat pertama, terakhir, lalu titik tengah secara biner.
+9. Footer parallax (>= 991px): `clamp(top bottom)` sampai `clamp(top top)`, scrub 0.2. Konten turun dari `y -12.5em`; visual `scale 0.9, xPercent -35, y 17.5em, rotate 30 -> 0`; overlay opacity 0.55 ke 0.
+10. Plop-in (`scale 0, rotate -20, y -4em -> scale 1, rotate 11`, 0.7 s elastic). Emoji rain: 40 emoji naik 0.8 sampai 1.8 s dengan goyangan, hanya saat scroll ke bawah. Tagline melengkung: `startOffset` textPath ter-scrub 0.5. Badge promo: dua pita jatuh dengan elastic (bukan marquee di JS). Accordion: Web Animations tinggi `<details>` 450 ms dengan kurva energy. Kontras teks kartu: luma (0.299R + 0.587G + 0.114B) > 0.5 memilih hitam.
+11. Header tidak bersembunyi saat scroll; hanya menandai `data-scrolling-started` setelah 50 px.
 
 ## Section per section
 
@@ -69,7 +74,7 @@ Pola khas:
 | 1 | Hero | yellow, sudut bawah 120px, 1050px | h1 tiga baris kiri, paragraf, `button-alt`, tulisan tangan violet di kanan atas, render kotak 3D (canvas sequence), blob pale-yellow dan orange di belakang | ellipse reveal, kata elastic, huruf tangan, blob bernapas, sequence ikut scroll |
 | 2 | Books | putih | h2 + lead + tulisan tangan, slider kartu 264 x 558: latar warna per buku (radius 24, dengan dua "telinga" SVG di atas), sampul 240 x 370, tag kecil warna-warni radius 18, tombol bulat hitam 54px | slider drag (smooothy), kontras teks dihitung otomatis per warna kartu |
 | 3 | Flow (How it works) | soft-pink, kapsul menjorok 18px | h2, lead tangan, CTA, 4 kartu 300 x 450 radius 24 (cyan, bright-pink, yellow, periwinkle) bernomor "Step #1" dengan ilustrasi | kartu jatuh masuk elastic, miring acak, ikut mouse |
-| 4 | Box | pale-blue, kapsul menjorok 18px, 2700px (ter-pin) | canvas 1440 x 900 memutar kotak terbuka, judul SVG, tombol App Store dan Google Play hitam radius 12 | image sequence scrub |
+| 4 | Box | pale-blue, kapsul menjorok 18px, 2700px (CSS sticky) | canvas 1440 x 900 memutar kotak terbuka, judul SVG, tombol App Store dan Google Play hitam radius 12 | image sequence scrub |
 | 5 | Genre | bright-pink, kapsul penuh, 1390px | daftar nama genre raksasa; hover memunculkan sampul buku genre itu | hover-reveal gambar mengikuti item |
 | 6 | Benefits | pale-yellow, sudut bawah 120px | 5 kapsul label raksasa (magenta, orange, periwinkle, cyan, olive) bertumpuk acak + logo bulat besar | pop elastic, dorongan momentum |
 | 7 | FAQ | putih | h2 + accordion kartu soft-blue radius 18 | buka-tutup accordion |
