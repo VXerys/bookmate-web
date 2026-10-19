@@ -30,3 +30,12 @@ test("each chapter's text colour on its background is an allowed normal-size pai
     assert.ok(pair, `${text} on ${bab.tone} is not an allowed normal-size pair`);
   }
 });
+
+test("every FAQ answer cites a source in the app repo", async () => {
+  const { faq } = await import("./story.ts");
+  assert.ok(faq.items.length >= 3);
+  for (const item of faq.items) {
+    assert.ok(filled(item.question) && filled(item.answer), item.question);
+    assert.match(item.source, /\.(md|dart)$/, item.question);
+  }
+});

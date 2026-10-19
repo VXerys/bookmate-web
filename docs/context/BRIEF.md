@@ -1,6 +1,6 @@
 <!-- GENERATED FILE — DO NOT EDIT. Rendered by `npm run context:render`.
 Source: sdd.config.json, docs/steering/, docs/specs/F-*/, docs/context/ASSUMPTIONS.md, docs/handoff/current.md.
-source_hash: 0722824ffd81b14d875d6cf18a7d4278dcb5e8fcb18b464594d6c14dabfd25fe -->
+source_hash: 9037eb7bb040c971ceeef5c7cd5e51ee211ed2c7b51627f8552ef12ca5468a48 -->
 
 # Brief
 
@@ -60,3 +60,5 @@ None.
 | F-003 Prolog (hero) | verification | complete | 2/2 |
 | F-004 Manifesto dan buka aplikasi | verification | complete | 2/2 |
 | F-005 Bab horizontal | verification | complete | 2/2 |
+| F-006 Streak dan kartu pembaca | verification | complete | 2/2 |
+| F-007 Diskusi, cara mulai, FAQ, dan epilog | verification | complete | 2/2 |

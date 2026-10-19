@@ -116,6 +116,48 @@ html.lenis body {
   display: block;
 }
 
+/* Streak calendar (F-006): a filled day is an ember square; all days start filled so no-JS shows the full month. */
+.streak-day[data-on] {
+  background: var(--color-ember);
+  border-color: var(--color-ember);
+}
+
+/* Badge deck (F-006): stacked only while JS with motion waits to deal it; flipping is a 3D turn, instant under
+   reduced motion through the global transition override. */
+.deck.deck-stacked {
+  display: block;
+  min-height: 20rem;
+}
+
+.deck.deck-stacked [data-card] {
+  position: absolute;
+  inset: 0 auto auto 50%;
+  width: min(80vw, 22rem);
+  /* margin, not translate: Flip measures transforms, and a leftover translate would shift the dealt grid. */
+  margin-left: calc(min(80vw, 22rem) / -2);
+}
+
+.card-inner {
+  transform-style: preserve-3d;
+  transition: transform 0.7s var(--ease-expo);
+}
+
+.card-inner[data-flipped] {
+  transform: rotateY(180deg);
+}
+
+.card-face {
+  backface-visibility: hidden;
+}
+
+.card-back {
+  transform: rotateY(180deg);
+}
+
+.card.is-rippling .card-front {
+  filter: url(#liquid-ripple);
+}
+
 /* Ring states for the custom cursor; the GSAP-moved wrapper keeps x/y, the inner circle owns the scale. */
 .cursor-circle {
   transition: transform 0.35s var(--ease-expo);

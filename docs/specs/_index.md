@@ -19,8 +19,8 @@ Task status belongs in each feature's `tasks.md`; `docs/context/state.yaml` and 
 | `F-003` | Prolog (hero) | `docs/specs/F-003-prolog/` | P0 | approved | M2 |
 | `F-004` | Manifesto dan buka aplikasi | `docs/specs/F-004-manifesto-buka/` | P0 | approved | M2 |
 | `F-005` | Bab horizontal | `docs/specs/F-005-bab-horizontal/` | P0 | approved | M2 |
-| `F-006` | Streak dan kartu pembaca | belum dibuat | P1 | draft | M3 |
-| `F-007` | Diskusi, cara mulai, FAQ, epilog | belum dibuat | P0 | draft | M3 |
+| `F-006` | Streak dan kartu pembaca | `docs/specs/F-006-streak-kartu/` | P1 | approved | M3 |
+| `F-007` | Diskusi, cara mulai, FAQ, epilog | `docs/specs/F-007-diskusi-epilog/` | P0 | approved | M3 |
 | `F-008` | Legal dan SEO | belum dibuat | P0 | draft | M4 |
 | `F-009` | WebGL hover distortion (opsional, butuh ADR-0002) | belum dibuat | P2 | draft | M4 |
 | `F-010` | QA dan rilis | belum dibuat | P0 | draft | M4 |

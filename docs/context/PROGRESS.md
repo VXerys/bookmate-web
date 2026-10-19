@@ -1,6 +1,6 @@
 <!-- GENERATED FILE — DO NOT EDIT. Rendered by `npm run context:render`.
 Source: sdd.config.json, docs/steering/, docs/specs/F-*/, docs/context/ASSUMPTIONS.md, docs/handoff/current.md.
-source_hash: 0722824ffd81b14d875d6cf18a7d4278dcb5e8fcb18b464594d6c14dabfd25fe -->
+source_hash: 9037eb7bb040c971ceeef5c7cd5e51ee211ed2c7b51627f8552ef12ca5468a48 -->
 
 # Project Progress
 
@@ -48,3 +48,17 @@ source_hash: 0722824ffd81b14d875d6cf18a7d4278dcb5e8fcb18b464594d6c14dabfd25fe --
 |---|---|---|---|---|
 | T-001 Konten bab dan test kontras | done | FR-001 |  | EV-001 |
 | T-002 Track horizontal dan fallback vertikal | done | FR-001, FR-002 | T-001 | EV-001 |
+
+## F-006 — Streak dan kartu pembaca (`verification`, complete)
+
+| Task | Status | Requirements | Depends on | Evidence |
+|---|---|---|---|---|
+| T-001 Data lencana dan Api streak | done | FR-001, FR-002 |  | EV-001 |
+| T-002 Kartu pembaca | done | FR-002 | T-001 | EV-001 |
+
+## F-007 — Diskusi, cara mulai, FAQ, dan epilog (`verification`, complete)
+
+| Task | Status | Requirements | Depends on | Evidence |
+|---|---|---|---|---|
+| T-001 Ruang diskusi | done | FR-001 |  | EV-001 |
+| T-002 Cara mulai, FAQ, Epilog | done | FR-002, FR-003 |  | EV-001 |

@@ -239,6 +239,53 @@ features:
           - T-001
         evidence:
           - EV-001
+  - id: F-006
+    title: Streak dan kartu pembaca
+    status: verification
+    phase: complete
+    spec_path: docs/specs/F-006-streak-kartu
+    tasks:
+      - id: T-001
+        title: Data lencana dan Api streak
+        status: done
+        requirements:
+          - FR-001
+          - FR-002
+        depends_on: []
+        evidence:
+          - EV-001
+      - id: T-002
+        title: Kartu pembaca
+        status: done
+        requirements:
+          - FR-002
+        depends_on:
+          - T-001
+        evidence:
+          - EV-001
+  - id: F-007
+    title: Diskusi, cara mulai, FAQ, dan epilog
+    status: verification
+    phase: complete
+    spec_path: docs/specs/F-007-diskusi-epilog
+    tasks:
+      - id: T-001
+        title: Ruang diskusi
+        status: done
+        requirements:
+          - FR-001
+        depends_on: []
+        evidence:
+          - EV-001
+      - id: T-002
+        title: Cara mulai, FAQ, Epilog
+        status: done
+        requirements:
+          - FR-002
+          - FR-003
+        depends_on: []
+        evidence:
+          - EV-001
 active:
   feature_id: F-002
   task_id: T-005
@@ -265,5 +312,5 @@ assumptions_open:
     feature: null
     title: Analytics yang dipakai
 blockers: []
-generated_at: 2026-10-19T03:18:01.689Z
-source_hash: 0722824ffd81b14d875d6cf18a7d4278dcb5e8fcb18b464594d6c14dabfd25fe
+generated_at: 2026-10-19T03:31:19.732Z
+source_hash: 9037eb7bb040c971ceeef5c7cd5e51ee211ed2c7b51627f8552ef12ca5468a48
