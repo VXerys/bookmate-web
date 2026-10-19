@@ -1,11 +1,11 @@
-import { Magnetic } from "@/components/motion/magnetic";
-import { Reveal } from "@/components/motion/reveal";
+import { BabTrack } from "@/components/sections/bab-track";
+import { Buka } from "@/components/sections/buka";
+import { Manifesto } from "@/components/sections/manifesto";
+import { Prolog } from "@/components/sections/prolog";
 import { chapterNumber, chapters, type Chapter } from "@/content/navigation";
-import { shell } from "@/content/shell";
-import { site } from "@/content/site";
 
-// Foundation check page for F-001 and F-002: tokens, fonts, Reveal, and one anchor per chapter so the shell's
-// navigation can be exercised. Replaced by the real sections from F-003 onward.
+// Chapters not built yet keep an anchored stub so the shell's navigation still has every target (F-002).
+// Each stub is replaced by its section in F-006 and F-007.
 function ChapterStub({ chapter }: { chapter: Chapter }) {
   return (
     <section
@@ -19,56 +19,20 @@ function ChapterStub({ chapter }: { chapter: Chapter }) {
   );
 }
 
-export default function Home() {
-  const babIndex = chapters.findIndex((chapter) => chapter.id === "bab");
-  const before = chapters.slice(1, babIndex);
-  const after = chapters.slice(babIndex + 1);
+const BUILT = new Set(["prolog", "manifesto", "buka", "bab"]);
 
+export default function Home() {
   return (
     <>
-      <section
-        id="prolog"
-        data-chapter="prolog"
-        className="flex min-h-svh flex-col justify-between gap-12 px-4 pt-24 pb-12 md:px-10"
-      >
-        <p className="label text-slate">Prolog — halaman {chapterNumber("prolog")}</p>
-        <div className="flex flex-col gap-8">
-          <Reveal as="h1" className="display" mode="words">
-            Satu halaman lagi, <em>bareng teman.</em>
-          </Reveal>
-          <Reveal className="statement max-w-4xl" mode="lines" delay={0.2}>
-            {site.tagline}
-          </Reveal>
-        </div>
-        <div className="flex flex-wrap items-center gap-6">
-          <Magnetic>
-            <a
-              className="inline-flex min-h-11 items-center rounded-full bg-ember px-6 py-3 font-medium text-ink"
-              href={site.app.playStoreUrl}
-              data-cursor-label={shell.header.cta}
-            >
-              Unduh di Google Play
-            </a>
-          </Magnetic>
-          <p className="max-w-md text-slate">{site.description}</p>
-        </div>
-      </section>
-
-      {before.map((chapter) => (
-        <ChapterStub key={chapter.id} chapter={chapter} />
-      ))}
-
-      <section id="bab" data-chapter="bab" className="grid gap-6 bg-ink px-4 py-24 text-paper md:grid-cols-3 md:px-10">
-        <h2 className="label text-peach">Bab 01 — Catat bacaan</h2>
-        <Reveal className="statement md:col-span-2" mode="lines">
-          Catat halaman, bab, atau persen. Buku baru dihitung <em className="text-ember">selesai</em> saat kamu yang
-          bilang selesai.
-        </Reveal>
-      </section>
-
-      {after.map((chapter) => (
-        <ChapterStub key={chapter.id} chapter={chapter} />
-      ))}
+      <Prolog />
+      <Manifesto />
+      <Buka />
+      <BabTrack />
+      {chapters
+        .filter((chapter) => !BUILT.has(chapter.id))
+        .map((chapter) => (
+          <ChapterStub key={chapter.id} chapter={chapter} />
+        ))}
     </>
   );
 }

@@ -147,7 +147,7 @@ Evidence that acceptance criteria hold at a named commit. A claim without a comm
   at the end the layer stops at 205 = footer top, footer bottom 900 = viewport; footer links last in tab order; 360 px fits one screen
   ```
 - date: 2026-10-19
-- commit: uncommitted on feat/F-002-shell-global (base a3c71bf)
+- commit: bdc4c6b
 - covers: [AC-018, AC-019]
 
 ### EV-012 — Integrasi shell (T-009)
@@ -159,7 +159,7 @@ Evidence that acceptance criteria hold at a named commit. A claim without a comm
   per-feature evidence: sampul EV-004 to EV-006, header EV-007, slice EV-008, menu EV-009, cursor EV-010, footer EV-011
   ```
 - date: 2026-10-19
-- commit: uncommitted on feat/F-002-shell-global (base a3c71bf)
+- commit: bdc4c6b
 - covers: [AC-001, AC-005, AC-009, AC-018]
 
 ## Coverage

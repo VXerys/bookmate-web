@@ -101,6 +101,21 @@ html.lenis body {
   transition-behavior: allow-discrete;
 }
 
+/* Bab track (F-005): BabTrack sets data-horizontal only on wide screens with motion allowed; otherwise panels stack. */
+.bab[data-horizontal] [data-bab-track] {
+  flex-direction: row;
+  width: max-content;
+}
+
+.bab[data-horizontal] [data-bab-panel] {
+  width: 100vw;
+  flex-shrink: 0;
+}
+
+.bab[data-horizontal] .bab-indicator {
+  display: block;
+}
+
 /* Ring states for the custom cursor; the GSAP-moved wrapper keeps x/y, the inner circle owns the scale. */
 .cursor-circle {
   transition: transform 0.35s var(--ease-expo);

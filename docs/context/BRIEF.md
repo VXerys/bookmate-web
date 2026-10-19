@@ -1,6 +1,6 @@
 <!-- GENERATED FILE — DO NOT EDIT. Rendered by `npm run context:render`.
 Source: sdd.config.json, docs/steering/, docs/specs/F-*/, docs/context/ASSUMPTIONS.md, docs/handoff/current.md.
-source_hash: c6526459961ad0e148dda67ca83179ab653a8734655db5410ad8422a0d95cc56 -->
+source_hash: 6681cd59cd2de622357d7b59ec1532569cfe4bcc59237dcc90ce6b170f973938 -->
 
 # Brief
 
@@ -57,3 +57,6 @@ None.
 |---|---|---|---|
 | F-001 Fondasi dan motion core | implementing | in_progress | 4/5 |
 | F-002 Shell global: sampul, header, slice transition, menu, cursor, footer | verification | complete | 9/9 |
+| F-003 Prolog (hero) | implementing | in_progress | 0/2 |
+| F-004 Manifesto dan buka aplikasi | implementing | in_progress | 0/2 |
+| F-005 Bab horizontal | implementing | in_progress | 0/2 |

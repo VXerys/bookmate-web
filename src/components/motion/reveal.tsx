@@ -4,6 +4,7 @@ import { useRef, type ElementType, type ReactNode } from "react";
 
 import { EASE_OUT, gsap, MOTION_OK, SplitText, useGSAP } from "@/lib/motion/gsap";
 import { whenIntroDone } from "@/lib/motion/intro-state";
+import { addScreenReaderCopy } from "@/lib/motion/accessible-split";
 import { accessibleCopyFor, INTERACTIVE_SELECTOR } from "@/lib/motion/reveal-strategy";
 
 type RevealProps = {
@@ -32,7 +33,7 @@ export function Reveal({ as: Tag = "p", className, children, mode = "words", del
         if (!document.documentElement.classList.contains("js")) return;
 
         let split: SplitText | undefined;
-        let srCopy: HTMLSpanElement | undefined;
+        let restoreCopy: (() => void) | undefined;
         const scrollTrigger = { trigger: el, start, once: true };
 
         // Splitting after the intro means lines are measured with the final web fonts, so autoSplit rarely re-runs.
@@ -42,14 +43,7 @@ export function Reveal({ as: Tag = "p", className, children, mode = "words", del
             gsap.from(target, { y: 32, autoAlpha: 0, duration: 1.1, ease: EASE_OUT, delay, scrollTrigger });
             return;
           }
-          if (copy === "duplicate") {
-            // Built only once JS splits, so the no-JS page and its HTML carry the text exactly once.
-            srCopy = document.createElement("span");
-            srCopy.className = "sr-only";
-            srCopy.textContent = target.textContent;
-            target.before(srCopy);
-            target.setAttribute("aria-hidden", "true");
-          }
+          if (copy === "duplicate") restoreCopy = addScreenReaderCopy(target);
           split = SplitText.create(target, {
             type: mode === "words" ? "words,lines" : "lines",
             mask: "lines",
@@ -73,8 +67,7 @@ export function Reveal({ as: Tag = "p", className, children, mode = "words", del
         return () => {
           stopWaiting();
           split?.revert();
-          srCopy?.remove();
-          if (srCopy) target.removeAttribute("aria-hidden");
+          restoreCopy?.();
           delete el.dataset.revealReady;
         };
       });

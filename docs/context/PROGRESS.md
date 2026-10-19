@@ -1,6 +1,6 @@
 <!-- GENERATED FILE — DO NOT EDIT. Rendered by `npm run context:render`.
 Source: sdd.config.json, docs/steering/, docs/specs/F-*/, docs/context/ASSUMPTIONS.md, docs/handoff/current.md.
-source_hash: c6526459961ad0e148dda67ca83179ab653a8734655db5410ad8422a0d95cc56 -->
+source_hash: 6681cd59cd2de622357d7b59ec1532569cfe4bcc59237dcc90ce6b170f973938 -->
 
 # Project Progress
 
@@ -27,3 +27,24 @@ source_hash: c6526459961ad0e148dda67ca83179ab653a8734655db5410ad8422a0d95cc56 --
 | T-007 Custom cursor dan magnetic | done | FR-005 |  | EV-010 |
 | T-008 Footer reveal | done | FR-006 | T-004 | EV-011 |
 | T-009 Integrasi dan verifikasi shell | done | FR-001, FR-002, FR-003, FR-004, FR-005, FR-006 | T-003, T-006, T-007, T-008 | EV-012 |
+
+## F-003 — Prolog (hero) (`implementing`, in_progress)
+
+| Task | Status | Requirements | Depends on | Evidence |
+|---|---|---|---|---|
+| T-001 Konten cerita dan bingkai ponsel | review | FR-001 |  | EV-001 |
+| T-002 Section Prolog dan lapisan bergerak | review | FR-001, FR-002, FR-003 | T-001 | EV-001 |
+
+## F-004 — Manifesto dan buka aplikasi (`implementing`, in_progress)
+
+| Task | Status | Requirements | Depends on | Evidence |
+|---|---|---|---|---|
+| T-001 Helper salinan aksesibel dan Manifesto | review | FR-001 |  | EV-001 |
+| T-002 Buka aplikasinya | review | FR-002 |  | EV-001 |
+
+## F-005 — Bab horizontal (`implementing`, in_progress)
+
+| Task | Status | Requirements | Depends on | Evidence |
+|---|---|---|---|---|
+| T-001 Konten bab dan test kontras | review | FR-001 |  | EV-001 |
+| T-002 Track horizontal dan fallback vertikal | review | FR-001, FR-002 | T-001 | EV-001 |
