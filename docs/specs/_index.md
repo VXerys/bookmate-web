@@ -24,6 +24,7 @@ Task status belongs in each feature's `tasks.md`; `docs/context/state.yaml` and 
 | `F-008` | Legal dan SEO | `docs/specs/F-008-seo-legal/` | P0 | approved | M4 |
 | `F-009` | WebGL hover distortion (opsional, butuh ADR-0002) | `docs/specs/F-009-webgl-hover/` | P2 | draft | M4 |
 | `F-010` | QA dan rilis | `docs/specs/F-010-qa-rilis/` | P0 | approved | M4 |
+| `F-011` | Screenshot sementara dan perbaikan bug animasi | `docs/specs/F-011-aset-motion-polish/` | P1 | verification | M4 |
 
 Ruang lingkup tiap fitur yang belum dibuat ada di `docs/product/roadmap.md`. Folder spec dibuat saat fitur dimulai, bukan sekaligus.
 

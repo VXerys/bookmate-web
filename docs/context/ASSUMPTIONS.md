@@ -46,6 +46,8 @@ Fitur terdampak: F-003, F-004, F-005. Field `feature` diisi saat folder spec fit
 
 Situs butuh screenshot asli dari build produksi v1.1.0 (Home, Catat Bacaan, Streak, Bedah Buku, Komunitas, Thread, Pinjam dan Chat, Profil dengan lencana), minimal 1080 x 2340, tanpa data pribadi pengguna nyata. Mockup di `marketing_assets/threads/` repo app dibuat AI dan tidak dipakai. Tanpa screenshot, F-003 sampai F-005 hanya bisa memakai bingkai kosong berlabel.
 
+2026-10-19 (F-011): atas instruksi pemilik, bingkai ponsel sementara memakai screenshot dari perangkat pemilik (`public/CREDITS.md`). Screenshot itu memuat sampul buku komersial, nama dan foto pemilik, avatar anggota, dan nama lawan chat, dan belum ada layar kalender streak, jadi assumption ini tetap open dan rilis tetap diblokir sampai screenshot bersih tersedia.
+
 ### A-003 — Lencana tarot boleh dipakai di web, dan daftar nama serta syaratnya tersedia
 - status: open
 - feature:

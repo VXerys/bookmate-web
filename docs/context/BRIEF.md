@@ -1,6 +1,6 @@
 <!-- GENERATED FILE — DO NOT EDIT. Rendered by `npm run context:render`.
 Source: sdd.config.json, docs/steering/, docs/specs/F-*/, docs/context/ASSUMPTIONS.md, docs/handoff/current.md.
-source_hash: 737781f299a3dd05fabbfedfd15ec6af40e9941a1a6b9279a5e3672b9e656685 -->
+source_hash: 2074dda90c9bb000e77358ecf60355895e986b0a35eb2b23af9198ac5761d348 -->
 
 # Brief
 
@@ -9,13 +9,14 @@ BookMate Web adalah situs pemasaran untuk aplikasi BookMate yang mengajak pembac
 Project `BookMate Web`, tier `lite`. Rendered from sdd.config.json, docs/steering/, docs/specs/F-*/, docs/context/ASSUMPTIONS.md, docs/handoff/current.md.
 
 ## Active
-Feature F-010 — QA dan rilis (`implementing`, docs/specs/F-010-qa-rilis/)
-Task T-003 — Deploy produksi (`blocked`); requirements: FR-003; depends on: none
+Feature F-011 — Screenshot sementara dan perbaikan bug animasi (`verification`, docs/specs/F-011-aset-motion-polish/)
+Task T-003 — Kualitas gerak (`done`); requirements: FR-003; depends on: none
 
-Diblokir A-004 dan persetujuan deploy pemilik. Acceptance: AC-004.
+`buka.tsx`, `bab-track.tsx`, `mulai.tsx`, `magnetic.tsx`, `cursor.tsx`, `diskusi.tsx`. Acceptance: AC-006, AC-007.
 
 Acceptance criteria:
-- AC-004: Given persetujuan pemilik dan domain (A-004), when deploy produksi, then situs dapat diakses di domain dan Lighthouse mobile memenuhi target PRD.
+- AC-006: Given Buka, when pin dimulai, then kalimat terbaca utuh di atas dan bawah ponsel; when berakhir, then ponsel mengisi sekitar 90% tinggi viewport.
+- AC-007: Given tombol magnetik, cursor, dan marquee, then magnetik memakai power3, cursor membaca ulang target saat scroll, dan kecepatan marquee kembali ke 1 setelah scroll berhenti.
 
 ## Rules
 Stop conditions:
@@ -42,9 +43,7 @@ Frozen: none
 None.
 
 ## Handoff
-Next step:
-
-Pemilik: cek reduced motion dan kesan gerak di `next start`, jawab A-001 sampai A-007, lalu putuskan push branch bertumpuk dan PR. Setelah A-002 tersedia: ganti slot `PhoneFrame` dengan screenshot asli lewat `next/image` dan catat di `public/CREDITS.md`.
+Active handoff without an "Exact next step" section.
 
 ## Other open tasks
 None.
@@ -62,3 +61,4 @@ None.
 | F-008 SEO dan halaman legal | implementing | blocked | 1/4 |
 | F-009 WebGL hover distortion (opsional) | draft | complete | 0/1 |
 | F-010 QA dan rilis | implementing | blocked | 2/3 |
+| F-011 Screenshot sementara dan perbaikan bug animasi | verification | complete | 3/3 |

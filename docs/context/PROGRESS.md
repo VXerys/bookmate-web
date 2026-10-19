@@ -1,6 +1,6 @@
 <!-- GENERATED FILE — DO NOT EDIT. Rendered by `npm run context:render`.
 Source: sdd.config.json, docs/steering/, docs/specs/F-*/, docs/context/ASSUMPTIONS.md, docs/handoff/current.md.
-source_hash: 737781f299a3dd05fabbfedfd15ec6af40e9941a1a6b9279a5e3672b9e656685 -->
+source_hash: 2074dda90c9bb000e77358ecf60355895e986b0a35eb2b23af9198ac5761d348 -->
 
 # Project Progress
 
@@ -85,3 +85,11 @@ source_hash: 737781f299a3dd05fabbfedfd15ec6af40e9941a1a6b9279a5e3672b9e656685 --
 | T-001 Header keamanan | done | FR-001 |  | EV-001 |
 | T-002 Audit aksesibilitas struktur dan bundle | done | FR-002 |  | EV-001 |
 | T-003 Deploy produksi | blocked | FR-003 |  |  |
+
+## F-011 — Screenshot sementara dan perbaikan bug animasi (`verification`, complete)
+
+| Task | Status | Requirements | Depends on | Evidence |
+|---|---|---|---|---|
+| T-001 Screenshot di mockup | done | FR-001 |  | EV-001 |
+| T-002 Posisi scroll dan trigger | done | FR-002 |  | EV-001 |
+| T-003 Kualitas gerak | done | FR-003 |  | EV-001 |

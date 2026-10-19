@@ -363,8 +363,38 @@ features:
           - FR-003
         depends_on: []
         evidence: []
+  - id: F-011
+    title: Screenshot sementara dan perbaikan bug animasi
+    status: verification
+    phase: complete
+    spec_path: docs/specs/F-011-aset-motion-polish
+    tasks:
+      - id: T-001
+        title: Screenshot di mockup
+        status: done
+        requirements:
+          - FR-001
+        depends_on: []
+        evidence:
+          - EV-001
+      - id: T-002
+        title: Posisi scroll dan trigger
+        status: done
+        requirements:
+          - FR-002
+        depends_on: []
+        evidence:
+          - EV-001
+      - id: T-003
+        title: Kualitas gerak
+        status: done
+        requirements:
+          - FR-003
+        depends_on: []
+        evidence:
+          - EV-001
 active:
-  feature_id: F-010
+  feature_id: F-011
   task_id: T-003
 assumptions_open:
   - id: A-001
@@ -401,5 +431,5 @@ blockers:
   - feature_id: F-010
     task_id: T-003
     title: Deploy produksi
-generated_at: 2026-10-19T03:38:37.544Z
-source_hash: 737781f299a3dd05fabbfedfd15ec6af40e9941a1a6b9279a5e3672b9e656685
+generated_at: 2026-10-19T04:47:55.116Z
+source_hash: 2074dda90c9bb000e77358ecf60355895e986b0a35eb2b23af9198ac5761d348
