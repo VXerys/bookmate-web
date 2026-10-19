@@ -37,9 +37,22 @@ const jetbrains = JetBrains_Mono({
   preload: false,
 });
 
+// Absolute share URLs need the production origin; until the domain is decided (A-004) it comes from the environment.
+const siteUrl = process.env.NEXT_PUBLIC_SITE_URL;
+
 export const metadata: Metadata = {
+  ...(siteUrl ? { metadataBase: new URL(siteUrl) } : {}),
   title: `${site.name} | Klub baca komunitas`,
   description: site.description,
+  applicationName: site.name,
+  openGraph: {
+    type: "website",
+    locale: "id_ID",
+    siteName: site.name,
+    title: `${site.name} | Klub baca komunitas`,
+    description: site.description,
+  },
+  twitter: { card: "summary_large_image", title: `${site.name} | Klub baca komunitas`, description: site.description },
 };
 
 export const viewport: Viewport = {

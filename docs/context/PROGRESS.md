@@ -1,6 +1,6 @@
 <!-- GENERATED FILE — DO NOT EDIT. Rendered by `npm run context:render`.
 Source: sdd.config.json, docs/steering/, docs/specs/F-*/, docs/context/ASSUMPTIONS.md, docs/handoff/current.md.
-source_hash: a2b395d7d2f703001cd0bb6897b80baca1ed990ace19556cd768ace98f94133d -->
+source_hash: da45f2842cad20a2f5d0f1709e2e20c228db58323f9b4c2339edc13aa80d27ee -->
 
 # Project Progress
 
@@ -62,3 +62,26 @@ source_hash: a2b395d7d2f703001cd0bb6897b80baca1ed990ace19556cd768ace98f94133d --
 |---|---|---|---|---|
 | T-001 Ruang diskusi | done | FR-001 |  | EV-001 |
 | T-002 Cara mulai, FAQ, Epilog | done | FR-002, FR-003 |  | EV-001 |
+
+## F-008 — SEO dan halaman legal (`implementing`, blocked)
+
+| Task | Status | Requirements | Depends on | Evidence |
+|---|---|---|---|---|
+| T-001 Metadata, gambar OG, robots, JSON-LD | done | FR-001 |  | EV-001 |
+| T-002 Halaman kebijakan privasi dan hapus akun | blocked | FR-002 |  |  |
+| T-003 Sitemap dan canonical | blocked | FR-002 |  |  |
+| T-004 Analytics klik CTA | blocked | FR-002 |  |  |
+
+## F-009 — WebGL hover distortion (opsional) (`draft`, complete)
+
+| Task | Status | Requirements | Depends on | Evidence |
+|---|---|---|---|---|
+| T-001 ADR-0002 dan implementasi shader | deferred | FR-001 |  |  |
+
+## F-010 — QA dan rilis (`implementing`, blocked)
+
+| Task | Status | Requirements | Depends on | Evidence |
+|---|---|---|---|---|
+| T-001 Header keamanan | done | FR-001 |  | EV-001 |
+| T-002 Audit aksesibilitas struktur dan bundle | done | FR-002 |  | EV-001 |
+| T-003 Deploy produksi | blocked | FR-003 |  |  |

@@ -1,6 +1,6 @@
 <!-- GENERATED FILE — DO NOT EDIT. Rendered by `npm run context:render`.
 Source: sdd.config.json, docs/steering/, docs/specs/F-*/, docs/context/ASSUMPTIONS.md, docs/handoff/current.md.
-source_hash: a2b395d7d2f703001cd0bb6897b80baca1ed990ace19556cd768ace98f94133d -->
+source_hash: da45f2842cad20a2f5d0f1709e2e20c228db58323f9b4c2339edc13aa80d27ee -->
 
 # Brief
 
@@ -9,16 +9,13 @@ BookMate Web adalah situs pemasaran untuk aplikasi BookMate yang mengajak pembac
 Project `BookMate Web`, tier `lite`. Rendered from sdd.config.json, docs/steering/, docs/specs/F-*/, docs/context/ASSUMPTIONS.md, docs/handoff/current.md.
 
 ## Active
-Feature F-002 — Shell global: sampul, header, slice transition, menu, cursor, footer (`verification`, docs/specs/F-002-shell-global/)
-Task T-005 — Slice transition, fokus, dan hash (`done`); requirements: FR-003; depends on: T-001, T-002
+Feature F-010 — QA dan rilis (`implementing`, docs/specs/F-010-qa-rilis/)
+Task T-003 — Deploy produksi (`blocked`); requirements: FR-003; depends on: none
 
-`slice-transition.tsx` dengan `navigateTo(id)`, delegasi klik tautan internal, `focusSection`, `history.pushState`. Acceptance: AC-009 sampai AC-011.
-
-Hasil: aturan klik mana yang dicegat ada di `src/lib/motion/in-page-link.ts` + test (modifier, tombol tengah, `data-slice="off"`, `#` kosong, halaman lain tetap native). `navigateTo(id, { onCovered })` disiapkan untuk menu T-006. Pengaman `setTimeout` 3 detik mendaratkan pengunjung bila ticker macet. Catatan verifikasi: Lenis 1.3 sudah menghormati `scroll-margin-top`, jadi offset manual yang sempat ditambahkan ke `jumpToTarget` dicabut lagi karena membuat jarak ganda (144 px).
+Diblokir A-004 dan persetujuan deploy pemilik. Acceptance: AC-004.
 
 Acceptance criteria:
-- AC-009: Given motion diizinkan, when pengguna mengaktifkan tautan ke `#id` sebuah section, then 5 irisan vertikal menutup layar berurutan, label bab tujuan terlihat, halaman melompat ke target saat tertutup, lalu irisan membuka.
-- AC-011: Given transisi sedang berjalan, when tautan lain diaktifkan, then klik kedua diabaikan sampai transisi selesai.
+- AC-004: Given persetujuan pemilik dan domain (A-004), when deploy produksi, then situs dapat diakses di domain dan Lighthouse mobile memenuhi target PRD.
 
 ## Rules
 Stop conditions:
@@ -47,7 +44,7 @@ None.
 ## Handoff
 Next step:
 
-Pemilik commit T-005 dan set `done`. Lalu T-006: `src/components/site/menu.tsx` (tombol "Menu" di bawah 768 px, panel curtain, kunci `menu`, focus trap, Esc, tutup saat lebar ≥ 768 px, pilih tautan memanggil `navigateTo(id, { onCovered: close })`), copy menu di `src/content/shell.ts`. Ini juga menguji AC-020 end-to-end (menu lalu slice).
+Pemilik: cek reduced motion dan kesan gerak di `next start`, jawab A-001 sampai A-007, lalu putuskan push branch bertumpuk dan PR. Setelah A-002 tersedia: ganti slot `PhoneFrame` dengan screenshot asli lewat `next/image` dan catat di `public/CREDITS.md`.
 
 ## Other open tasks
 None.
@@ -62,3 +59,6 @@ None.
 | F-005 Bab horizontal | verification | complete | 2/2 |
 | F-006 Streak dan kartu pembaca | verification | complete | 2/2 |
 | F-007 Diskusi, cara mulai, FAQ, dan epilog | verification | complete | 2/2 |
+| F-008 SEO dan halaman legal | implementing | blocked | 1/4 |
+| F-009 WebGL hover distortion (opsional) | draft | complete | 0/1 |
+| F-010 QA dan rilis | implementing | blocked | 2/3 |

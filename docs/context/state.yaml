@@ -286,9 +286,86 @@ features:
         depends_on: []
         evidence:
           - EV-001
+  - id: F-008
+    title: SEO dan halaman legal
+    status: implementing
+    phase: blocked
+    spec_path: docs/specs/F-008-seo-legal
+    tasks:
+      - id: T-001
+        title: Metadata, gambar OG, robots, JSON-LD
+        status: done
+        requirements:
+          - FR-001
+        depends_on: []
+        evidence:
+          - EV-001
+      - id: T-002
+        title: Halaman kebijakan privasi dan hapus akun
+        status: blocked
+        requirements:
+          - FR-002
+        depends_on: []
+        evidence: []
+      - id: T-003
+        title: Sitemap dan canonical
+        status: blocked
+        requirements:
+          - FR-002
+        depends_on: []
+        evidence: []
+      - id: T-004
+        title: Analytics klik CTA
+        status: blocked
+        requirements:
+          - FR-002
+        depends_on: []
+        evidence: []
+  - id: F-009
+    title: WebGL hover distortion (opsional)
+    status: draft
+    phase: complete
+    spec_path: docs/specs/F-009-webgl-hover
+    tasks:
+      - id: T-001
+        title: ADR-0002 dan implementasi shader
+        status: deferred
+        requirements:
+          - FR-001
+        depends_on: []
+        evidence: []
+  - id: F-010
+    title: QA dan rilis
+    status: implementing
+    phase: blocked
+    spec_path: docs/specs/F-010-qa-rilis
+    tasks:
+      - id: T-001
+        title: Header keamanan
+        status: done
+        requirements:
+          - FR-001
+        depends_on: []
+        evidence:
+          - EV-001
+      - id: T-002
+        title: Audit aksesibilitas struktur dan bundle
+        status: done
+        requirements:
+          - FR-002
+        depends_on: []
+        evidence:
+          - EV-001
+      - id: T-003
+        title: Deploy produksi
+        status: blocked
+        requirements:
+          - FR-003
+        depends_on: []
+        evidence: []
 active:
-  feature_id: F-002
-  task_id: T-005
+  feature_id: F-010
+  task_id: T-003
 assumptions_open:
   - id: A-001
     feature: null
@@ -311,6 +388,18 @@ assumptions_open:
   - id: A-007
     feature: null
     title: Analytics yang dipakai
-blockers: []
-generated_at: 2026-10-19T03:31:41.080Z
-source_hash: a2b395d7d2f703001cd0bb6897b80baca1ed990ace19556cd768ace98f94133d
+blockers:
+  - feature_id: F-008
+    task_id: T-002
+    title: Halaman kebijakan privasi dan hapus akun
+  - feature_id: F-008
+    task_id: T-003
+    title: Sitemap dan canonical
+  - feature_id: F-008
+    task_id: T-004
+    title: Analytics klik CTA
+  - feature_id: F-010
+    task_id: T-003
+    title: Deploy produksi
+generated_at: 2026-10-19T03:38:26.210Z
+source_hash: da45f2842cad20a2f5d0f1709e2e20c228db58323f9b4c2339edc13aa80d27ee

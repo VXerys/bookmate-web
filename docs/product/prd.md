@@ -94,9 +94,9 @@ Detail per phase di `docs/product/roadmap.md`.
 | F-005 | Bab horizontal | lima bab kemampuan | F-002 | verification |
 | F-006 | Streak dan kartu pembaca | kalender streak, dek tarot Flip + liquid | F-002 | verification |
 | F-007 | Diskusi, cara mulai, FAQ, epilog | sticky stack, marquee, CTA akhir | F-002 | verification |
-| F-008 | Legal dan SEO | privasi, hapus akun, metadata, analytics | F-001 | draft |
+| F-008 | Legal dan SEO | privasi, hapus akun, metadata, analytics | F-001 | implementing |
 | F-009 | WebGL hover (opsional) | shader distortion di kartu dan gambar | F-006, ADR | draft |
-| F-010 | QA dan rilis | audit performa, a11y, perangkat, deploy | semua | draft |
+| F-010 | QA dan rilis | audit performa, a11y, perangkat, deploy | semua | implementing |
 
 ## Approval
 
