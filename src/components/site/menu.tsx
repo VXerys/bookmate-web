@@ -106,7 +106,7 @@ export function Menu() {
         aria-expanded={open}
         aria-controls="menu-panel"
         onClick={() => setOpen(true)}
-        className="inline-flex h-11 min-w-11 items-center justify-center rounded-3xl bg-peach-pale px-4 text-sm font-bold md:hidden"
+        className="inline-flex h-11 min-w-11 items-center justify-center rounded-full bg-white px-4 text-sm font-bold shadow-[0_6px_20px_-12px_rgb(3_4_10/0.5)] md:hidden"
       >
         {shell.menu.open}
       </button>

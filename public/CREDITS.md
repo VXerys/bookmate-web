@@ -32,3 +32,21 @@ Every illustration on the page is SVG or CSS drawn in this repository, with no t
 (`src/components/art/doodles.tsx`), abstract covers and spines (`books.tsx`), CSS 3D hardcovers (`book3d.tsx`), hour
 scenes (`scenes.tsx`), and the loader brush stroke. Layout energy was inspired by Aardvark Book Club (Awwwards SOTD);
 none of its assets, fonts (Champ, Degular), or copy are used.
+
+## BookMate app assets (F-014)
+
+Source: the BookMate app repository (`bookmeet`, publisher Mangcoding), copied and resized by
+`scripts/assets/import-app-assets.mjs` into `src/assets/images/app/`. Used on the owner's instruction of 2026-10-19
+("pakai image buku yang ada di mock, cek codebase bookmate nya").
+
+| Folder | Original in the app repo | Treatment | Status |
+|---|---|---|---|
+| `covers/` (18) | `assets/images/book-image-cover/*.webp`, the covers of the app's mock books | WebP 400 px, card colour picked from the cover | publisher artwork, blocks release (A-002) |
+| `tarot/` (30) | `assets/images/tarot_badges/*.webp`, mapped by code in `reading_achievement_resolver.dart` | WebP 520 px | assumed Mangcoding-owned (A-003) |
+| `memoji/` (13) | `assets/icons/memoji/*.webp` | WebP 320 px | assumed Mangcoding-licensed (A-003) |
+| `komunitas/` (5) | `assets/images/komunitas-image-cover/*.webp` | WebP 480 px | assumed Mangcoding-owned (A-003) |
+| `ilustrasi/` (11) | `assets/icons/icons-color-bookmate/*.svg`, `assets/icons/empty-state/*.svg` | rasterised to WebP 640 px | Mangcoding app artwork |
+
+The book and community data (`src/content/app-data.ts`) comes from `lib/core/mock/mock_data_constants.dart`. Three
+mock authors differ from the printed cover; the site shows the cover's author: Immaculate Conception (Ling Ling Huang),
+A Palace Near the Wind (Ai Jiang), Rites of the Starling (Devney Perry).

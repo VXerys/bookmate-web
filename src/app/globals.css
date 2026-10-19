@@ -20,6 +20,7 @@
   --color-coral: #ff4d4d;
   --color-soft-red: #ffd8d8;
   --color-gold: #ffb300;
+  --color-navy: #0b1638;
   --color-plum: #52405a;
   --color-forest: #19382b;
   --color-slate: #64748b;
@@ -46,7 +47,7 @@
 
   html {
     background: var(--color-white);
-    color: var(--color-ink);
+    color: var(--color-navy);
     color-scheme: light;
     /* Reserves the scrollbar lane, so locking scroll during the sampul does not reflow the page and stale every trigger. */
     scrollbar-gutter: stable;
@@ -54,8 +55,11 @@
 
   body {
     background: var(--color-white);
+    /* Clip, not hidden: animated titles start shifted sideways and decorative art bleeds past the edge, but clip makes
+       no scroll container, so sticky cards and pinned scenes keep working and no horizontal scrollbar appears. */
+    overflow-x: clip;
     font-family: var(--font-sans);
-    font-size: 1.0625rem;
+    font-size: 1rem;
     font-weight: 500;
     line-height: 1.45;
     -webkit-font-smoothing: antialiased;
@@ -208,37 +212,47 @@ html.lenis body {
   clip-path: inset(var(--shape-i) round var(--shape-r));
 }
 
-/* Buka (F-013): stacked by default; once the section pins (wide screens, motion allowed) the sentence wraps around
+/* Aplikasi (F-014): stacked by default; once the section pins (wide screens, motion allowed) the sentence wraps around
    the phone and the start steps wait to the right of centre. */
-.buka .buka-gap {
+.aplikasi .aplikasi-gap {
   display: none;
 }
 
-.buka[data-pinned] .buka-statement {
+.aplikasi[data-pinned] .aplikasi-statement {
   position: absolute;
   inset-inline: 1.5rem;
   top: 50%;
   translate: 0 -50%;
 }
 
-.buka[data-pinned] .buka-gap {
+.aplikasi[data-pinned] .aplikasi-gap {
   display: block;
-  height: var(--buka-phone);
+  height: var(--app-phone);
   margin-block: 2svh;
 }
 
-.buka[data-pinned] .buka-stage {
+.aplikasi[data-pinned] .aplikasi-stage {
   position: absolute;
   inset: 0;
   max-width: none;
   justify-content: center;
 }
 
-.buka[data-pinned] .buka-steps {
+.aplikasi[data-pinned] .aplikasi-steps {
   position: absolute;
   left: 50%;
   top: 50%;
   translate: 0 -50%;
+}
+
+/* Buku (F-014): once the shelf pins, GSAP moves the track, so native scrolling, snapping, and the step buttons step aside. */
+.shelf[data-shelf-pinned] [data-shelf-track] {
+  overflow: visible;
+  scroll-snap-type: none;
+}
+
+.shelf[data-shelf-pinned] .shelf-steps {
+  display: none;
 }
 
 /* Horizontal shelves scroll natively; the bar is hidden because the round buttons and the cut-off card already show
@@ -328,8 +342,8 @@ html.lenis body {
   .display {
     font-family: var(--font-display);
     font-weight: 800;
-    font-size: clamp(3rem, 6.4vw, 6.75rem);
-    line-height: 0.82;
+    font-size: clamp(2.75rem, 5.4vw, 5.75rem);
+    line-height: 0.84;
     letter-spacing: -0.02em;
     text-wrap: balance;
   }
@@ -337,8 +351,8 @@ html.lenis body {
   .heading {
     font-family: var(--font-display);
     font-weight: 800;
-    font-size: clamp(2.6rem, 5.4vw, 4.875rem);
-    line-height: 0.84;
+    font-size: clamp(2.2rem, 4.1vw, 4.25rem);
+    line-height: 0.88;
     letter-spacing: -0.015em;
     text-wrap: balance;
   }
@@ -346,7 +360,7 @@ html.lenis body {
   .statement {
     font-family: var(--font-display);
     font-weight: 700;
-    font-size: clamp(1.6rem, 2.4vw, 2rem);
+    font-size: clamp(1.35rem, 1.9vw, 1.75rem);
     line-height: 0.92;
     letter-spacing: -0.01em;
   }
@@ -359,8 +373,8 @@ html.lenis body {
 
   .lead {
     font-weight: 600;
-    font-size: clamp(1.125rem, 1.6vw, 1.5rem);
-    line-height: 1.2;
+    font-size: clamp(1.05rem, 1.25vw, 1.3rem);
+    line-height: 1.25;
     letter-spacing: -0.02em;
   }
 
@@ -376,7 +390,7 @@ html.lenis body {
   .hand {
     font-family: var(--font-hand);
     font-weight: 600;
-    font-size: clamp(1.4rem, 1.8vw, 1.6rem);
+    font-size: clamp(1.3rem, 1.6vw, 1.5rem);
     line-height: 1;
     color: var(--color-blue);
   }

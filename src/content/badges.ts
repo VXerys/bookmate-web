@@ -1,6 +1,6 @@
 // Generated from the BookMate app: lib/features/profile/domain/services/reading_achievement_resolver.dart
-// (names, philosophy, and unlock criteria exactly as the app defines them). Card art is not published until the owner
-// confirms the rights to the badge images (docs/context/ASSUMPTIONS.md A-003).
+// (names, philosophy, and unlock criteria exactly as the app defines them). The tarot card art ships since F-014 on the
+// owner's instruction; its rights are still tracked in docs/context/ASSUMPTIONS.md A-003.
 export type Badge = {
   code: string;
   title: string;

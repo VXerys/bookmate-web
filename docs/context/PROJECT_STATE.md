@@ -1,10 +1,10 @@
 <!-- GENERATED FILE — DO NOT EDIT. Rendered by `npm run context:render`.
 Source: sdd.config.json, docs/steering/, docs/specs/F-*/, docs/context/ASSUMPTIONS.md, docs/handoff/current.md.
-source_hash: ef1078541274b0b562d4b9003035c43b1f62e91b04bbb4c75467ada6aaaf8aaf -->
+source_hash: 0c2781432622c2b648c5b6739b9d395b8f576b4d7eb909636c0b2855355e05d4 -->
 
 # Project State
 
-- Generated at: 2026-10-19T06:38:41.238Z
+- Generated at: 2026-10-19T07:01:37.632Z
 - Project: BookMate Web (tier `lite`)
 - Active: F-013 / T-003
 - Open assumptions: 7
@@ -27,19 +27,20 @@ source_hash: ef1078541274b0b562d4b9003035c43b1f62e91b04bbb4c75467ada6aaaf8aaf --
 | F-011 Screenshot sementara dan perbaikan bug animasi | verification | complete | 0 | 0 | 0 | 0 | 3 | 0 |
 | F-012 Redesign Marginalia: satu hari pembaca | superseded | complete | 0 | 0 | 0 | 0 | 6 | 0 |
 | F-013 Revamp gaya Aardvark | verification | complete | 0 | 0 | 0 | 0 | 3 | 0 |
+| F-014 Cerita BookMate dengan aset asli | approved | not_started | 4 | 0 | 0 | 0 | 0 | 0 |
 
 <!-- GENERATED:GIT_FACTS:START -->
 ## Git
 
-- Branch: `feat/F-013-gaya-aardvark`
-- HEAD: `76167f3`
+- Branch: `feat/F-014-cerita-aardvark`
+- HEAD: `dbbf9a7`
 - Worktree: dirty
 
 Recent commits:
 
+- `dbbf9a7 Merge pull request #6 from VXerys/feat/F-013-gaya-aardvark`
+- `07f3323 docs(F-013): REA-validated reference, books-shelf requirement, evidence, superseded specs, handoff`
 - `76167f3 feat(F-013): Aardvark-style revamp with BookMate story, mock-data book shelf, REA-validated motion`
 - `e89e489 docs(F-013): Aardvark-style art direction and spec`
 - `5235ec7 docs: reverse-engineered reference of aardvarkbookclub.com sections, tokens, and motion`
-- `d13bb04 docs(F-012): evidence, task status, credits, and handoff for the redesign`
-- `bc841eb feat(F-012): Aardvark-style revamp: brush-wipe loader, yellow hero with CSS 3D books, colour slabs, pill header and CTA`
 <!-- GENERATED:GIT_FACTS:END -->

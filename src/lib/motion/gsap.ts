@@ -8,11 +8,13 @@ import { DrawSVGPlugin } from "gsap/DrawSVGPlugin";
 import { MotionPathPlugin } from "gsap/MotionPathPlugin";
 import { CustomEase } from "gsap/CustomEase";
 import { InertiaPlugin } from "gsap/InertiaPlugin";
+import { MorphSVGPlugin } from "gsap/MorphSVGPlugin";
 
 // Registered once here so every client component shares the same plugin instances (ADR-0001).
 // Every plugin ships inside the gsap package, so none is a new dependency: DrawSVG for doodles and the loader stroke,
-// MotionPath for the travelling book, CustomEase for the motion tokens, Inertia for the momentum push on benefit pills.
-gsap.registerPlugin(ScrollTrigger, SplitText, DrawSVGPlugin, MotionPathPlugin, CustomEase, InertiaPlugin, useGSAP);
+// MotionPath for the travelling book, CustomEase for the motion tokens, Inertia for the momentum push on benefit pills,
+// MorphSVG for the shape-shifting waves and blobs (F-014).
+gsap.registerPlugin(ScrollTrigger, SplitText, DrawSVGPlugin, MotionPathPlugin, CustomEase, InertiaPlugin, MorphSVGPlugin, useGSAP);
 
 // The reference's motion vocabulary (docs/product/reference-aardvark.md): "osmo" for general moves, "energy" for copy
 // and buttons, and an elastic landing for headings, cards, and labels (F-013 Q5).
@@ -28,4 +30,4 @@ export const POINTER_MOTION = "(prefers-reduced-motion: no-preference) and (poin
 export const EASE_OUT = "osmo";
 export const HOVER_MOTION = "(hover: hover) and (pointer: fine) and (prefers-reduced-motion: no-preference)";
 
-export { CustomEase, DrawSVGPlugin, gsap, InertiaPlugin, MotionPathPlugin, ScrollTrigger, SplitText, useGSAP };
+export { CustomEase, DrawSVGPlugin, gsap, InertiaPlugin, MorphSVGPlugin, MotionPathPlugin, ScrollTrigger, SplitText, useGSAP };

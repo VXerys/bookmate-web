@@ -5,9 +5,18 @@ import { useEffect, useRef } from "react";
 import { jumpToTarget, lockScroll, unlockScroll } from "@/components/motion/smooth-scroll";
 import { chapterNumber, chapters } from "@/content/navigation";
 import { sliceTargetId } from "@/lib/motion/in-page-link";
-import { gsap, MOTION_OK, ScrollTrigger } from "@/lib/motion/gsap";
+import { LogoMark } from "@/components/site/logo";
+import { gsap, LAND, MOTION_OK, ScrollTrigger } from "@/lib/motion/gsap";
 
-const STRIPS = 5;
+// Curtain shapes in a 100x100 box stretched over the viewport: a sheet rises from the bottom with a bulging top edge,
+// covers the screen, then leaves upward with its bottom edge sagging. Every shape has the same commands, so MorphSVG
+// blends them point for point.
+const RISE_START = "M0 100 V100 Q50 100 100 100 V100 Z";
+const RISE_MID = "M0 100 V55 Q50 5 100 55 V100 Z";
+const COVER_FROM_BOTTOM = "M0 100 V0 Q50 0 100 0 V100 Z";
+const COVER_FROM_TOP = "M0 0 V100 Q50 100 100 100 V0 Z";
+const LEAVE_MID = "M0 0 V45 Q50 95 100 45 V0 Z";
+const LEAVE_END = "M0 0 V0 Q50 0 100 0 V0 Z";
 // setTimeout, not the ticker: if the ticker stalls (hidden tab) the visitor still lands on the target.
 const SLICE_SAFETY_MS = 3000;
 
@@ -36,7 +45,7 @@ function land(section: HTMLElement) {
 
 function labelFor(id: string) {
   const chapter = chapters.find((item) => item.id === id);
-  return chapter ? `${chapterNumber(id)} — ${chapter.label}` : "";
+  return chapter ? { number: chapterNumber(id), label: chapter.label } : { number: "", label: "" };
 }
 
 // Single entry point for travelling between chapters; returns false when there is no such section or a transition
@@ -54,9 +63,13 @@ export function navigateTo(id: string, options: NavigateOptions = {}): boolean {
     return true;
   }
 
-  const strips = overlay.querySelectorAll<HTMLElement>("[data-slice-strip]");
+  const [back, front] = overlay.querySelectorAll<SVGPathElement>("[data-curtain]");
+  const number = overlay.querySelector<HTMLElement>("[data-slice-number]");
   const label = overlay.querySelector<HTMLElement>("[data-slice-label]");
-  if (label) label.textContent = labelFor(id);
+  const parts = overlay.querySelectorAll<HTMLElement>("[data-slice-part]");
+  const text = labelFor(id);
+  if (number) number.textContent = text.number;
+  if (label) label.textContent = text.label;
   lockScroll("slice");
 
   let finished = false;
@@ -80,14 +93,23 @@ export function navigateTo(id: string, options: NavigateOptions = {}): boolean {
     finish();
   }, SLICE_SAFETY_MS);
 
+  // Yellow leads in and trails out, the blue sheet in front carries the chapter name: the page's two brand colours.
   gsap
-    .timeline({ defaults: { ease: "expo.inOut" }, onComplete: finish })
+    .timeline({ onComplete: finish })
     .set(overlay, { autoAlpha: 1 })
-    .fromTo(strips, { yPercent: 100 }, { yPercent: 0, duration: 0.55, stagger: 0.05 })
-    .fromTo(label, { autoAlpha: 0, y: 16 }, { autoAlpha: 1, y: 0, duration: 0.3, ease: "power2.out" }, "-=0.25")
+    .set([back, front], { morphSVG: RISE_START })
+    .to(back, { morphSVG: RISE_MID, duration: 0.28, ease: "power2.in" }, 0)
+    .to(back, { morphSVG: COVER_FROM_BOTTOM, duration: 0.3, ease: "power2.out" }, 0.28)
+    .to(front, { morphSVG: RISE_MID, duration: 0.28, ease: "power2.in" }, 0.1)
+    .to(front, { morphSVG: COVER_FROM_BOTTOM, duration: 0.3, ease: "power2.out" }, 0.38)
+    .fromTo(parts, { yPercent: 120, rotate: 6, autoAlpha: 0 }, { yPercent: 0, rotate: 0, autoAlpha: 1, duration: 0.6, ease: LAND, stagger: 0.06 }, 0.45)
     .call(cover)
-    .to(label, { autoAlpha: 0, duration: 0.2, ease: "power2.in" }, "+=0.15")
-    .to(strips, { yPercent: -100, duration: 0.55, stagger: 0.05 }, "<");
+    .to(parts, { yPercent: -80, autoAlpha: 0, duration: 0.25, ease: "power2.in", stagger: 0.03 }, "+=0.2")
+    .set([back, front], { morphSVG: COVER_FROM_TOP })
+    .to(front, { morphSVG: LEAVE_MID, duration: 0.28, ease: "power2.in" })
+    .to(front, { morphSVG: LEAVE_END, duration: 0.3, ease: "power2.out" })
+    .to(back, { morphSVG: LEAVE_MID, duration: 0.28, ease: "power2.in" }, "<-0.18")
+    .to(back, { morphSVG: LEAVE_END, duration: 0.3, ease: "power2.out" });
   return true;
 }
 
@@ -116,14 +138,18 @@ export function SliceTransition() {
   }, []);
 
   return (
-    <div ref={root} className="invisible fixed inset-0 z-[80] flex opacity-0" aria-hidden="true">
-      {Array.from({ length: STRIPS }, (_, index) => (
-        <div key={index} data-slice-strip className="h-full flex-1 translate-y-full bg-ink" />
-      ))}
-      <p
-        data-slice-label
-        className="statement pointer-events-none absolute inset-x-4 top-1/2 -translate-y-1/2 text-center text-paper opacity-0"
-      />
+    <div ref={root} className="invisible fixed inset-0 z-[80] opacity-0" aria-hidden="true">
+      <svg viewBox="0 0 100 100" preserveAspectRatio="none" className="absolute inset-0 h-full w-full">
+        <path data-curtain d={RISE_START} fill="var(--color-highlight)" />
+        <path data-curtain d={RISE_START} fill="var(--color-blue)" />
+      </svg>
+      <div className="pointer-events-none absolute inset-0 flex flex-col items-center justify-center gap-5 px-6 text-center">
+        <span data-slice-part className="grid size-16 place-items-center rounded-full bg-white">
+          <LogoMark className="w-8 text-blue" />
+        </span>
+        <span data-slice-part data-slice-number className="label rounded-full bg-highlight px-4 py-1.5 text-navy" />
+        <p data-slice-part data-slice-label className="display text-white" />
+      </div>
     </div>
   );
 }

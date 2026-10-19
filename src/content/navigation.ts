@@ -1,5 +1,5 @@
-// Order follows docs/product/art-direction.md ("Urutan halaman /"). Ids double as section anchors (#id), so they stay
-// stable once sections ship; labels feed the header indicator and the slice transition.
+// Order follows the F-014 story (docs/specs/F-014-cerita-aardvark/requirements.md FR-002). Ids double as section
+// anchors (#id), so they stay stable once sections ship; labels feed the header indicator and the slice transition.
 export type Chapter = {
   id: string;
   label: string;
@@ -9,13 +9,13 @@ export type Chapter = {
 
 export const chapters: readonly Chapter[] = [
   { id: "prolog", label: "Prolog" },
-  { id: "buku", label: "Buku di rak teman", navLabel: "Buku" },
-  { id: "fitur", label: "Fitur", navLabel: "Fitur" },
-  { id: "hari", label: "Satu hari", navLabel: "Satu hari" },
-  { id: "buka", label: "Buka aplikasinya" },
-  { id: "daftar", label: "Pilih fitur" },
-  { id: "manfaat", label: "Kenapa BookMate" },
-  { id: "rak", label: "Rak lencana", navLabel: "Lencana" },
+  { id: "buku", label: "Rak teman", navLabel: "Buku" },
+  { id: "pinjam", label: "Cara pinjam", navLabel: "Cara pinjam" },
+  { id: "aplikasi", label: "Di sakumu" },
+  { id: "fitur", label: "Pilih fitur" },
+  { id: "kenapa", label: "Kenapa BookMate" },
+  { id: "komunitas", label: "Komunitas", navLabel: "Komunitas" },
+  { id: "lencana", label: "Rak lencana", navLabel: "Lencana" },
   { id: "indeks", label: "Pertanyaan", navLabel: "FAQ" },
   { id: "epilog", label: "Epilog" },
 ];

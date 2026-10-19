@@ -1,6 +1,6 @@
 <!-- GENERATED FILE — DO NOT EDIT. Rendered by `npm run context:render`.
 Source: sdd.config.json, docs/steering/, docs/specs/F-*/, docs/context/ASSUMPTIONS.md, docs/handoff/current.md.
-source_hash: ef1078541274b0b562d4b9003035c43b1f62e91b04bbb4c75467ada6aaaf8aaf -->
+source_hash: 0c2781432622c2b648c5b6739b9d395b8f576b4d7eb909636c0b2855355e05d4 -->
 
 # Brief
 
@@ -64,3 +64,4 @@ None.
 | F-011 Screenshot sementara dan perbaikan bug animasi | verification | complete | 3/3 |
 | F-012 Redesign Marginalia: satu hari pembaca | superseded | complete | 6/6 |
 | F-013 Revamp gaya Aardvark | verification | complete | 3/3 |
+| F-014 Cerita BookMate dengan aset asli | approved | not_started | 0/4 |
