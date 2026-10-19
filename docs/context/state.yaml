@@ -393,6 +393,53 @@ features:
         depends_on: []
         evidence:
           - EV-001
+  - id: F-012
+    title: "Redesign Marginalia: satu hari pembaca"
+    status: approved
+    phase: not_started
+    spec_path: docs/specs/F-012-marginalia
+    tasks:
+      - id: T-001
+        title: Fondasi visual dan pustaka doodle
+        status: planned
+        requirements:
+          - FR-001
+        depends_on: []
+        evidence: []
+      - id: T-002
+        title: Sampul, prolog, manifesto, buka
+        status: planned
+        requirements:
+          - FR-002
+        depends_on:
+          - T-001
+        evidence: []
+      - id: T-003
+        title: Satu hari pembaca
+        status: planned
+        requirements:
+          - FR-003
+        depends_on:
+          - T-001
+        evidence: []
+      - id: T-004
+        title: Rak, papan, mulai, indeks, epilog, cursor
+        status: planned
+        requirements:
+          - FR-004
+        depends_on:
+          - T-001
+        evidence: []
+      - id: T-005
+        title: Navigasi, audit visual, checks
+        status: planned
+        requirements:
+          - FR-005
+        depends_on:
+          - T-002
+          - T-003
+          - T-004
+        evidence: []
 active:
   feature_id: F-011
   task_id: T-003
@@ -431,5 +478,5 @@ blockers:
   - feature_id: F-010
     task_id: T-003
     title: Deploy produksi
-generated_at: 2026-10-19T04:47:55.116Z
-source_hash: 2074dda90c9bb000e77358ecf60355895e986b0a35eb2b23af9198ac5761d348
+generated_at: 2026-10-19T05:02:52.169Z
+source_hash: d90ca4bb984f795bb59fae692e8bcc0b4a5f6548624eec03fafdfbf9ba734881

@@ -1,6 +1,6 @@
 <!-- GENERATED FILE — DO NOT EDIT. Rendered by `npm run context:render`.
 Source: sdd.config.json, docs/steering/, docs/specs/F-*/, docs/context/ASSUMPTIONS.md, docs/handoff/current.md.
-source_hash: 2074dda90c9bb000e77358ecf60355895e986b0a35eb2b23af9198ac5761d348 -->
+source_hash: d90ca4bb984f795bb59fae692e8bcc0b4a5f6548624eec03fafdfbf9ba734881 -->
 
 # Brief
 
@@ -62,3 +62,4 @@ None.
 | F-009 WebGL hover distortion (opsional) | draft | complete | 0/1 |
 | F-010 QA dan rilis | implementing | blocked | 2/3 |
 | F-011 Screenshot sementara dan perbaikan bug animasi | verification | complete | 3/3 |
+| F-012 Redesign Marginalia: satu hari pembaca | approved | not_started | 0/5 |

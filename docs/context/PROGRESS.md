@@ -1,6 +1,6 @@
 <!-- GENERATED FILE — DO NOT EDIT. Rendered by `npm run context:render`.
 Source: sdd.config.json, docs/steering/, docs/specs/F-*/, docs/context/ASSUMPTIONS.md, docs/handoff/current.md.
-source_hash: 2074dda90c9bb000e77358ecf60355895e986b0a35eb2b23af9198ac5761d348 -->
+source_hash: d90ca4bb984f795bb59fae692e8bcc0b4a5f6548624eec03fafdfbf9ba734881 -->
 
 # Project Progress
 
@@ -93,3 +93,13 @@ source_hash: 2074dda90c9bb000e77358ecf60355895e986b0a35eb2b23af9198ac5761d348 --
 | T-001 Screenshot di mockup | done | FR-001 |  | EV-001 |
 | T-002 Posisi scroll dan trigger | done | FR-002 |  | EV-001 |
 | T-003 Kualitas gerak | done | FR-003 |  | EV-001 |
+
+## F-012 — Redesign Marginalia: satu hari pembaca (`approved`, not_started)
+
+| Task | Status | Requirements | Depends on | Evidence |
+|---|---|---|---|---|
+| T-001 Fondasi visual dan pustaka doodle | planned | FR-001 |  |  |
+| T-002 Sampul, prolog, manifesto, buka | planned | FR-002 | T-001 |  |
+| T-003 Satu hari pembaca | planned | FR-003 | T-001 |  |
+| T-004 Rak, papan, mulai, indeks, epilog, cursor | planned | FR-004 | T-001 |  |
+| T-005 Navigasi, audit visual, checks | planned | FR-005 | T-002, T-003, T-004 |  |
