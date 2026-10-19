@@ -28,8 +28,8 @@ function LeftPage({ spread, index }: { spread: Spread; index: number }) {
         <span className="hand text-[clamp(2.5rem,4.4vw,4.25rem)] text-blue">{spread.time}</span>
         <span className="label">{spread.when}</span>
       </p>
-      <Scene moment={spread.id} className="mt-2 w-[62%]" />
-      <div className="absolute right-[7%] bottom-[7%] w-[33%] -rotate-3">
+      <Scene moment={spread.id} className="mt-2 w-[56%]" />
+      <div className="absolute right-[6%] bottom-[7%] w-[31%] -rotate-3">
         <PhoneFrame screen={spread.screen} sizes="(min-width: 1024px) 210px, 40vw" />
       </div>
       <p className="label absolute bottom-4 left-[clamp(1.25rem,2.4vw,2.25rem)] text-slate" aria-hidden="true">
@@ -189,10 +189,10 @@ export function Hari() {
 
   const last = spreads.length - 1;
   return (
-    <section ref={root} id="hari" data-chapter="hari" className="relative">
-      <div data-hari-stage className="hari-stage relative flex min-h-svh flex-col overflow-hidden bg-sky text-ink">
+    <section ref={root} id="hari" data-chapter="hari" className="slab">
+      <div data-hari-stage className="hari-stage relative flex min-h-svh flex-col overflow-hidden rounded-[inherit] bg-sky text-ink">
         <svg viewBox="0 0 1000 600" preserveAspectRatio="xMidYMid slice" className="hari-sky pointer-events-none absolute inset-0 h-full w-full" aria-hidden="true">
-          <path data-sky-arc="" d="M-40 560 C200 -120 800 -120 1040 560" fill="none" stroke="currentColor" strokeOpacity="0.18" strokeWidth="2" strokeDasharray="4 14" />
+          <path data-sky-arc="" d="M520 600 C640 -70 920 -70 1060 600" fill="none" stroke="currentColor" strokeOpacity="0.18" strokeWidth="2" strokeDasharray="4 14" />
           <g data-sun="" style={{ visibility: "hidden" }}>
             <circle r="38" fill="var(--color-highlight)" stroke="var(--color-ink)" strokeWidth="3" />
             {Array.from({ length: 8 }, (_, i) => {

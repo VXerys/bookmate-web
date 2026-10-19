@@ -84,7 +84,7 @@ export function Papan() {
       const section = root.current;
       if (!section) return;
       const notes = gsap.utils.toArray<HTMLElement>("[data-board-note]", section);
-      const row = section.querySelector<HTMLElement>("[data-marquee-row]");
+      const rows = gsap.utils.toArray<HTMLElement>("[data-marquee-row]", section);
       const mm = gsap.matchMedia();
       mm.add(MOTION_OK, () => {
         const scatter = [
@@ -111,11 +111,15 @@ export function Papan() {
           .from("[data-poll-bar]", { scaleX: 0, transformOrigin: "0% 50%", duration: 1, ease: EASE_OUT, stagger: 0.12 })
           .from("[data-sticker]", { scale: 0, rotation: -30, duration: 0.6, ease: EASE_OUT, stagger: 0.1 }, 0.2);
 
-        if (!row) return;
+        if (!rows.length) return;
         // The ribbon speeds up with scroll velocity, eases back to its resting pace, and rests outside the viewport.
-        const loop = gsap.to(row, { xPercent: -50, duration: 28, ease: "none", repeat: -1, paused: true });
+        const loop = gsap.timeline({ repeat: -1, paused: true });
+        rows.forEach((row) => {
+          const reverse = row.dataset.marqueeRow === "reverse";
+          loop.fromTo(row, { xPercent: reverse ? -50 : 0 }, { xPercent: reverse ? 0 : -50, duration: 32, ease: "none" }, 0);
+        });
         const visibility = ScrollTrigger.create({
-          trigger: row,
+          trigger: rows[0].parentElement!.parentElement!,
           start: "top bottom",
           end: "bottom top",
           onToggle: (self) => (self.isActive ? loop.play() : loop.pause()),
@@ -138,7 +142,7 @@ export function Papan() {
   );
 
   return (
-    <section ref={root} id="papan" data-chapter="papan" className="relative overflow-hidden bg-blue pt-24 pb-16 text-ink">
+    <section ref={root} id="papan" data-chapter="papan" className="slab overflow-hidden bg-blue pt-24 pb-16 text-ink">
       <div className="flex max-w-4xl flex-col gap-4 px-4 md:px-10">
         <h2 className="label">{papan.kicker}</h2>
         <p className="statement">{papan.statement}</p>
@@ -155,18 +159,24 @@ export function Papan() {
           </li>
         ))}
       </ul>
-      <div className="mt-20 -rotate-2 border-y-[3px] border-ink bg-highlight py-3" aria-hidden="true">
-        <div className="flex overflow-hidden whitespace-nowrap">
-          <div data-marquee-row className="flex shrink-0">
-            {[0, 1].map((copy) =>
-              papan.marquee.map((word) => (
-                <span key={`${copy}-${word}`} className="display px-6 text-[clamp(2.25rem,5vw,4.5rem)]">
-                  {word} <span className="font-serif italic">✶</span>
-                </span>
-              )),
-            )}
+      {/* Two rows of feature pills drifting in opposite directions, like a genre wall. */}
+      <div className="mt-20 flex flex-col gap-4" aria-hidden="true">
+        {[0, 1].map((rowIndex) => (
+          <div key={rowIndex} className="flex overflow-hidden whitespace-nowrap">
+            <div data-marquee-row={rowIndex ? "reverse" : ""} className="flex shrink-0 gap-4 pr-4">
+              {[0, 1].map((copy) =>
+                (rowIndex ? [...papan.marquee].reverse() : papan.marquee).map((word, index) => (
+                  <span
+                    key={`${copy}-${word}`}
+                    className={`rounded-full border-[2.5px] border-ink px-7 py-3 font-display text-[clamp(1.5rem,3.2vw,2.75rem)] font-extrabold tracking-tight ${["bg-highlight", "bg-paper", "bg-ember", "bg-sky", "bg-peach", "bg-paper"][(index + rowIndex * 2) % 6]}`}
+                  >
+                    {word}
+                  </span>
+                )),
+              )}
+            </div>
           </div>
-        </div>
+        ))}
       </div>
     </section>
   );

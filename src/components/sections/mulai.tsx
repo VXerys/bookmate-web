@@ -57,7 +57,7 @@ export function Mulai() {
       ref={root}
       id="mulai"
       data-chapter="mulai"
-      className="ruled grid gap-12 overflow-hidden px-4 py-24 md:grid-cols-[minmax(0,1fr)_auto] md:items-center md:px-10"
+      className="slab grid gap-12 overflow-hidden bg-sky px-4 py-24 md:grid-cols-[minmax(0,1fr)_auto] md:items-center md:px-10"
     >
       <div className="flex flex-col gap-12">
         <h2 className="label text-slate">{mulai.kicker}</h2>

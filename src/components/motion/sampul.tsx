@@ -3,6 +3,7 @@
 import { useRef } from "react";
 
 import { jumpToTarget, lockScroll, unlockScroll } from "@/components/motion/smooth-scroll";
+import { Book3D } from "@/components/art/book3d";
 import { Sparkle } from "@/components/art/doodles";
 import { shell } from "@/content/shell";
 import { site } from "@/content/site";
@@ -94,6 +95,7 @@ export function Sampul() {
     const renderCount = () => {
       if (counter.current) counter.current.textContent = String(Math.round(progress.value)).padStart(3, "0");
     };
+    const spin = gsap.to(q("[data-sampul-book] .book3d-box"), { rotationY: "+=360", duration: 5, ease: "none", repeat: -1 });
     const counting = gsap.to(progress, { value: 90, duration: SAMPUL_OPEN_MAX_MS / 1000, ease: "power2.out", onUpdate: renderCount });
 
     pageSettled().then(() => {
@@ -103,64 +105,52 @@ export function Sampul() {
       gsap
         .timeline({ defaults: { ease: "expo.inOut" }, onComplete: end })
         .to(progress, { value: 100, duration: lead * 0.6, ease: "power2.out", onUpdate: renderCount }, 0)
-        .to(q("[data-sampul-counter]"), { autoAlpha: 0, y: -8, duration: lead * 0.4, ease: "power3.in" }, lead * 0.6)
+        .to(q("[data-sampul-mark]"), { y: -24, autoAlpha: 0, duration: lead * 0.5, ease: "power3.in" }, lead * 0.5)
         .addLabel("open", lead)
-        // The cover swings open on its spine while the book slides right, so the open spread ends up centred.
-        .to(q("[data-sampul-cover]"), { rotateY: -168, duration: 1.3, ease: "power3.inOut" }, "open")
-        .to(q("[data-sampul-book]"), { xPercent: 50, duration: 1.3, ease: "power3.inOut" }, "open")
-        .from(q("[data-sampul-line]"), { autoAlpha: 0, y: 12, stagger: 0.12, duration: 0.6, ease: "power3.out" }, "open+=0.55")
-        // Then the reader leans into the first page: it fills the screen and fades into the hero.
-        .to(q("[data-sampul-book]"), { scale: 5, duration: 0.9, ease: "power3.in" }, "open+=1.35")
-        .to(el, { autoAlpha: 0, duration: 0.45, ease: "power1.in" }, "open+=1.75")
-        .call(completeIntro, [], `open+=${SAMPUL_INTRO_AFTER_OPEN_MS / 1000 + 1.2}`);
+        // One fat highlighter stroke sweeps the screen yellow; the hero underneath is the same yellow, so lifting
+        // the cover afterwards is seamless (F-012 AC-011).
+        .fromTo(q("[data-sampul-brush]"), { drawSVG: "0%" }, { drawSVG: "100%", duration: 1.15, ease: "power2.inOut" }, "open")
+        .set(el, { autoAlpha: 0 }, "open+=1.2")
+        .call(completeIntro, [], `open+=${SAMPUL_INTRO_AFTER_OPEN_MS / 1000 + 0.7}`);
     });
 
     // Releases only what this run holds, so a remount (React Strict Mode in development) replays the sampul cleanly.
     return () => {
       cancelled = true;
+      spin.kill();
       window.clearTimeout(safety);
       unlockScroll("sampul");
     };
   });
 
   return (
-    <div ref={root} className="sampul fixed inset-0 z-[90] bg-sky [perspective:1800px]" aria-hidden="true">
-      <div className="absolute inset-0 flex items-center justify-center">
-        <div data-sampul-book className="relative aspect-[3/4] w-[min(58vw,320px)] [transform-style:preserve-3d]">
-          {/* The first page under the cover, written in a club member's hand. */}
-          <div className="absolute inset-0 flex flex-col items-center justify-center gap-1 rounded-r-xl border-[3px] border-ink bg-paper px-5 text-center text-ink shadow-[12px_16px_0_-2px_var(--color-ink)]">
-            <p data-sampul-line className="hand text-[clamp(1.6rem,6vw,2.4rem)] -rotate-2">{shell.sampul.kicker}</p>
-            <p data-sampul-line className="display mt-2 text-[clamp(2.2rem,8vw,3.4rem)]">{site.name}</p>
-          </div>
-          <div data-sampul-cover className="absolute inset-0 origin-left [transform-style:preserve-3d]">
-            <div className="absolute inset-0 overflow-hidden rounded-r-xl border-[3px] border-ink bg-blue text-paper [backface-visibility:hidden]">
-              <svg viewBox="0 0 120 160" preserveAspectRatio="none" className="absolute inset-0 h-full w-full opacity-25" aria-hidden="true">
-                {Array.from({ length: 7 }, (_, i) => (
-                  <path key={i} d={`M0 ${16 + i * 22} C30 ${6 + i * 22} 60 ${26 + i * 22} 120 ${12 + i * 22}`} fill="none" stroke="var(--color-paper)" strokeWidth="4" />
-                ))}
-              </svg>
-              <span className="absolute inset-y-0 left-0 w-4 bg-ink/25" />
-              <div className="relative flex h-full flex-col justify-between p-6 pl-8">
-                <Sparkle data-draw={undefined} className="sampul-rise size-12 text-highlight" />
-                <p className="display sampul-rise text-[clamp(2.6rem,9vw,4rem)] text-paper" style={{ animationDelay: "0.12s" }}>
-                  {site.name}
-                </p>
-                <p data-sampul-counter className="label sampul-rise text-paper" style={{ animationDelay: "0.24s" }}>
-                  <span ref={counter}>001</span> / 100 {shell.sampul.counterUnit}
-                </p>
-              </div>
-            </div>
-            {/* The inside of the cover: an endpaper, seen once the book is open. */}
-            <div className="absolute inset-0 overflow-hidden rounded-l-xl border-[3px] border-ink bg-sky [backface-visibility:hidden] [transform:rotateY(180deg)]">
-              <svg viewBox="0 0 120 160" className="absolute inset-0 h-full w-full" aria-hidden="true">
-                {Array.from({ length: 48 }, (_, i) => (
-                  <circle key={i} cx={10 + (i % 6) * 20} cy={10 + Math.floor(i / 6) * 20} r="2.5" fill="var(--color-blue)" opacity="0.5" />
-                ))}
-              </svg>
-            </div>
-          </div>
+    <div ref={root} className="sampul fixed inset-0 z-[90] overflow-hidden bg-blue text-paper" aria-hidden="true">
+      <div data-sampul-mark className="absolute inset-0 flex flex-col items-center justify-center gap-8">
+        <div data-sampul-book className="sampul-rise text-[clamp(9px,1.6vw,14px)]">
+          <Book3D tone="highlight" pattern="waves" id="sampul" pose="rotateX(10deg) rotateY(-24deg)" />
         </div>
+        <p className="display sampul-rise text-[clamp(3rem,9vw,7rem)]" style={{ animationDelay: "0.12s" }}>
+          {site.name}
+        </p>
+        <p className="label sampul-rise flex items-center gap-3" style={{ animationDelay: "0.24s" }}>
+          <Sparkle data-draw={undefined} className="size-6 text-highlight" />
+          <span>
+            <span ref={counter}>001</span> / 100 {shell.sampul.counterUnit}
+          </span>
+        </p>
       </div>
+      <svg viewBox="0 0 1000 1000" preserveAspectRatio="xMidYMid slice" className="absolute inset-0 h-full w-full">
+        <path
+          data-sampul-brush
+          d="M-220 80 C260 -60 700 260 1220 120 C700 300 260 360 -220 520 C300 560 760 620 1220 640 C700 760 300 860 -220 1080"
+          fill="none"
+          stroke="var(--color-highlight)"
+          strokeWidth="420"
+          strokeLinecap="round"
+          strokeLinejoin="round"
+          style={{ strokeDasharray: "0 99999" }}
+        />
+      </svg>
     </div>
   );
 }

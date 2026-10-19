@@ -111,9 +111,8 @@ function Besok() {
       <path d="M218 196 V140 L256 110 L294 140 V196 Z" fill="var(--color-sky)" {...outline} />
       <rect x="54" y="160" width="20" height="36" fill="var(--color-ink)" />
       <rect x="246" y="160" width="20" height="36" fill="var(--color-ink)" />
-      <g data-draw="">
-        <path data-scene-path="" {...line} strokeDasharray="2 12" d="M80 104 C120 20 200 20 240 104" />
-      </g>
+      {/* Static dotted route: DrawSVG would overwrite the dash pattern, so only the book moves along it. */}
+      <path data-scene-path="" {...line} strokeDasharray="2 12" d="M80 104 C120 20 200 20 240 104" />
       <g data-scene-traveler="" transform="translate(160 42)">
         <rect x="-16" y="-20" width="32" height="40" rx="3" fill="var(--color-blue)" {...outline} strokeWidth="2.5" />
         <rect x="-16" y="-20" width="6" height="40" fill="var(--color-ink)" opacity="0.3" />

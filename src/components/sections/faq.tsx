@@ -5,7 +5,7 @@ import { faq } from "@/content/story";
 // The underline is static (no data-draw), so it never waits on a timeline.
 export function Faq() {
   return (
-    <section id="indeks" data-chapter="indeks" className="grid gap-12 bg-peach-pale px-4 py-24 md:grid-cols-[minmax(0,0.8fr)_minmax(0,1.2fr)] md:px-10">
+    <section id="indeks" data-chapter="indeks" className="slab grid gap-12 bg-peach-pale px-4 py-24 md:grid-cols-[minmax(0,0.8fr)_minmax(0,1.2fr)] md:px-10">
       <div className="flex flex-col gap-4">
         <h2 className="label">{faq.kicker}</h2>
         <p className="statement">{faq.title}</p>
@@ -14,9 +14,9 @@ export function Faq() {
           <WavyUnderline data-draw={undefined} className="mt-1 h-3 w-48 text-ember" />
         </p>
       </div>
-      <div className="flex flex-col border-t-[2.5px] border-ink">
+      <div className="flex flex-col gap-4">
         {faq.items.map((item, index) => (
-          <details key={item.question} className="group border-b-[2.5px] border-ink py-1">
+          <details key={item.question} className="group rounded-3xl border-[2.5px] border-ink bg-paper px-5 py-1 shadow-[4px_4px_0_var(--color-ink)] transition-[translate,box-shadow] open:translate-x-[2px] open:translate-y-[2px] open:shadow-[2px_2px_0_var(--color-ink)]">
             <summary className="flex min-h-14 cursor-pointer list-none items-baseline gap-3 py-4 text-xl font-medium [&::-webkit-details-marker]:hidden">
               <span className="label w-6 shrink-0 text-slate" aria-hidden="true">
                 {String(index + 1).padStart(2, "0")}

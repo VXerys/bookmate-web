@@ -17,12 +17,12 @@ const groupName = (group: string) => group.replace(/\s*\(.*\)$/, "");
 
 // Literal looks per spine so the shelf reads as six different books, not a repeated component.
 const LOOKS: { tone: BookTone; pattern: BookPattern; height: string; width: string }[] = [
-  { tone: "blue", pattern: "waves", height: "h-[92%]", width: "w-[4.6rem]" },
-  { tone: "ember", pattern: "dots", height: "h-[78%]", width: "w-[4rem]" },
-  { tone: "plum", pattern: "stripes", height: "h-full", width: "w-[5.2rem]" },
-  { tone: "highlight", pattern: "grid", height: "h-[84%]", width: "w-[4.2rem]" },
-  { tone: "forest", pattern: "arches", height: "h-[95%]", width: "w-[4.8rem]" },
-  { tone: "peach", pattern: "sun", height: "h-[74%]", width: "w-[4.4rem]" },
+  { tone: "blue", pattern: "waves", height: "h-[92%]", width: "w-[4.2rem]" },
+  { tone: "ember", pattern: "dots", height: "h-[78%]", width: "w-[3.7rem]" },
+  { tone: "plum", pattern: "stripes", height: "h-full", width: "w-[4.6rem]" },
+  { tone: "highlight", pattern: "grid", height: "h-[84%]", width: "w-[3.9rem]" },
+  { tone: "forest", pattern: "arches", height: "h-[95%]", width: "w-[4.3rem]" },
+  { tone: "peach", pattern: "sun", height: "h-[74%]", width: "w-[4rem]" },
 ];
 const LABEL_ON_DARK = new Set<BookTone>(["blue", "plum", "forest"]);
 
@@ -69,7 +69,7 @@ export function Rak() {
   });
 
   return (
-    <section ref={root} id="rak" data-chapter="rak" className="relative overflow-hidden px-4 py-24 md:px-10">
+    <section ref={root} id="rak" data-chapter="rak" className="slab overflow-hidden bg-paper px-4 py-24 md:px-10">
       <div className="flex max-w-4xl flex-col gap-4">
         <h2 className="label text-slate">{rak.kicker}</h2>
         <p className="statement">{rak.statement}</p>
@@ -79,7 +79,7 @@ export function Rak() {
       </div>
 
       <div className="mt-14 grid items-end gap-14 lg:grid-cols-[minmax(0,1fr)_minmax(18rem,26rem)]">
-        <div className="relative">
+        <div className="relative min-w-0">
           <div data-shelf className="flex h-[min(56svh,26rem)] items-end gap-2.5 overflow-x-auto px-2 pt-10 sm:gap-3.5">
             {shelf.map((item, index) => {
               const look = LOOKS[index % LOOKS.length];
@@ -128,7 +128,7 @@ export function Rak() {
               <span className="text-xl font-medium">{badge.criteria}</span>
             </p>
           </div>
-          <div className="pointer-events-none absolute -bottom-16 -left-4 hidden items-center gap-1 lg:flex" aria-hidden="true">
+          <div className="pointer-events-none absolute -top-16 right-2 hidden items-center gap-1 lg:flex" aria-hidden="true">
             <CurvedArrow data-rak-arrow="" className="h-14 w-16 rotate-[150deg] text-ink" />
             <p className="hand -rotate-3 text-2xl text-blue">{rak.note}</p>
           </div>

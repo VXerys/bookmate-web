@@ -60,7 +60,7 @@ export function Manifesto() {
       ref={root}
       id="manifesto"
       data-chapter="manifesto"
-      className="relative flex min-h-svh flex-col justify-center gap-8 overflow-hidden px-4 py-24 md:px-10"
+      className="slab relative flex min-h-svh flex-col justify-center gap-8 overflow-hidden bg-paper px-4 py-24 md:px-10"
     >
       <h2 className="label text-slate">{manifesto.kicker}</h2>
       <p data-manifesto className="statement max-w-5xl">

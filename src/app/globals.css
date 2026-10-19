@@ -125,6 +125,92 @@ html.lenis body {
   }
 }
 
+/* Book3D (F-012 FR-006): six faces of a hardcover in preserve-3d; sizes come from --w, --h, --d on the wrapper. */
+.book3d {
+  width: var(--w);
+  height: var(--h);
+  perspective: 60em;
+}
+
+.book3d-box {
+  position: relative;
+  width: 100%;
+  height: 100%;
+  transform-style: preserve-3d;
+}
+
+.book3d-face {
+  position: absolute;
+  border: 0.18em solid var(--color-ink);
+}
+
+.book3d-front,
+.book3d-back {
+  inset: 0;
+  border: 0;
+}
+
+.book3d-front {
+  transform: translateZ(calc(var(--d) / 2));
+}
+
+.book3d-back {
+  border: 0.18em solid var(--color-ink);
+  border-radius: 0.4em;
+  transform: rotateY(180deg) translateZ(calc(var(--d) / 2));
+}
+
+.book3d-spine,
+.book3d-pages {
+  top: 0;
+  left: calc(50% - var(--d) / 2);
+  width: var(--d);
+  height: 100%;
+}
+
+.book3d-spine {
+  transform: rotateY(-90deg) translateZ(calc(var(--w) / 2));
+  filter: brightness(0.82);
+}
+
+/* Page block: fine lines like paper edges, slightly inset from the boards. */
+.book3d-pages {
+  transform: rotateY(90deg) translateZ(calc(var(--w) / 2 - 0.25em));
+  background: repeating-linear-gradient(90deg, var(--color-paper) 0 0.22em, var(--color-peach-pale) 0.22em 0.32em);
+}
+
+.book3d-top,
+.book3d-bottom {
+  left: 0;
+  top: calc(50% - var(--d) / 2);
+  width: calc(100% - 0.3em);
+  height: var(--d);
+  background: repeating-linear-gradient(0deg, var(--color-paper) 0 0.22em, var(--color-peach-pale) 0.22em 0.32em);
+}
+
+.book3d-top {
+  transform: rotateX(90deg) translateZ(calc(var(--h) / 2 - 0.2em));
+}
+
+.book3d-bottom {
+  transform: rotateX(-90deg) translateZ(calc(var(--h) / 2 - 0.2em));
+}
+
+/* Colour slabs (F-012 FR-006): each coloured section rounds its top corners and overlaps the one before, so the page
+   reads as a stack of cards. Later slabs paint above earlier ones because they come later in the flow. */
+.slab {
+  position: relative;
+  margin-top: -3rem;
+  border-radius: 3rem 3rem 0 0;
+}
+
+@media (max-width: 767px) {
+  .slab {
+    margin-top: -1.75rem;
+    border-radius: 1.75rem 1.75rem 0 0;
+  }
+}
+
 /* Rak (F-012): a pointer lifts a spine and the open one stands proud; translate and rotate compose with the GSAP
    transform used for the drop-in, so the two never fight. */
 .spine {

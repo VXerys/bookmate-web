@@ -84,10 +84,10 @@ export function Burst({ strokeWidth = 3, ...props }: DoodleProps) {
 }
 
 /** A highlighter swipe: a fill, swept in with scaleX rather than drawn. Sits behind text (negative z). */
-export function Highlight({ className, ...props }: SVGProps<SVGSVGElement>) {
+export function Highlight({ className, tone = "highlight", ...props }: SVGProps<SVGSVGElement> & { tone?: "highlight" | "paper" | "sky" }) {
   return (
     <svg viewBox="0 0 300 60" preserveAspectRatio="none" aria-hidden="true" data-highlight="" className={className} {...props}>
-      <path fill="var(--color-highlight)" d="M8 16 C70 9 170 12 294 7 C296 22 293 38 290 50 C200 55 96 52 10 57 C6 44 5 29 8 16 Z" />
+      <path fill={`var(--color-${tone})`} d="M8 16 C70 9 170 12 294 7 C296 22 293 38 290 50 C200 55 96 52 10 57 C6 44 5 29 8 16 Z" />
     </svg>
   );
 }

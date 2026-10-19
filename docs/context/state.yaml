@@ -440,6 +440,14 @@ features:
           - T-003
           - T-004
         evidence: []
+      - id: T-006
+        title: Energi Aardvark
+        status: planned
+        requirements:
+          - FR-006
+        depends_on:
+          - T-001
+        evidence: []
 active:
   feature_id: F-011
   task_id: T-003
@@ -478,5 +486,5 @@ blockers:
   - feature_id: F-010
     task_id: T-003
     title: Deploy produksi
-generated_at: 2026-10-19T05:03:45.574Z
-source_hash: 5dd051bd53eb2bfa28b97e6333a1c6707dea246c197955194a2175a780e836ec
+generated_at: 2026-10-19T05:27:14.890Z
+source_hash: 203279bebaef1b8ca804e8547fecc1602f60418b9ac6132f35feca5bf494ec84

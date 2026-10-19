@@ -4,6 +4,7 @@ import { useRef, useState } from "react";
 
 import { chapterNumber, chapters, navChapters } from "@/content/navigation";
 import { Magnetic } from "@/components/motion/magnetic";
+import { CtaLink } from "@/components/site/cta-link";
 import { Menu } from "@/components/site/menu";
 import { shell } from "@/content/shell";
 import { site } from "@/content/site";
@@ -87,23 +88,32 @@ export function Header() {
   return (
     <header
       ref={root}
-      className="fixed inset-x-0 top-0 z-50 border-b border-ink/10 bg-paper/90 backdrop-blur-sm will-change-transform"
+      className="pointer-events-none fixed inset-x-0 top-0 z-50 will-change-transform"
     >
-      <div className="flex items-center gap-6 px-4 py-3 md:px-10">
-        <a href="#prolog" className="inline-flex min-h-11 items-center font-serif text-2xl italic" aria-label={`${site.name}, ${shell.header.homeLabel}`}>
+      {/* Floating pills instead of a bar, so every coloured section shows through around them. */}
+      <div className="flex items-center gap-3 px-3 py-3 md:px-6">
+        <a
+          href="#prolog"
+          className="pointer-events-auto inline-flex min-h-11 items-center gap-2 rounded-full border-[2.5px] border-ink bg-paper px-4 font-display text-xl font-extrabold tracking-tight"
+          aria-label={`${site.name}, ${shell.header.homeLabel}`}
+        >
+          <svg viewBox="0 0 24 24" className="size-6 text-blue" aria-hidden="true">
+            <path d="M5 4 h10 a3 3 0 0 1 3 3 v13 h-11 a2 2 0 0 1 -2 -2 Z" fill="currentColor" stroke="var(--color-ink)" strokeWidth="2" strokeLinejoin="round" />
+            <path d="M8 4 v12 M18 16 h-11 a2 2 0 0 0 0 4" fill="none" stroke="var(--color-ink)" strokeWidth="2" strokeLinecap="round" />
+          </svg>
           {site.name}
         </a>
-        <p className="label hidden text-slate sm:block" aria-hidden="true">
+        <p className="label pointer-events-auto hidden rounded-full border-[2.5px] border-ink bg-paper px-3 py-2 lg:block" aria-hidden="true">
           {chapterNumber(active)} — {activeLabel}
         </p>
-        <nav aria-label={shell.header.navLabel} className="ml-auto hidden md:block">
-          <ul className="flex items-center gap-1">
+        <nav aria-label={shell.header.navLabel} className="pointer-events-auto mx-auto hidden md:block">
+          <ul className="flex items-center gap-1.5">
             {navChapters.map((chapter) => (
               <li key={chapter.id}>
                 <a
                   href={`#${chapter.id}`}
                   aria-current={active === chapter.id ? "location" : undefined}
-                  className="inline-flex min-h-11 min-w-11 items-center justify-center px-3 text-sm aria-[current=location]:underline aria-[current=location]:underline-offset-4"
+                  className="inline-flex min-h-11 min-w-11 items-center justify-center rounded-full border-[2.5px] border-ink bg-paper px-4 text-sm font-semibold transition-colors hover:bg-sky aria-[current=location]:bg-ink aria-[current=location]:text-paper"
                 >
                   {chapter.navLabel}
                 </a>
@@ -111,16 +121,17 @@ export function Header() {
             ))}
           </ul>
         </nav>
-        <Magnetic className="ml-auto md:ml-0">
-          <a
-            href={site.app.playStoreUrl}
-            data-cursor-label={shell.header.cta}
-            className="inline-flex min-h-11 items-center rounded-full bg-ember px-5 text-sm font-medium text-ink"
-          >
-            {shell.header.cta}
-          </a>
-        </Magnetic>
-        <Menu />
+        {/* Below 640px the menu carries the download link, so the bar fits a 360px phone. */}
+        <div className="pointer-events-auto ml-auto hidden sm:block md:ml-0">
+          <Magnetic>
+            <CtaLink href={site.app.playStoreUrl} cursorLabel={shell.header.cta} size="sm">
+              {shell.header.cta}
+            </CtaLink>
+          </Magnetic>
+        </div>
+        <div className="pointer-events-auto ml-auto sm:ml-0">
+          <Menu />
+        </div>
       </div>
     </header>
   );

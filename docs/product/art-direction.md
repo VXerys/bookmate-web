@@ -105,3 +105,18 @@ Di bawah 1024px atau dengan reduced motion, buku "hari" menjadi lima kartu halam
 ## Yang ditolak
 
 Gradien blob generik, bento grid, glassmorphism, ilustrasi orang generik bergaya korporat, efek tanpa peran dalam cerita.
+
+## Revisi 2026-10-19: energi Aardvark Book Club
+
+Atas permintaan pemilik, lapisan visual didorong ke energi Aardvark Book Club (SOTD Awwwards, situs klub buku). Yang diambil: ritme dan keberanian, bukan aset. Font, warna, ilustrasi, dan copy tetap milik BookMate.
+
+| Pola Aardvark | Terjemahan BookMate |
+|---|---|
+| Loader ungu + sapuan kuas raksasa | layar `blue` + ikon buku, lalu satu sapuan kuas `highlight` tebal (DrawSVG) menutup layar dan membuka hero kuning |
+| Hero kuning dengan blob gelombang | Prolog `highlight` dengan blob `paper` transparan, display Bricolage 800 `wdth` 75 |
+| Buku hardcover 3D melayang | `Book3D`: kotak CSS 3D (sampul, punggung, blok halaman) yang berputar pelan, ikut scroll dan pointer |
+| Nav pill, CTA pink dengan kotak panah | nav pill `paper`, CTA `ember` dengan kotak panah `ink` |
+| Section blok warna dengan sudut membulat yang saling menumpuk | setiap section berwarna bersudut atas `3rem` dan menumpuk di atas section sebelumnya |
+| Genre sebagai pill marquee | fitur BookMate sebagai dua baris pill berlawanan arah di papan |
+
+Champ (font Aardvark) berlisensi komersial, jadi tidak dipakai; potongan condensed Bricolage memberi bobot serupa.

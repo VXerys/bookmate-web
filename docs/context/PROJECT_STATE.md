@@ -1,10 +1,10 @@
 <!-- GENERATED FILE — DO NOT EDIT. Rendered by `npm run context:render`.
 Source: sdd.config.json, docs/steering/, docs/specs/F-*/, docs/context/ASSUMPTIONS.md, docs/handoff/current.md.
-source_hash: 5dd051bd53eb2bfa28b97e6333a1c6707dea246c197955194a2175a780e836ec -->
+source_hash: 203279bebaef1b8ca804e8547fecc1602f60418b9ac6132f35feca5bf494ec84 -->
 
 # Project State
 
-- Generated at: 2026-10-19T05:03:45.574Z
+- Generated at: 2026-10-19T05:27:14.890Z
 - Project: BookMate Web (tier `lite`)
 - Active: F-011 / T-003
 - Open assumptions: 7
@@ -25,20 +25,20 @@ source_hash: 5dd051bd53eb2bfa28b97e6333a1c6707dea246c197955194a2175a780e836ec --
 | F-009 WebGL hover distortion (opsional) | draft | complete | 0 | 0 | 0 | 0 | 0 | 1 |
 | F-010 QA dan rilis | implementing | blocked | 0 | 0 | 1 | 0 | 2 | 0 |
 | F-011 Screenshot sementara dan perbaikan bug animasi | verification | complete | 0 | 0 | 0 | 0 | 3 | 0 |
-| F-012 Redesign Marginalia: satu hari pembaca | approved | not_started | 5 | 0 | 0 | 0 | 0 | 0 |
+| F-012 Redesign Marginalia: satu hari pembaca | approved | not_started | 6 | 0 | 0 | 0 | 0 | 0 |
 
 <!-- GENERATED:GIT_FACTS:START -->
 ## Git
 
 - Branch: `feat/F-012-marginalia`
-- HEAD: `aa712cf`
-- Worktree: clean
+- HEAD: `b562e97`
+- Worktree: dirty
 
 Recent commits:
 
+- `b562e97 feat(F-012): Marginalia sections: opening book, hero notes, manifesto marks, reader's day book, shelf, board, ribbon, index`
+- `f0dc7ae feat(F-012): Marginalia foundation: sky and highlight tokens, display and hand fonts, DrawSVG, doodle library`
+- `44bda39 docs(F-012): render context views after steering sync`
 - `aa712cf docs(F-012): Marginalia art direction and redesign spec`
 - `f173155 docs(F-011): spec, evidence, and handoff for screenshots and motion fixes`
-- `523ae22 feat(F-011): real screens in device mockups and motion bug fixes`
-- `aacabcd Merge BookMate Web M1 to M4 (F-001 to F-010)`
-- `7251fc1 docs(M4): record evidence hash and final handoff`
 <!-- GENERATED:GIT_FACTS:END -->

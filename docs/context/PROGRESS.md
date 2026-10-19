@@ -1,6 +1,6 @@
 <!-- GENERATED FILE — DO NOT EDIT. Rendered by `npm run context:render`.
 Source: sdd.config.json, docs/steering/, docs/specs/F-*/, docs/context/ASSUMPTIONS.md, docs/handoff/current.md.
-source_hash: 5dd051bd53eb2bfa28b97e6333a1c6707dea246c197955194a2175a780e836ec -->
+source_hash: 203279bebaef1b8ca804e8547fecc1602f60418b9ac6132f35feca5bf494ec84 -->
 
 # Project Progress
 
@@ -103,3 +103,4 @@ source_hash: 5dd051bd53eb2bfa28b97e6333a1c6707dea246c197955194a2175a780e836ec --
 | T-003 Satu hari pembaca | planned | FR-003 | T-001 |  |
 | T-004 Rak, papan, mulai, indeks, epilog, cursor | planned | FR-004 | T-001 |  |
 | T-005 Navigasi, audit visual, checks | planned | FR-005 | T-002, T-003, T-004 |  |
+| T-006 Energi Aardvark | planned | FR-006 | T-001 |  |

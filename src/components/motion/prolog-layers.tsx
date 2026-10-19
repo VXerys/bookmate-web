@@ -2,7 +2,7 @@
 
 import { useRef } from "react";
 
-import { BookCover } from "@/components/art/books";
+import { Book3D } from "@/components/art/book3d";
 import { Sparkle, Tape } from "@/components/art/doodles";
 import { PhoneFrame } from "@/components/site/phone-frame";
 import { prolog } from "@/content/story";
@@ -49,6 +49,16 @@ export function PrologLayers() {
         } else {
           el.dataset.revealReady = "";
         }
+        // The 3D books bob gently on their own and tumble a little further as the page scrolls past them.
+        gsap.utils.toArray<HTMLElement>(".book3d", el).forEach((book, index) => {
+          gsap.to(book, { y: -14, duration: 2.6 + index * 0.4, ease: "sine.inOut", yoyo: true, repeat: -1 });
+          gsap.to(book.querySelector(".book3d-box"), {
+            rotationY: `+=${index % 2 ? -70 : 80}`,
+            rotationX: `+=${index % 2 ? 24 : -18}`,
+            ease: "none",
+            scrollTrigger: { trigger: section, start: "top top", end: "bottom top", scrub: 1 },
+          });
+        });
         layers.forEach((layer) => {
           gsap.to(layer, {
             yPercent: -45 * depth(layer),
@@ -95,14 +105,19 @@ export function PrologLayers() {
   return (
     <div ref={root} data-reveal="" className="relative mx-auto h-[min(80svh,640px)] w-full max-w-[560px]" aria-hidden="true">
       {/* Positioned with insets, not translate utilities: GSAP owns each layer's transform. */}
-      <div data-depth="1.1" className="absolute top-[4%] left-[2%] w-[24%]">
-        <div className="-rotate-12">
-          <BookCover tone="ember" pattern="sun" id="prolog-a" className="w-full drop-shadow-[6px_8px_0_var(--color-ink)]" />
+      <div data-depth="1.1" className="absolute top-[4%] left-[0%] text-[clamp(9px,1.05vw,15px)]">
+        <div>
+          <Book3D tone="blue" pattern="waves" id="prolog-a" pose="rotateX(14deg) rotateY(-34deg) rotateZ(-16deg)" />
         </div>
       </div>
-      <div data-depth="0.7" className="absolute right-[0%] bottom-[8%] w-[26%]">
-        <div className="rotate-[14deg]">
-          <BookCover tone="plum" pattern="dots" id="prolog-b" className="w-full drop-shadow-[6px_8px_0_var(--color-ink)]" />
+      <div data-depth="0.75" className="absolute right-[0%] bottom-[6%] text-[clamp(8.5px,0.95vw,14px)]">
+        <div>
+          <Book3D tone="ember" pattern="dots" id="prolog-b" pose="rotateX(-10deg) rotateY(32deg) rotateZ(18deg)" />
+        </div>
+      </div>
+      <div data-depth="1.4" className="absolute top-[0%] right-[24%] text-[clamp(6px,0.62vw,9px)]">
+        <div>
+          <Book3D tone="plum" pattern="stripes" id="prolog-c" pose="rotateX(20deg) rotateY(40deg) rotateZ(64deg)" depth={2.8} />
         </div>
       </div>
       <div data-depth="0.35" className="absolute inset-0 flex items-center justify-center">

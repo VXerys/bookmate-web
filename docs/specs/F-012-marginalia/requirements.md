@@ -64,6 +64,13 @@ Bab baru harus terhubung ke header, menu, dan slice transition, tanpa overflow h
 - AC-009: Given chapters baru, when tautan menu diklik, then section tujuan tiba di bawah header dan indikator menampilkan bab itu.
 - AC-010: Given 1440 dan 375 px, then tidak ada overflow horizontal, tidak ada error console, dan lint, typecheck, test, build lulus.
 
+### FR-006 — Energi Aardvark
+
+Atas permintaan pemilik 2026-10-19, situs harus memakai ritme blok warna bersudut membulat, loader sapuan kuas, buku 3D CSS, nav pill, dan pill marquee (art-direction.md, Revisi 2026-10-19), tanpa aset atau font Aardvark.
+
+- AC-011: Given halaman dimuat dengan motion, then loader biru tertutup sapuan kuas kuning lalu hero kuning tampil, dan buku 3D di hero berputar mengikuti scroll dan pointer.
+- AC-012: Given section berwarna, then masing-masing bersudut atas membulat dan menumpuk di atas section sebelumnya tanpa overflow horizontal di 1440 dan 375 px.
+
 ## Dependencies, scope, and open questions
 
 - Menggantikan lapisan visual section F-003 sampai F-007 dan F-011; perilaku yang dipertahankan (reveal teks, slice, scroll lock, footer reveal) tetap milik F-001 dan F-002.

@@ -43,7 +43,7 @@ export function Buka() {
       ref={root}
       id="buka"
       data-chapter="buka"
-      className="relative flex min-h-svh flex-col items-center justify-center overflow-hidden bg-peach px-4 py-24 text-ink [--buka-phone:min(52svh,34rem)]"
+      className="slab relative flex min-h-svh flex-col items-center justify-center overflow-hidden bg-peach-pale px-4 py-24 text-ink [--buka-phone:min(52svh,34rem)]"
     >
       <h2 className="label absolute top-24 left-4 md:left-10">{buka.kicker}</h2>
       <p className="display relative z-0 text-center text-[clamp(2.25rem,9vw,9.5rem)]">

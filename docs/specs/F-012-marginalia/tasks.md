@@ -8,7 +8,7 @@ owner: "M Sechan Alfarisi"
 created: 2026-10-19
 last_updated: 2026-10-19
 last_verified: 2026-10-19
-requirements: [FR-001, FR-002, FR-003, FR-004, FR-005]
+requirements: [FR-001, FR-002, FR-003, FR-004, FR-005, FR-006]
 supersedes: null
 ---
 
@@ -59,6 +59,14 @@ Acceptance: AC-007, AC-008.
 - evidence: []
 
 Acceptance: AC-009, AC-010.
+
+### T-006 — Energi Aardvark
+- status: planned
+- requirements: [FR-006]
+- depends_on: [T-001]
+- evidence: []
+
+Loader sapuan kuas, `Book3D`, header pill, blok warna bersudut, pill marquee. Acceptance: AC-011, AC-012.
 
 ## Deferred
 
