@@ -2,7 +2,7 @@
 id: F-003
 title: "Prolog (hero)"
 type: tasks
-status: implementing
+status: verification
 tier: lite
 owner: "M Sechan Alfarisi"
 created: 2026-10-19
@@ -21,7 +21,7 @@ Disetujui lewat instruksi pemilik 2026-10-19: selesaikan semua fase tanpa menung
 ## Tasks
 
 ### T-001 — Konten cerita dan bingkai ponsel
-- status: review
+- status: done
 - requirements: [FR-001]
 - depends_on: []
 - evidence: [EV-001]
@@ -29,7 +29,7 @@ Disetujui lewat instruksi pemilik 2026-10-19: selesaikan semua fase tanpa menung
 `src/content/story.ts` + test, `phone-frame.tsx`. Acceptance: AC-001.
 
 ### T-002 — Section Prolog dan lapisan bergerak
-- status: review
+- status: done
 - requirements: [FR-001, FR-002, FR-003]
 - depends_on: [T-001]
 - evidence: [EV-001]

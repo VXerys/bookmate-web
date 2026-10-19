@@ -2,7 +2,7 @@
 id: F-003
 title: "Prolog (hero)"
 type: verification
-status: implementing
+status: verification
 tier: lite
 owner: "M Sechan Alfarisi"
 created: 2026-10-19
@@ -27,7 +27,7 @@ supersedes: null
   scroll 450 px: yPercent -6 / -16 / -20 / -12 (scrub, by depth); no-JS HTML contains the layers and copy
   ```
 - date: 2026-10-19
-- commit: uncommitted on feat/M2-cerita-utama (base bdc4c6b)
+- commit: c2669d2
 - covers: [AC-001, AC-003, AC-004, AC-006]
 
 ## Coverage

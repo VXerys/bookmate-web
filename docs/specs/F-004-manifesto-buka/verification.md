@@ -2,7 +2,7 @@
 id: F-004
 title: "Manifesto dan buka aplikasi"
 type: verification
-status: implementing
+status: verification
 tier: lite
 owner: "M Sechan Alfarisi"
 created: 2026-10-19
@@ -27,7 +27,7 @@ supersedes: null
   buka frame scale 0.55 -> 0.78 -> 1.00 across its pinned range; statement fades with it
   ```
 - date: 2026-10-19
-- commit: uncommitted on feat/M2-cerita-utama (base bdc4c6b)
+- commit: c2669d2
 - covers: [AC-001, AC-003, AC-004]
 
 ## Coverage

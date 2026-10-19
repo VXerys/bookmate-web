@@ -2,7 +2,7 @@
 id: F-003
 title: "Prolog (hero)"
 type: design
-status: implementing
+status: verification
 tier: lite
 owner: "M Sechan Alfarisi"
 created: 2026-10-19

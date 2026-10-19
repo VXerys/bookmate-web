@@ -2,7 +2,7 @@
 id: F-005
 title: "Bab horizontal"
 type: verification
-status: implementing
+status: verification
 tier: lite
 owner: "M Sechan Alfarisi"
 created: 2026-10-19
@@ -27,7 +27,7 @@ supersedes: null
   360 px: no data-horizontal, panels stacked, indicator hidden, no horizontal overflow; no-JS HTML: 5 panels, no data-horizontal
   ```
 - date: 2026-10-19
-- commit: uncommitted on feat/M2-cerita-utama (base bdc4c6b)
+- commit: c2669d2
 - covers: [AC-001, AC-002, AC-003, AC-004, AC-005]
 
 ## Coverage

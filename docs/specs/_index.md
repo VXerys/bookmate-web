@@ -16,9 +16,9 @@ Task status belongs in each feature's `tasks.md`; `docs/context/state.yaml` and 
 |---|---|---|---|---|---|
 | `F-001` | Fondasi dan motion core | `docs/specs/F-001-fondasi-motion-core/` | P0 | review | M1 |
 | `F-002` | Shell global: sampul, header, slice transition, menu, cursor, footer reveal | `docs/specs/F-002-shell-global/` | P0 | approved | M1 |
-| `F-003` | Prolog (hero) | belum dibuat | P0 | draft | M2 |
-| `F-004` | Manifesto dan buka aplikasi | belum dibuat | P0 | draft | M2 |
-| `F-005` | Bab horizontal | belum dibuat | P0 | draft | M2 |
+| `F-003` | Prolog (hero) | `docs/specs/F-003-prolog/` | P0 | approved | M2 |
+| `F-004` | Manifesto dan buka aplikasi | `docs/specs/F-004-manifesto-buka/` | P0 | approved | M2 |
+| `F-005` | Bab horizontal | `docs/specs/F-005-bab-horizontal/` | P0 | approved | M2 |
 | `F-006` | Streak dan kartu pembaca | belum dibuat | P1 | draft | M3 |
 | `F-007` | Diskusi, cara mulai, FAQ, epilog | belum dibuat | P0 | draft | M3 |
 | `F-008` | Legal dan SEO | belum dibuat | P0 | draft | M4 |
