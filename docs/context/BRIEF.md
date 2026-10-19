@@ -1,6 +1,6 @@
 <!-- GENERATED FILE — DO NOT EDIT. Rendered by `npm run context:render`.
 Source: sdd.config.json, docs/steering/, docs/specs/F-*/, docs/context/ASSUMPTIONS.md, docs/handoff/current.md.
-source_hash: f5a92e14f4c8f83bdb023d4ba5c1edd3083a06a9252a07683f9bfe55aa0f008f -->
+source_hash: 2d7e7177532608ee427ca94f09a03d9cc494ee77424dc85b5d955a41b8b6e96e -->
 
 # Brief
 
@@ -63,3 +63,4 @@ None.
 | F-010 QA dan rilis | implementing | blocked | 2/3 |
 | F-011 Screenshot sementara dan perbaikan bug animasi | verification | complete | 3/3 |
 | F-012 Redesign Marginalia: satu hari pembaca | verification | complete | 6/6 |
+| F-013 Revamp gaya Aardvark | approved | not_started | 0/2 |

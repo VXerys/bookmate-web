@@ -454,6 +454,28 @@ features:
           - T-001
         evidence:
           - EV-001
+  - id: F-013
+    title: Revamp gaya Aardvark
+    status: approved
+    phase: not_started
+    spec_path: docs/specs/F-013-gaya-aardvark
+    tasks:
+      - id: T-001
+        title: Sistem visual dan gerak
+        status: planned
+        requirements:
+          - FR-001
+          - FR-002
+        depends_on: []
+        evidence: []
+      - id: T-002
+        title: Section BookMate
+        status: planned
+        requirements:
+          - FR-003
+        depends_on:
+          - T-001
+        evidence: []
 active:
   feature_id: F-012
   task_id: T-005
@@ -492,5 +514,5 @@ blockers:
   - feature_id: F-010
     task_id: T-003
     title: Deploy produksi
-generated_at: 2026-10-19T05:41:58.095Z
-source_hash: f5a92e14f4c8f83bdb023d4ba5c1edd3083a06a9252a07683f9bfe55aa0f008f
+generated_at: 2026-10-19T06:04:07.806Z
+source_hash: 2d7e7177532608ee427ca94f09a03d9cc494ee77424dc85b5d955a41b8b6e96e

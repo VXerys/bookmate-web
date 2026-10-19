@@ -1,10 +1,10 @@
 <!-- GENERATED FILE — DO NOT EDIT. Rendered by `npm run context:render`.
 Source: sdd.config.json, docs/steering/, docs/specs/F-*/, docs/context/ASSUMPTIONS.md, docs/handoff/current.md.
-source_hash: f5a92e14f4c8f83bdb023d4ba5c1edd3083a06a9252a07683f9bfe55aa0f008f -->
+source_hash: 2d7e7177532608ee427ca94f09a03d9cc494ee77424dc85b5d955a41b8b6e96e -->
 
 # Project State
 
-- Generated at: 2026-10-19T05:41:58.095Z
+- Generated at: 2026-10-19T06:04:07.806Z
 - Project: BookMate Web (tier `lite`)
 - Active: F-012 / T-005
 - Open assumptions: 7
@@ -26,19 +26,20 @@ source_hash: f5a92e14f4c8f83bdb023d4ba5c1edd3083a06a9252a07683f9bfe55aa0f008f --
 | F-010 QA dan rilis | implementing | blocked | 0 | 0 | 1 | 0 | 2 | 0 |
 | F-011 Screenshot sementara dan perbaikan bug animasi | verification | complete | 0 | 0 | 0 | 0 | 3 | 0 |
 | F-012 Redesign Marginalia: satu hari pembaca | verification | complete | 0 | 0 | 0 | 0 | 6 | 0 |
+| F-013 Revamp gaya Aardvark | approved | not_started | 2 | 0 | 0 | 0 | 0 | 0 |
 
 <!-- GENERATED:GIT_FACTS:START -->
 ## Git
 
-- Branch: `feat/F-012-marginalia`
-- HEAD: `bc841eb`
+- Branch: `feat/F-013-gaya-aardvark`
+- HEAD: `5235ec7`
 - Worktree: dirty
 
 Recent commits:
 
+- `5235ec7 docs: reverse-engineered reference of aardvarkbookclub.com sections, tokens, and motion`
+- `d13bb04 docs(F-012): evidence, task status, credits, and handoff for the redesign`
 - `bc841eb feat(F-012): Aardvark-style revamp: brush-wipe loader, yellow hero with CSS 3D books, colour slabs, pill header and CTA`
 - `b562e97 feat(F-012): Marginalia sections: opening book, hero notes, manifesto marks, reader's day book, shelf, board, ribbon, index`
 - `f0dc7ae feat(F-012): Marginalia foundation: sky and highlight tokens, display and hand fonts, DrawSVG, doodle library`
-- `44bda39 docs(F-012): render context views after steering sync`
-- `aa712cf docs(F-012): Marginalia art direction and redesign spec`
 <!-- GENERATED:GIT_FACTS:END -->

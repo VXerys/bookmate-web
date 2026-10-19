@@ -1,6 +1,6 @@
 <!-- GENERATED FILE — DO NOT EDIT. Rendered by `npm run context:render`.
 Source: sdd.config.json, docs/steering/, docs/specs/F-*/, docs/context/ASSUMPTIONS.md, docs/handoff/current.md.
-source_hash: f5a92e14f4c8f83bdb023d4ba5c1edd3083a06a9252a07683f9bfe55aa0f008f -->
+source_hash: 2d7e7177532608ee427ca94f09a03d9cc494ee77424dc85b5d955a41b8b6e96e -->
 
 # Project Progress
 
@@ -104,3 +104,10 @@ source_hash: f5a92e14f4c8f83bdb023d4ba5c1edd3083a06a9252a07683f9bfe55aa0f008f --
 | T-004 Rak, papan, mulai, indeks, epilog, cursor | done | FR-004 | T-001 | EV-001 |
 | T-005 Navigasi, audit visual, checks | done | FR-005 | T-002, T-003, T-004 | EV-001 |
 | T-006 Energi Aardvark | done | FR-006 | T-001 | EV-001 |
+
+## F-013 — Revamp gaya Aardvark (`approved`, not_started)
+
+| Task | Status | Requirements | Depends on | Evidence |
+|---|---|---|---|---|
+| T-001 Sistem visual dan gerak | planned | FR-001, FR-002 |  |  |
+| T-002 Section BookMate | planned | FR-003 | T-001 |  |
