@@ -45,7 +45,9 @@ Source: the BookMate app repository (`bookmeet`, publisher Mangcoding), copied a
 | `tarot/` (30) | `assets/images/tarot_badges/*.webp`, mapped by code in `reading_achievement_resolver.dart` | WebP 520 px | assumed Mangcoding-owned (A-003) |
 | `memoji/` (13) | `assets/icons/memoji/*.webp` | WebP 320 px | assumed Mangcoding-licensed (A-003) |
 | `komunitas/` (5) | `assets/images/komunitas-image-cover/*.webp` | WebP 480 px | assumed Mangcoding-owned (A-003) |
-| `ilustrasi/` (11) | `assets/icons/icons-color-bookmate/*.svg`, `assets/icons/empty-state/*.svg` | rasterised to WebP 640 px | Mangcoding app artwork |
+
+The borrow-step icons (`src/components/art/borrow-icons.tsx`) are simple interface pictograms drawn in this repository
+on the owner's request; the app's own illustrations are no longer shipped.
 
 The book and community data (`src/content/app-data.ts`) comes from `lib/core/mock/mock_data_constants.dart`. Three
 mock authors differ from the printed cover; the site shows the cover's author: Immaculate Conception (Ling Ling Huang),

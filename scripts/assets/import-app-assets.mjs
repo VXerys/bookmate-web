@@ -1,5 +1,5 @@
-// Imports the BookMate app's own artwork into the site (F-014): book covers, tarot badges, memoji, community covers, and
-// illustrations, resized for the web, plus the demo book and community data with each cover's dominant colour.
+// Imports the BookMate app's own artwork into the site (F-014): book covers, tarot badges, memoji, and community covers,
+// resized for the web, plus the demo book and community data with each cover's dominant colour.
 // Usage: node scripts/assets/import-app-assets.mjs [path to the bookmeet repo, default ../bookmeet]
 // sharp comes with Next.js (image optimisation), so this script adds no dependency.
 import fs from "node:fs";
@@ -160,23 +160,6 @@ const memojiDir = path.join(app, "assets/icons/memoji");
 const memoji = fs.readdirSync(memojiDir).filter((f) => f.endsWith(".webp")).sort((a, b) => parseInt(a) - parseInt(b));
 for (const file of memoji) await webp(path.join(memojiDir, file), path.join(out, "memoji", file), 320, 82);
 
-const ILLUSTRATIONS = {
-  rak: "icons/icons-color-bookmate/buku-saya.svg",
-  pinjam: "icons/icons-color-bookmate/peminjaman-saya.svg",
-  chat: "icons/icons-color-bookmate/chat-icons.svg",
-  baca: "icons/icons-color-bookmate/create-book.svg",
-  komunitas: "icons/icons-color-bookmate/community.svg",
-  tandai: "icons/icons-color-bookmate/bookmark.svg",
-  orangPinjam: "icons/empty-state/no-borrow.svg",
-  orangPesan: "icons/empty-state/no-message.svg",
-  orangKomunitas: "icons/empty-state/tidak-ada-komunitas.svg",
-  orangRak: "icons/empty-state/tidak-ada-buku-saya.svg",
-  orangCari: "icons/empty-state/search.svg",
-};
-for (const [key, source] of Object.entries(ILLUSTRATIONS)) {
-  await webp(path.join(app, "assets", source), path.join(out, "ilustrasi", `${slug(key)}.webp`), 640, 86);
-}
-
 // Generated content (no bundler imports) and the image map (static imports for next/image).
 const withoutFile = (item) => {
   const copy = { ...item };
@@ -233,7 +216,6 @@ const coverEntries = entries(books, "cover");
 const communityEntries = entries(communities, "community");
 const tarotEntries = entries(tarot.map((t) => ({ key: t.code, file: `tarot/${t.code.toLowerCase()}.webp` })), "tarot");
 const memojiEntries = entries(memoji.map((f) => ({ key: f.replace(".webp", ""), file: `memoji/${f}` })), "memoji");
-const illustrationEntries = entries(Object.keys(ILLUSTRATIONS).map((key) => ({ key, file: `ilustrasi/${slug(key)}.webp` })), "art");
 fs.writeFileSync(
   path.join(root, "src/components/site/app-images.ts"),
   `${header}import type { StaticImageData } from "next/image";
@@ -255,12 +237,8 @@ ${tarotEntries.join("\n")}
 export const memojiImages: Record<string, StaticImageData> = {
 ${memojiEntries.join("\n")}
 };
-
-export const illustrationImages = {
-${illustrationEntries.join("\n")}
-} satisfies Record<string, StaticImageData>;
 `,
 );
 
-console.log(`books ${books.length}, communities ${communities.length}, tarot ${tarot.length}, memoji ${memoji.length}, illustrations ${Object.keys(ILLUSTRATIONS).length}`);
+console.log(`books ${books.length}, communities ${communities.length}, tarot ${tarot.length}, memoji ${memoji.length}`);
 for (const book of books) console.log(`  ${book.title} | ${book.author}${book.author !== book.mockAuthor ? ` (mock: ${book.mockAuthor})` : ""} | ${book.color} ${book.text} ${book.contrast}`);

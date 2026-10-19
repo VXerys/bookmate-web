@@ -2,6 +2,7 @@
 
 import { useGSAP } from "@gsap/react";
 
+import { jumpToTarget } from "@/components/motion/smooth-scroll";
 import { gsap, LAND, MOTION_OK, ScrollTrigger } from "@/lib/motion/gsap";
 import { whenIntroDone } from "@/lib/motion/intro-state";
 
@@ -45,9 +46,22 @@ export function Ambient() {
         const shapes = (el.dataset.morph ?? el.getAttribute("data-morph") ?? "").split("|").filter(Boolean);
         if (!shapes.length) return;
         const original = el.getAttribute("d") ?? "";
-        const roll = gsap.timeline({ repeat: -1, paused: true, defaults: { duration: 3.2 + (index % 3) * 0.6, ease: "sine.inOut" } });
+        // data-morph-time pins the duration, so paired paths (a wave and its crest line) stay in step.
+        const seconds = Number(el.getAttribute("data-morph-time")) || 3.2 + (index % 3) * 0.6;
+        const roll = gsap.timeline({ repeat: -1, paused: true, defaults: { duration: seconds, ease: "sine.inOut" } });
         [...shapes, original].forEach((shape) => roll.to(el, { morphSVG: shape }));
         onScreen(el, roll);
+      });
+
+      // Rings ripple outward from the centre one after another, like a phone's signal.
+      gsap.utils.toArray<SVGSVGElement>("[data-pulse]").forEach((el) => {
+        const rings = el.querySelectorAll("circle");
+        const box = el.viewBox.baseVal;
+        const origin = `${box.width / 2} ${box.height / 2}`;
+        gsap.set(rings, { scale: 0.35, opacity: 0, svgOrigin: origin });
+        const ripple = gsap.timeline({ repeat: -1, paused: true });
+        ripple.to(rings, { keyframes: { "0%": { scale: 0.35, opacity: 0 }, "20%": { opacity: 1 }, "100%": { scale: 1, opacity: 0 } }, duration: 4, ease: "sine.out", stagger: 1 });
+        onScreen(el, ripple);
       });
 
       gsap.utils.toArray<SVGTextPathElement>("[data-curve]").forEach((el) => {
@@ -86,7 +100,8 @@ export function Ambient() {
 
       // Reading order inside a chapter: kicker, lead, and supporting items rise out of a light blur once, in sequence
       // (data-rise holds an optional delay), after the elastic title has landed.
-      gsap.utils.toArray<HTMLElement>("[data-rise]").forEach((el) => {
+      const rises = gsap.utils.toArray<HTMLElement>("[data-rise]");
+      rises.forEach((el) => {
         gsap.fromTo(
           el,
           { y: 32, autoAlpha: 0, filter: "blur(8px)" },
@@ -108,6 +123,8 @@ export function Ambient() {
       const pops = gsap.utils.toArray<HTMLElement>("[data-pop]");
       const introPops = pops.filter((el) => el.dataset.pop === "intro");
       gsap.set(pops, { scale: 0, rotation: (i: number) => (i % 2 ? 40 : -40) });
+      // Starting states are in place: release the CSS guard that kept these hidden through hydration.
+      [...pops, ...rises].forEach((el) => (el.dataset.motionReady = ""));
       pops
         .filter((el) => el.dataset.pop !== "intro")
         .forEach((el) => {
@@ -122,10 +139,18 @@ export function Ambient() {
       // Scroll velocity becomes a brief boost on every loop's timeScale, then eases back to normal speed.
       const pace = { value: 1 };
       const apply = () => loops.forEach((loop) => loop.timeScale(pace.value));
+      // data-skew rows lean against the scroll direction while it moves, then straighten once it settles.
+      const skews = gsap.utils.toArray<HTMLElement>("[data-skew]").map((el) => gsap.quickTo(el, "skewX", { duration: 0.5, ease: "power3.out" }));
+      const straighten = gsap.delayedCall(0.15, () => skews.forEach((to) => to(0))).pause();
       const velocity = ScrollTrigger.create({
         start: 0,
         end: "max",
         onUpdate: (self) => {
+          if (skews.length) {
+            const lean = gsap.utils.clamp(-10, 10, self.getVelocity() / -250);
+            skews.forEach((to) => to(lean));
+            straighten.restart(true);
+          }
           const boost = gsap.utils.clamp(1, 5, 1 + Math.abs(self.getVelocity()) / 700);
           if (boost <= pace.value) return;
           pace.value = boost;
@@ -138,10 +163,27 @@ export function Ambient() {
         stop();
         intro?.kill();
         velocity.kill();
+        straighten.kill();
         gsap.set(pops, { clearProps: "transform" });
+        [...pops, ...rises].forEach((el) => delete el.dataset.motionReady);
       };
     });
-    return () => mm.revert();
+
+    // A refresh on a chapter link (#komunitas) lets the browser jump before the pinned scenes add their spacers, which
+    // lands the reader in the wrong place; once every trigger has measured, jump again to the same chapter.
+    const target = window.location.hash.length > 1 ? document.getElementById(decodeURIComponent(window.location.hash.slice(1))) : null;
+    let settle = 0;
+    if (target) {
+      settle = window.requestAnimationFrame(() => {
+        ScrollTrigger.refresh();
+        jumpToTarget(target);
+      });
+    }
+
+    return () => {
+      window.cancelAnimationFrame(settle);
+      mm.revert();
+    };
   });
 
   return null;

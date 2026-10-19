@@ -67,17 +67,6 @@ import memoji23 from "@/assets/images/app/memoji/23.webp";
 import memoji27 from "@/assets/images/app/memoji/27.webp";
 import memoji28 from "@/assets/images/app/memoji/28.webp";
 import memoji34 from "@/assets/images/app/memoji/34.webp";
-import artRak from "@/assets/images/app/ilustrasi/rak.webp";
-import artPinjam from "@/assets/images/app/ilustrasi/pinjam.webp";
-import artChat from "@/assets/images/app/ilustrasi/chat.webp";
-import artBaca from "@/assets/images/app/ilustrasi/baca.webp";
-import artKomunitas from "@/assets/images/app/ilustrasi/komunitas.webp";
-import artTandai from "@/assets/images/app/ilustrasi/tandai.webp";
-import artOrangPinjam from "@/assets/images/app/ilustrasi/orangpinjam.webp";
-import artOrangPesan from "@/assets/images/app/ilustrasi/orangpesan.webp";
-import artOrangKomunitas from "@/assets/images/app/ilustrasi/orangkomunitas.webp";
-import artOrangRak from "@/assets/images/app/ilustrasi/orangrak.webp";
-import artOrangCari from "@/assets/images/app/ilustrasi/orangcari.webp";
 
 export const coverImages: Record<string, StaticImageData> = {
   "aSunnyPlaceForShadyPeople": coverASunnyPlaceForShadyPeople,
@@ -156,17 +145,3 @@ export const memojiImages: Record<string, StaticImageData> = {
   "28": memoji28,
   "34": memoji34,
 };
-
-export const illustrationImages = {
-  "rak": artRak,
-  "pinjam": artPinjam,
-  "chat": artChat,
-  "baca": artBaca,
-  "komunitas": artKomunitas,
-  "tandai": artTandai,
-  "orangPinjam": artOrangPinjam,
-  "orangPesan": artOrangPesan,
-  "orangKomunitas": artOrangKomunitas,
-  "orangRak": artOrangRak,
-  "orangCari": artOrangCari,
-} satisfies Record<string, StaticImageData>;

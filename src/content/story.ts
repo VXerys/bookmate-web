@@ -12,8 +12,11 @@ export type Tone = Extract<PaletteToken, "highlight" | "ember" | "green" | "cora
 export const prolog = {
   headlineLead: "Satu halaman lagi,",
   headlineEmphasis: "bareng teman.",
-  body: "Klub baca komunitas di Android. Pinjam buku fisik dari rak teman, catat progres, jaga streak, dan bedah buku bareng.",
+  eyebrow: "Klub baca komunitas di Android",
+  body: "Pinjam buku fisik dari rak teman, catat progres, jaga streak, dan bedah buku bareng komunitasmu.",
   secondary: "Intip rak teman",
+  // Three things the app does, shown as chips under the buttons (lib/features: borrow_request, streak, reflection).
+  chips: ["Pinjam buku fisik", "Streak harian", "Bedah buku"],
   stamp: "KLUB BACA · PINJAM BUKU · BEDAH BUKU · ",
   sticker: "Gratis!",
   note: "ada di Google Play",
@@ -27,6 +30,20 @@ export const buku = {
   lead: "Buku-buku ini menunggu di rak sesama anggota. Cek kondisinya, lihat yang tersedia, lalu ajukan pinjam lewat aplikasi.",
   note: "geser raknya, pilih satu",
   demoLabel: "Data demo aplikasi",
+  // Ten of the 18 demo books, picked for varied cover colours; a longer shelf made the pinned scroll drag (owner, F-014).
+  // The hero's three books come first, so each lands on its own card when the hero hands off to the shelf.
+  featured: [
+    "aCourtOfThornsAndRoses",
+    "thePumpkinSpiceCafe",
+    "remarkablyBrightCreatures",
+    "aSunnyPlaceForShadyPeople",
+    "anitaDeMonteLaughsLast",
+    "immaculateConception",
+    "somebodyIsWalkingOnYourGrave",
+    "projectHailMary",
+    "thingsWeLostInTheFire",
+    "whatYouAreLookingForIsInTheLibrary",
+  ],
   condition: { LIKE_NEW: "Seperti baru", GOOD: "Bagus", FAIR: "Cukup" },
   status: { AVAILABLE: "Tersedia", BORROWED: "Dipinjam" },
   previous: "Buku sebelumnya",
@@ -36,8 +53,8 @@ export const buku = {
 export type BorrowStep = {
   title: string;
   body: string;
-  // Key into illustrationImages (src/components/site/app-images.ts): the app's own artwork.
-  art: "orangCari" | "pinjam" | "chat" | "tandai";
+  // Which animated step icon the card shows (src/components/art/borrow-icons.tsx).
+  art: "cari" | "pinjam" | "chat" | "ulas";
   tone: Tone;
 };
 
@@ -50,10 +67,10 @@ export const pinjam = {
   lead: "Bukunya pindah tangan, pertemanannya bertambah. Begini perjalanan satu buku pinjaman.",
   note: "bukunya ikut jalan-jalan",
   steps: [
-    { title: "Temukan bukunya", body: "Cari judul atau intip rak anggota. Kondisi dan ketersediaannya terlihat sebelum kamu meminta.", art: "orangCari", tone: "white" },
+    { title: "Temukan bukunya", body: "Cari judul atau intip rak anggota. Kondisi dan ketersediaannya terlihat sebelum kamu meminta.", art: "cari", tone: "white" },
     { title: "Tekan Pinjam Buku", body: "Permintaanmu masuk ke pemilik buku, yang tinggal menekan Setujui Permintaan.", art: "pinjam", tone: "highlight" },
     { title: "Ngobrol di chat", body: "Begitu disetujui, ruang Chat Peminjaman terbuka untuk mengatur waktu dan tempat ketemu.", art: "chat", tone: "white" },
-    { title: "Kembalikan, beri ulasan", body: "Pemilik menandai buku sudah dikembalikan, lalu kamu menulis ulasan untuk peminjamannya.", art: "tandai", tone: "highlight" },
+    { title: "Kembalikan, beri ulasan", body: "Pemilik menandai buku sudah dikembalikan, lalu kamu menulis ulasan untuk peminjamannya.", art: "ulas", tone: "highlight" },
   ] as readonly BorrowStep[],
 } as const;
 
@@ -122,7 +139,8 @@ export const komunitas = {
 } as const;
 
 export const pita = {
-  phrases: ["Unduh gratis", "Klub baca", "Pinjam buku fisik", "Bedah buku", "Streak harian", "30 lencana"],
+  // Sentence case, like a real promo line; each fact is backed elsewhere on the page (FAQ, kenapa pills).
+  phrases: ["Unduh gratis di Google Play", "Pinjam buku fisik dari rak teman", "Gabung klub baca di kotamu", "Kumpulkan 30 lencana tarot"],
 } as const;
 
 export const lencana = {

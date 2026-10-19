@@ -26,7 +26,7 @@
   --color-slate: #64748b;
 
   --font-sans: var(--font-jakarta), ui-sans-serif, system-ui, sans-serif;
-  --font-display: var(--font-rubik), ui-sans-serif, system-ui, sans-serif;
+  --font-display: var(--font-bricolage), ui-sans-serif, system-ui, sans-serif;
   --font-hand: var(--font-caveat), "Comic Sans MS", cursive;
 
   --ease-expo: cubic-bezier(0.16, 1, 0.3, 1);
@@ -240,7 +240,7 @@ html.lenis body {
 
 .aplikasi[data-pinned] .aplikasi-steps {
   position: absolute;
-  left: 50%;
+  left: 46%;
   top: 50%;
   translate: 0 -50%;
 }
@@ -328,6 +328,15 @@ html.lenis body {
   }
 }
 
+/* Stickers and supporting copy (F-014 ambient motion) wait hidden only while JS runs with motion allowed, until their
+   starting state is set, so a refresh never flashes them at full size before they spring or rise in. */
+@media (prefers-reduced-motion: no-preference) {
+  html.js [data-pop]:not([data-motion-ready]),
+  html.js [data-rise]:not([data-motion-ready]) {
+    visibility: hidden;
+  }
+}
+
 /* Doodles (F-012) wait hidden only while JS runs with motion allowed, until their component has set the undrawn state;
    without JS, with the boot fallback, or with reduced motion they show fully drawn. */
 @media (prefers-reduced-motion: no-preference) {
@@ -338,13 +347,13 @@ html.lenis body {
 }
 
 @layer components {
-  /* Rubik at its heaviest with a leading under 1, like the reference's 120/96 and 78/62 headings. */
+  /* Bricolage Grotesque at its heaviest, tightly tracked with a leading under 1, like the reference's 120/96 and 78/62 headings. */
   .display {
     font-family: var(--font-display);
     font-weight: 800;
     font-size: clamp(2.75rem, 5.4vw, 5.75rem);
     line-height: 0.84;
-    letter-spacing: -0.02em;
+    letter-spacing: -0.03em;
     text-wrap: balance;
   }
 
@@ -353,7 +362,7 @@ html.lenis body {
     font-weight: 800;
     font-size: clamp(2.2rem, 4.1vw, 4.25rem);
     line-height: 0.88;
-    letter-spacing: -0.015em;
+    letter-spacing: -0.028em;
     text-wrap: balance;
   }
 
@@ -362,7 +371,7 @@ html.lenis body {
     font-weight: 700;
     font-size: clamp(1.35rem, 1.9vw, 1.75rem);
     line-height: 0.92;
-    letter-spacing: -0.01em;
+    letter-spacing: -0.03em;
   }
 
   .display em,

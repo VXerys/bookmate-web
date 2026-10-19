@@ -10,6 +10,7 @@ import { communityImages, memojiImages } from "@/components/site/app-images";
 import { demoCommunities, memojiIds } from "@/content/app-data";
 import { komunitas } from "@/content/story";
 import { gsap, LAND, MOTION_OK, useGSAP } from "@/lib/motion/gsap";
+import { SectionWaves } from "@/components/art/section-waves";
 
 const FAN = "(min-width: 1024px) and (prefers-reduced-motion: no-preference)";
 const FACE_TONES = ["bg-white", "bg-highlight", "bg-peach-pale", "bg-blue"] as const;
@@ -53,7 +54,8 @@ export function Komunitas() {
 
   return (
     <div className="bg-white">
-      <section ref={root} id="komunitas" data-chapter="komunitas" className="shape-capsule relative overflow-hidden bg-sky px-6 py-28 lg:px-10">
+      <section ref={root} id="komunitas" data-chapter="komunitas" className="shape-capsule relative isolate overflow-hidden bg-sky px-6 py-16 lg:py-20 lg:px-10">
+        <SectionWaves variant="komunitas" />
         <div className="mx-auto grid max-w-[90rem] gap-14 lg:grid-cols-[0.8fr_1.2fr] lg:items-center">
           <div className="flex min-w-0 flex-col items-start gap-5">
             <p data-rise className="label">{komunitas.kicker}</p>

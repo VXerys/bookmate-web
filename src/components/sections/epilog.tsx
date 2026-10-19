@@ -54,7 +54,7 @@ export function Epilog() {
   );
 
   return (
-    <section ref={root} id="epilog" data-chapter="epilog" className="shape-bottom relative isolate flex min-h-svh flex-col items-center justify-center gap-10 overflow-hidden bg-white px-6 pt-10 pb-28 text-center lg:px-10">
+    <section ref={root} id="epilog" data-chapter="epilog" className="shape-bottom relative isolate flex min-h-svh flex-col items-center justify-center gap-10 overflow-hidden bg-white px-6 pt-10 pb-20 text-center lg:px-10">
       <CurveText id="epilog-curve" text={epilog.curve} tone="highlight" ink="navy" morph={CURVE_MORPH} from="-30%" to="5%" className="-mx-6 h-[clamp(6rem,14vw,12rem)] w-[calc(100%+3rem)] lg:-mx-10 lg:w-[calc(100%+5rem)]" />
       <div data-epilog-book className="pointer-events-none absolute top-[30%] left-[5%] hidden text-[clamp(8px,0.9vw,13px)] md:block" aria-hidden="true">
         <Book3D cover={BOOK_A.cover} color={BOOK_A.color} pose="rotateX(12deg) rotateY(-30deg) rotateZ(-10deg)" />
@@ -64,7 +64,7 @@ export function Epilog() {
       </div>
       <p data-rise className="label">{epilog.kicker}</p>
       <PopTitle className="display max-w-5xl">
-        {epilog.statementLead} <em className="text-blue">{epilog.statementEmphasis}</em>
+        {epilog.statementLead} <em>{epilog.statementEmphasis}</em>
       </PopTitle>
       <div data-epilog-cta className="flex flex-col items-center gap-4">
         <ButtonAlt href={site.app.playStoreUrl} cursorLabel={shell.header.cta} tone="navy" size="lg">

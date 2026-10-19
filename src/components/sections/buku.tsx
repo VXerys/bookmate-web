@@ -6,11 +6,12 @@ import { useRef } from "react";
 import { Starburst } from "@/components/art/starburst";
 import { HandNote } from "@/components/motion/hand-note";
 import { PopTitle } from "@/components/motion/pop-title";
-import { shelfBooks } from "@/components/site/shelf";
+import { shelfBook } from "@/components/site/shelf";
 import { buku } from "@/content/story";
 import { gsap, LAND, MOTION_OK, useGSAP } from "@/lib/motion/gsap";
 
 const PINNED = "(min-width: 1024px) and (prefers-reduced-motion: no-preference)";
+const BOOKS = buku.featured.map((key) => shelfBook(key));
 
 // Chapter 1, find (F-014 FR-001): the 18 demo books as cards in their cover's own colour. On wide screens with motion
 // the section pins and the shelf slides sideways with the scroll while a squiggle draws underneath; cards lean with the
@@ -81,9 +82,9 @@ export function Buku() {
   };
 
   return (
-    <section ref={root} id="buku" data-chapter="buku" className="shelf relative overflow-hidden bg-white py-24 lg:flex lg:min-h-svh lg:flex-col lg:justify-center lg:py-16">
+    <section ref={root} id="buku" data-chapter="buku" className="shelf relative overflow-hidden bg-white py-16 lg:flex lg:h-svh lg:min-h-[40rem] lg:flex-col lg:justify-start lg:pt-20 lg:pb-6">
       <div className="mx-auto flex w-full max-w-[90rem] flex-wrap items-end justify-between gap-8 px-6 lg:px-10">
-        <div className="flex max-w-2xl flex-col gap-4">
+        <div className="flex max-w-2xl flex-col gap-4 lg:gap-3">
           <p data-rise className="label">{buku.kicker}</p>
           <PopTitle className="heading">{buku.title}</PopTitle>
           <p data-rise="0.15" className="lead lg:max-w-xl">{buku.lead}</p>
@@ -116,17 +117,18 @@ export function Buku() {
         data-shelf-track
         tabIndex={0}
         aria-label={buku.title}
-        className="no-scrollbar mt-12 flex snap-x snap-mandatory gap-5 overflow-x-auto scroll-px-6 px-6 pt-10 pb-10 lg:mt-6 lg:pt-8 lg:pb-6 lg:scroll-px-10 lg:px-10"
+        className="no-scrollbar mt-12 flex snap-x snap-mandatory gap-5 overflow-x-auto scroll-px-6 px-6 pt-10 pb-10 lg:mt-4 lg:pt-8 lg:pb-5 lg:scroll-px-10 lg:px-10"
       >
-        {shelfBooks.map((book, index) => {
+        {BOOKS.map((book, index) => {
           const available = book.status === "AVAILABLE";
           const ink = book.text === "ink" ? "var(--color-ink)" : "var(--color-white)";
           return (
-            <li key={book.id} data-shelf-card className="w-[min(76vw,17rem)] shrink-0 snap-start lg:w-[clamp(12.5rem,15vw,15rem)]" style={{ rotate: `${index % 2 ? 1.5 : -1.5}deg` }}>
+            <li key={book.id} data-shelf-card className="w-[min(76vw,17rem)] shrink-0 snap-start lg:w-[clamp(10.5rem,calc((100svh-26rem)/1.5),15rem)]" style={{ rotate: `${index % 2 ? 1.5 : -1.5}deg` }}>
               <article className="relative flex h-full flex-col gap-3 rounded-[1.5rem] p-3 pb-5" style={{ background: book.color, color: ink }}>
                 <div className="relative">
                   <Image
                     src={book.cover}
+                    data-shelf-cover={book.key}
                     alt={`Sampul ${book.title}`}
                     sizes="(min-width: 1024px) 248px, 70vw"
                     className="aspect-[2/3] w-full rounded-[1rem] object-cover shadow-[0_18px_30px_-14px_rgb(3_4_10/0.55)]"
@@ -137,11 +139,11 @@ export function Buku() {
                     </Starburst>
                   </div>
                 </div>
-                <div className="flex flex-wrap gap-1.5 px-1">
-                  <span className="rounded-full bg-white px-2.5 py-1 text-xs font-bold text-ink">{book.genre[0]}</span>
-                  <span className="rounded-full bg-navy px-2.5 py-1 text-xs font-bold text-white">{buku.condition[book.condition]}</span>
+                <div className="flex gap-1.5 overflow-hidden px-1">
+                  <span className="truncate rounded-full bg-white px-2.5 py-1 text-xs font-bold text-navy">{book.genre[0]}</span>
+                  <span className="shrink-0 rounded-full bg-navy px-2.5 py-1 text-xs font-bold text-white">{buku.condition[book.condition]}</span>
                 </div>
-                <h3 className="statement px-1 text-[1.5rem] lg:text-[1.3rem]">{book.title}</h3>
+                <h3 className="statement line-clamp-2 px-1 text-[1.5rem] lg:text-[1.2rem]">{book.title}</h3>
                 <p className="px-1 text-sm font-bold">{book.author}</p>
               </article>
             </li>

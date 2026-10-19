@@ -10,6 +10,7 @@ import { tarotImages } from "@/components/site/app-images";
 import { badges } from "@/content/badges";
 import { lencana } from "@/content/story";
 import { gsap, HOVER_MOTION, MOTION_OK, useGSAP } from "@/lib/motion/gsap";
+import { SectionWaves } from "@/components/art/section-waves";
 
 // The top tiers only (IV and V): their cards are the richest art in the set, which the owner asked to show. Names and
 // criteria come straight from the app (badges.ts), the art from the app's tarot set (A-003).
@@ -85,7 +86,8 @@ export function Lencana() {
 
   return (
     <div className="bg-white">
-      <section ref={root} id="lencana" data-chapter="lencana" className="shape-capsule relative isolate overflow-hidden bg-navy px-6 py-28 text-paper lg:px-10">
+      <section ref={root} id="lencana" data-chapter="lencana" className="shape-capsule relative isolate overflow-hidden bg-navy px-6 py-16 lg:py-20 text-paper lg:px-10">
+        <SectionWaves variant="lencana" />
         {SPARKS.map((spark) => (
           <svg key={spark.spot} viewBox="0 0 20 20" data-spin={spark.spin} className={`pointer-events-none absolute -z-10 ${spark.spot} ${spark.size}`} aria-hidden="true">
             <path d="M10 0 12.6 7.4 20 10 12.6 12.6 10 20 7.4 12.6 0 10 7.4 7.4Z" fill="var(--color-highlight)" />
@@ -100,7 +102,7 @@ export function Lencana() {
           </HandNote>
         </div>
 
-        <div className="relative mx-auto mt-16 max-w-6xl">
+        <div className="relative mx-auto mt-12 max-w-5xl">
           <div className="absolute -top-12 -right-2 z-20 w-24 lg:-top-16 lg:right-[-3%] lg:w-32">
             <div data-pop>
               <Starburst tone="highlight" text="navy" spin={-14} className="aspect-square w-full rotate-12 font-display text-base lg:text-xl">
@@ -126,7 +128,9 @@ export function Lencana() {
                       <Image src={tarotImages[badge.code]} alt="" sizes="(min-width: 1024px) 360px, 45vw" className="h-full w-full object-contain drop-shadow-[0_24px_30px_rgb(0_0_0/0.45)]" />
                       <span className="absolute inset-x-[8%] bottom-[5%] rounded-xl bg-navy/85 px-3 py-2 text-center">
                         <span className="label block text-peach">
-                          {lencana.tierLabel} {badge.tier} · {groupName(badge.group)}
+                          {lencana.tierLabel} {badge.tier}
+                          {/* The category name only fits from small tablets up; phones show the tier alone. */}
+                          <span className="hidden sm:inline"> · {groupName(badge.group)}</span>
                         </span>
                         <span className="block font-display text-[clamp(1rem,1.8vw,1.5rem)] leading-tight font-extrabold text-paper">{badge.title}</span>
                       </span>

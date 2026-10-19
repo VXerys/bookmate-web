@@ -1,5 +1,5 @@
 import type { Metadata, Viewport } from "next";
-import { Caveat, Plus_Jakarta_Sans, Rubik } from "next/font/google";
+import { Bricolage_Grotesque, Caveat, Plus_Jakarta_Sans } from "next/font/google";
 
 import { Cursor } from "@/components/motion/cursor";
 import { Sampul } from "@/components/motion/sampul";
@@ -14,11 +14,12 @@ import { site } from "@/content/site";
 import { bootScript } from "@/lib/motion/boot-script";
 import "./globals.css";
 
-// Rubik's heavy, softly rounded grotesk stands in for the reference's licensed display face (F-013 Q2).
-const rubik = Rubik({
-  variable: "--font-rubik",
+// Bricolage Grotesque (OFL, Google Fonts) at its heaviest stands in for the reference's licensed display face: a tight,
+// characterful grotesk the owner picked over Rubik (F-014). Variable, with the optical-size axis so big headings sharpen.
+const bricolage = Bricolage_Grotesque({
+  variable: "--font-bricolage",
   subsets: ["latin"],
-  weight: ["600", "700", "800", "900"],
+  axes: ["opsz"],
   display: "swap",
 });
 
@@ -64,7 +65,7 @@ export const viewport: Viewport = {
 export default function RootLayout({ children }: LayoutProps<"/">) {
   return (
     // The boot script adds html.js and data-sampul before hydration, so React must not flag the attribute difference.
-    <html lang="id" className={`${rubik.variable} ${jakarta.variable} ${caveat.variable}`} suppressHydrationWarning>
+    <html lang="id" className={`${bricolage.variable} ${jakarta.variable} ${caveat.variable}`} suppressHydrationWarning>
       <head>
         <InlineScript html={bootScript} />
       </head>

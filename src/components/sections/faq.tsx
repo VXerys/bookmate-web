@@ -7,7 +7,7 @@ import { faq } from "@/content/story";
 // Native <details>: opens with mouse, keyboard, and without JavaScript (F-007 AC-004).
 export function Faq() {
   return (
-    <section id="indeks" data-chapter="indeks" className="grid gap-12 bg-white px-6 py-28 md:grid-cols-[minmax(0,0.8fr)_minmax(0,1.2fr)] lg:px-10">
+    <section id="indeks" data-chapter="indeks" className="grid gap-12 bg-white px-6 py-16 lg:py-20 md:grid-cols-[minmax(0,0.8fr)_minmax(0,1.2fr)] lg:px-10">
       <div className="relative flex flex-col items-start gap-5">
         <PopTitle className="heading">{faq.title}</PopTitle>
         <HandNote decorative className="-rotate-2">

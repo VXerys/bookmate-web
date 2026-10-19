@@ -4,6 +4,7 @@ import Image from "next/image";
 import { useRef } from "react";
 
 import { CircleText } from "@/components/art/circle-text";
+import { mix } from "@/components/art/swells";
 import { HandNote } from "@/components/motion/hand-note";
 import { LogoMark } from "@/components/site/logo";
 import { PhoneFrame } from "@/components/site/phone-frame";
@@ -12,6 +13,7 @@ import { shell } from "@/content/shell";
 import { site } from "@/content/site";
 import { aplikasi } from "@/content/story";
 import { gsap, useGSAP } from "@/lib/motion/gsap";
+import { SectionWaves } from "@/components/art/section-waves";
 
 const PINNED = "(min-width: 1024px) and (prefers-reduced-motion: no-preference)";
 
@@ -23,11 +25,6 @@ const ORBIT = [
   { book: shelfBook("theLionTheWitchAndTheWardrobe"), spot: "right-[13%] bottom-[12%]", tilt: -10 },
 ] as const;
 
-const BLOB = "M300 70 C 420 60 530 150 530 290 C 530 430 430 540 300 530 C 170 520 70 430 70 300 C 70 170 180 80 300 70 Z";
-const BLOB_MORPH = [
-  "M310 60 C 450 90 540 180 510 320 C 480 460 400 540 270 520 C 140 500 60 400 80 270 C 100 140 170 30 310 60 Z",
-  "M290 80 C 400 40 560 130 520 280 C 490 420 450 520 310 540 C 160 560 50 440 70 310 C 90 180 180 120 290 80 Z",
-];
 
 // Chapter 3, read (F-014): the one pinned scene. The phone turns from a tilted three-quarter view to face the reader
 // between the two halves of the sentence while four books burst out from behind it and the blob behind breathes; the
@@ -55,13 +52,15 @@ export function Aplikasi() {
           scrollTrigger: { trigger: section, start: "top top", end: "+=220%", scrub: 1, pin: true, anticipatePin: 1, invalidateOnRefresh: true },
         });
         tl.fromTo("[data-app-phone]", { rotationY: -34, rotationX: 14, rotationZ: -8, scale: 0.86 }, { rotationY: 0, rotationX: 0, rotationZ: 0, scale: 1.06, duration: 1 }, 0)
-          .from(covers, { x: (i: number) => toCentre(covers[i]).x * 0.55, y: (i: number) => toCentre(covers[i]).y * 0.55, scale: 0.6, autoAlpha: 0, duration: 0.7, stagger: 0.05 }, 0)
+          .from(covers, { x: (i: number) => toCentre(covers[i]).x * 0.55, y: (i: number) => toCentre(covers[i]).y * 0.55, scale: 0.6, duration: 0.7, stagger: 0.05 }, 0)
           .to("[data-app-lead]", { yPercent: -60, autoAlpha: 0, duration: 0.6 }, 0.75)
           .to("[data-app-tail]", { yPercent: 60, autoAlpha: 0, duration: 0.6 }, 0.75)
           .to(extras[0] ?? {}, { autoAlpha: 1, duration: 0.25 }, 1.05)
-          .to("[data-app-phone]", { xPercent: -62, scale: 1, rotationY: 14, duration: 0.8 }, 1.25)
-          .to(covers, { scale: 0.8, autoAlpha: 0.55, duration: 0.6 }, 1.25)
-          .from("[data-app-step]", { x: 80, autoAlpha: 0, stagger: 0.18, duration: 0.5 }, 1.5)
+          .to("[data-app-phone]", { x: () => -window.innerWidth * 0.2, scale: 1, rotationY: 12, duration: 0.8 }, 1.25)
+          .to("[data-app-rings]", { x: () => -window.innerWidth * 0.2, duration: 0.8 }, 1.25)
+          .to(covers, { scale: 0.85, duration: 0.6 }, 1.25)
+          .from("[data-app-card]", { x: 140, autoAlpha: 0, rotation: 4, duration: 0.5 }, 1.35)
+          .from("[data-app-step]", { x: 40, autoAlpha: 0, stagger: 0.12, duration: 0.4 }, 1.55)
           .to(extras[1] ?? {}, { autoAlpha: 1, duration: 0.25 }, 1.75)
           .from("[data-app-cta]", { y: 40, autoAlpha: 0, duration: 0.4 }, 2)
           .to({}, { duration: 0.3 });
@@ -79,18 +78,25 @@ export function Aplikasi() {
         id="aplikasi"
         data-chapter="aplikasi"
         data-depth="off"
-        className="aplikasi shape-inset relative isolate flex min-h-svh flex-col items-center justify-center gap-10 overflow-hidden bg-highlight px-6 py-28 [--app-phone:min(54svh,30rem)] lg:px-10"
+        className="aplikasi shape-inset relative isolate flex min-h-svh flex-col items-center justify-center gap-10 overflow-hidden bg-sky px-6 py-20 [--app-phone:min(56svh,30rem)] lg:px-10"
       >
-        <svg viewBox="0 0 600 600" className="pointer-events-none absolute top-1/2 left-1/2 -z-10 hidden w-[min(80svh,46rem)] -translate-x-1/2 -translate-y-1/2 lg:block" aria-hidden="true">
-          <path d={BLOB} data-morph={BLOB_MORPH.join("|")} fill="var(--color-white)" />
-        </svg>
+        <SectionWaves variant="aplikasi" />
+        {/* Signal rings: the phone "calls" the reader; they ripple out from behind it and travel with it. */}
+        <div data-app-rings className="pointer-events-none absolute top-1/2 left-1/2 -z-10 hidden aspect-square w-[min(90svh,52rem)] -translate-x-1/2 -translate-y-1/2 lg:block" aria-hidden="true">
+          <div className="absolute inset-[18%] rounded-full" style={{ background: `radial-gradient(circle, var(--color-white) 0%, ${mix("var(--color-white)", 60, "transparent")} 35%, transparent 70%)` }} />
+          <svg viewBox="0 0 600 600" data-pulse className="absolute inset-0 h-full w-full overflow-visible">
+            {[0, 1, 2, 3].map((ring) => (
+              <circle key={ring} cx="300" cy="300" r="290" fill="none" stroke="var(--color-blue)" strokeOpacity={0.45 - ring * 0.08} strokeWidth="2.5" />
+            ))}
+          </svg>
+        </div>
         {ORBIT.map(({ book, spot, tilt }) => (
           <div key={book.key} data-orbit className={`pointer-events-none absolute hidden w-[clamp(6rem,8.5vw,8.5rem)] lg:block ${spot}`} style={{ rotate: `${tilt}deg` }} aria-hidden="true">
             <Image src={book.cover} alt="" sizes="136px" className="aspect-[2/3] w-full rounded-[0.6rem] object-cover shadow-[0_24px_40px_-18px_rgb(3_4_10/0.55)]" />
           </div>
         ))}
 
-        <p className="aplikasi-statement heading relative z-0 text-center text-[clamp(2.2rem,6vw,5.5rem)]">
+        <p className="aplikasi-statement heading relative z-0 text-center text-[clamp(2.2rem,5.6vw,5rem)] text-navy">
           <span data-app-lead className="block">
             {aplikasi.statementLead}
           </span>{" "}
@@ -102,9 +108,9 @@ export function Aplikasi() {
 
         <div className="aplikasi-stage relative z-10 flex w-full max-w-[72rem] flex-col items-center gap-12">
           <div className="[perspective:1600px]">
-            <div data-app-phone className="relative aspect-[9/20] h-(--app-phone) [transform-style:preserve-3d]">
+            <div data-app-phone className="relative aspect-[9/19.5] h-(--app-phone) [transform-style:preserve-3d]">
               <PhoneFrame screen={aplikasi.screens[0]} more={aplikasi.screens.slice(1)} sizes="(min-width: 1024px) 300px, 70vw" />
-              <div className="absolute -top-10 -right-14 w-[clamp(6rem,8vw,8rem)]">
+              <div className="absolute -bottom-6 -left-12 w-[clamp(5.5rem,7vw,7rem)]">
                 <div data-pop>
                   <CircleText id="app-stamp" text={aplikasi.stamp} tone="blue" ink="white" className="aspect-square w-full">
                     <LogoMark className="w-full text-white" />
@@ -113,7 +119,7 @@ export function Aplikasi() {
               </div>
             </div>
           </div>
-          <div className="aplikasi-steps flex max-w-md flex-col gap-6">
+          <div data-app-card className="aplikasi-steps flex w-full max-w-[27rem] flex-col gap-5 rounded-[2rem] bg-white p-7 shadow-[0_30px_60px_-30px_rgb(3_4_10/0.55)] lg:p-8">
             <p data-app-step className="label">
               {aplikasi.kicker}
             </p>
@@ -123,11 +129,11 @@ export function Aplikasi() {
             <ol className="flex flex-col gap-5">
               {aplikasi.steps.map((step, index) => (
                 <li key={step.title} data-app-step className="flex gap-4">
-                  <span className="grid size-11 shrink-0 place-items-center rounded-full bg-blue font-display text-xl font-extrabold text-paper">
+                  <span className="grid size-11 shrink-0 place-items-center rounded-full bg-highlight font-display text-xl font-extrabold text-navy">
                     {index + 1}
                   </span>
                   <span className="flex flex-col gap-1">
-                    <span className="font-display text-2xl font-bold">{step.title}</span>
+                    <span className="font-display text-xl font-bold">{step.title}</span>
                     <span className="font-semibold">{step.body}</span>
                   </span>
                 </li>

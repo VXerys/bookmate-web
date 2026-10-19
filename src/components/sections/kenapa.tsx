@@ -5,12 +5,12 @@ import { useRef } from "react";
 
 import { CircleText } from "@/components/art/circle-text";
 import { Starburst } from "@/components/art/starburst";
-import { Blobs } from "@/components/motion/blobs";
 import { PopTitle } from "@/components/motion/pop-title";
 import { memojiImages } from "@/components/site/app-images";
 import { LogoMark } from "@/components/site/logo";
 import { kenapa } from "@/content/story";
 import { gsap, HOVER_MOTION, MOTION_OK, useGSAP } from "@/lib/motion/gsap";
+import { SectionWaves } from "@/components/art/section-waves";
 
 // Where each pill rests on the wide board: position (percent of the board) and tilt.
 const SPOT = [
@@ -28,10 +28,6 @@ const FACES = [
   { id: "27", spot: "left-[44%] top-[82%]", tone: "bg-white" },
 ] as const;
 
-const BLOBS = [
-  { d: "M1180 80 C1320 30 1470 120 1460 270 C1450 410 1320 470 1210 430 C1100 390 1060 290 1080 200 C1090 140 1120 100 1180 80 Z", color: "var(--color-white)" },
-  { d: "M60 620 C150 560 300 600 320 700 C340 800 250 880 140 870 C40 860 -20 780 -10 700 C0 660 20 640 60 620 Z", color: "var(--color-white)" },
-] as const;
 
 // Why BookMate as big rounded labels (F-014, reference "benefits"): they pop in at random tilts with a spring, the club
 // stamp turns in the corner, members' faces bob between them, and a fine pointer can shove the pills; each one drifts
@@ -97,15 +93,15 @@ export function Kenapa() {
 
   return (
     <div className="bg-white">
-    <section ref={root} id="kenapa" data-chapter="kenapa" className="shape-inset relative isolate overflow-hidden bg-peach-pale px-6 pt-24 pb-28 lg:px-10">
-      <Blobs blobs={BLOBS} small className="absolute inset-0 -z-10 h-full w-full" />
+    <section ref={root} id="kenapa" data-chapter="kenapa" className="shape-inset relative isolate overflow-hidden bg-peach-pale px-6 pt-16 pb-20 lg:pt-20 lg:px-10">
+      <SectionWaves variant="kenapa" />
       <div className="mx-auto max-w-[90rem]">
         <div className="flex max-w-4xl flex-col gap-4">
           <p data-rise className="label">{kenapa.kicker}</p>
           <PopTitle className="heading">{kenapa.title}</PopTitle>
         </div>
 
-        <div data-board className="relative mt-12 lg:h-[36rem]">
+        <div data-board className="relative mt-8 lg:h-[32rem]">
           <ul className="flex flex-wrap justify-center gap-3 lg:block">
             {kenapa.pills.map((pill, index) => (
               <li

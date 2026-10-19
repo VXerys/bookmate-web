@@ -7,17 +7,18 @@ import { CurveText } from "@/components/art/curve-text";
 import { HandNote } from "@/components/motion/hand-note";
 import { screenImages } from "@/components/site/screen-images";
 import { fitur } from "@/content/story";
-import { gsap, HOVER_MOTION, LAND, MOTION_OK, useGSAP } from "@/lib/motion/gsap";
+import { gsap, LAND, MOTION_OK, ScrollTrigger, useGSAP } from "@/lib/motion/gsap";
+import { SectionWaves } from "@/components/art/section-waves";
 
 const CURVE_MORPH = [
   "M-80 150 C 240 260 460 260 760 130 S 1240 20 1520 200",
   "M-80 220 C 200 60 480 80 740 210 S 1200 290 1520 90",
 ];
 
-// The feature list as giant words on a blue capsule (F-014, reference "genre" section). Each word fills in from a
-// faint outline to solid ink as it crosses the middle of the screen, a highlighter ribbon of feature names bends across
-// the top, and on a fine pointer hovering a word floats that feature's screenshot beside the cursor. Every word keeps a
-// one-line description below it, so touch and keyboard users read the same facts.
+// The feature list as giant words on a blue capsule (F-014, reference "genre" section). Each word fills in as it
+// crosses the middle of the screen, a highlighter ribbon of feature names bends across the top, and on wide screens two
+// phones flank the list and show the screens of the latest two features. Every word keeps a one-line description below
+// it, so touch and keyboard users read the same facts.
 export function Fitur() {
   const root = useRef<HTMLElement>(null);
 
@@ -38,56 +39,38 @@ export function Fitur() {
         gsap.from("[data-list-body]", { y: 16, autoAlpha: 0, duration: 0.7, ease: LAND, stagger: 0.06, scrollTrigger: { trigger: "[data-list]", start: "top 70%", once: true } });
       });
 
-      mm.add(HOVER_MOTION, () => {
-        const preview = section.querySelector<HTMLElement>("[data-preview]");
-        const shots = gsap.utils.toArray<HTMLElement>("[data-preview-shot]", section);
+      // Two screens flank the list (after the reference's covers beside its genre list): whichever word sits at the middle
+      // of the screen becomes active, and its screenshot slides into one of the two phones, alternating left and right,
+      // so both sides keep showing the latest two features. Hovering a word on a fine pointer does the same.
+      mm.add(`${MOTION_OK} and (min-width: 1024px)`, () => {
         const rows = gsap.utils.toArray<HTMLElement>("[data-list-row]", section);
-        if (!preview) return;
-        gsap.set(preview, { xPercent: -50, yPercent: -50, scale: 0, rotate: -12 });
-        const x = gsap.quickTo(preview, "x", { duration: 0.55, ease: "power3" });
-        const y = gsap.quickTo(preview, "y", { duration: 0.55, ease: "power3" });
-        const pointer = { x: -1, y: -1 };
-        let shown = -1;
-        const place = (instant: boolean) => {
-          const box = section.getBoundingClientRect();
-          if (instant) gsap.set(preview, { x: pointer.x - box.left, y: pointer.y - box.top });
-          else {
-            x(pointer.x - box.left);
-            y(pointer.y - box.top);
-          }
+        const cards = gsap.utils.toArray<HTMLElement>("[data-side-card]", section);
+        let current = -1;
+        const activate = (index: number) => {
+          if (index === current || index < 0) return;
+          current = index;
+          const card = cards[index % 2];
+          if (!card) return;
+          const shots = gsap.utils.toArray<HTMLElement>("[data-side-shot]", card);
+          shots.forEach((shot) => {
+            const on = Number(shot.dataset.sideShot) === index;
+            gsap.to(shot, on ? { autoAlpha: 1, yPercent: 0, duration: 0.6, ease: "power3.out", overwrite: true } : { autoAlpha: 0, yPercent: -10, duration: 0.35, ease: "power2.in", overwrite: true });
+          });
+          gsap.fromTo(card, { scale: 0.94 }, { scale: 1, duration: 0.8, ease: LAND, overwrite: "auto" });
         };
-        const show = (index: number) => {
-          if (index === shown) return;
-          // Appearing from hidden jumps to the pointer first, so the card never flies in from the section's corner.
-          if (shown < 0 && index >= 0) place(true);
-          shown = index;
-          shots.forEach((shot, i) => gsap.to(shot, { autoAlpha: i === index ? 1 : 0, duration: 0.25, overwrite: true }));
-          gsap.to(preview, { scale: index < 0 ? 0 : 1, rotate: index < 0 ? -12 : index % 2 ? 6 : -6, duration: 0.6, ease: index < 0 ? "power3.in" : LAND, overwrite: "auto" });
-        };
-        // Smooth scrolling moves rows under a still pointer without any pointer event, so the row under the pointer and
-        // the card position are re-read every frame while the card is out.
-        const follow = () => {
-          if (pointer.x < 0) return;
-          const row = document.elementFromPoint(pointer.x, pointer.y)?.closest<HTMLElement>("[data-list-row]");
-          show(row ? rows.indexOf(row) : -1);
-          if (shown >= 0) place(false);
-        };
-        const onMove = (event: PointerEvent) => {
-          pointer.x = event.clientX;
-          pointer.y = event.clientY;
-        };
-        const onLeave = () => {
-          pointer.x = -1;
-          show(-1);
-        };
-        gsap.ticker.add(follow);
-        section.addEventListener("pointermove", onMove);
-        section.addEventListener("pointerleave", onLeave);
-        return () => {
-          gsap.ticker.remove(follow);
-          section.removeEventListener("pointermove", onMove);
-          section.removeEventListener("pointerleave", onLeave);
-        };
+        rows.forEach((row, index) => {
+          ScrollTrigger.create({ trigger: row, start: "top 55%", end: "bottom 55%", onToggle: (self) => self.isActive && activate(index) });
+        });
+        const offs = rows.map((row, index) => {
+          const enter = () => activate(index);
+          row.addEventListener("pointerenter", enter);
+          return () => row.removeEventListener("pointerenter", enter);
+        });
+        // The phones lean with the scroll as the list passes, opposite ways, like the reference's tilted covers.
+        cards.forEach((card, i) => {
+          gsap.fromTo(card, { y: 60, rotation: i ? 14 : -14 }, { y: -60, rotation: i ? 6 : -6, ease: "none", scrollTrigger: { trigger: "[data-list]", start: "top bottom", end: "bottom top", scrub: 1 } });
+        });
+        return () => offs.forEach((off) => off());
       });
 
       return () => mm.revert();
@@ -97,15 +80,32 @@ export function Fitur() {
 
   return (
     <div className="bg-white">
-      <section ref={root} id="fitur" data-chapter="fitur" className="shape-capsule relative overflow-hidden bg-blue pt-16 pb-28">
-        <CurveText id="fitur-curve" text={fitur.curve} tone="highlight" ink="navy" morph={CURVE_MORPH} from="-10%" to="-55%" className="-mt-4 mb-6 h-[clamp(7rem,16vw,14rem)]" />
+      <section ref={root} id="fitur" data-chapter="fitur" className="shape-capsule relative isolate overflow-x-clip bg-blue pt-16 pb-20">
+        <SectionWaves variant="fitur" />
+        <CurveText id="fitur-curve" text={fitur.curve} tone="highlight" ink="navy" morph={CURVE_MORPH} from="-10%" to="-55%" className="-mt-4 mb-10 h-[clamp(7rem,16vw,14rem)] lg:mb-14" />
         <div className="mx-auto flex max-w-[90rem] flex-col items-center gap-3 px-6 text-center lg:px-10">
           <h2 className="statement text-white">{fitur.kicker}</h2>
           <HandNote decorative className="rotate-2 !text-highlight">
             {fitur.note}
           </HandNote>
         </div>
-        <ul data-list className="mx-auto mt-12 flex max-w-[90rem] flex-col items-center gap-6 px-6 text-center lg:gap-2 lg:px-10">
+        <div className="relative">
+          {/* Decorative: the screenshots show what each feature looks like; the words and descriptions carry the meaning.
+              The phones ride a sticky layer, so they stay level with the middle of the screen while the list scrolls. */}
+          <div className="pointer-events-none absolute inset-0 hidden lg:block" aria-hidden="true">
+            <div className="sticky top-[calc(50svh-13rem)] flex h-[26rem] items-center justify-between px-[3%]">
+              {[0, 1].map((side) => (
+                <div key={side} data-side-card className="relative aspect-[9/19] w-[clamp(9.5rem,12.5vw,14rem)] overflow-hidden rounded-[1.8rem] border-[6px] border-highlight bg-white shadow-[0_30px_60px_-25px_rgb(3_4_10/0.6)]" style={{ rotate: side ? "8deg" : "-8deg" }}>
+                  {fitur.items.map((item, index) => (
+                    <div key={item.id} data-side-shot={index} className={`absolute inset-0 ${index === side ? "" : "invisible opacity-0"}`}>
+                      <Image src={screenImages[item.screen]} alt="" fill sizes="224px" className="object-cover object-top" />
+                    </div>
+                  ))}
+                </div>
+              ))}
+            </div>
+          </div>
+        <ul data-list className="relative mx-auto mt-12 flex max-w-[90rem] flex-col items-center gap-6 px-6 text-center lg:gap-2 lg:px-10">
           {fitur.items.map((item) => (
             <li key={item.id} data-list-row className="flex flex-col items-center">
               <span data-list-word className="block font-display text-[clamp(2.4rem,7.4vw,7rem)] leading-[0.92] font-extrabold tracking-tight text-white">
@@ -117,15 +117,6 @@ export function Fitur() {
             </li>
           ))}
         </ul>
-        {/* Decorative: the screenshots show what each feature looks like; the words and descriptions carry the meaning. */}
-        <div data-preview className="pointer-events-none absolute top-0 left-0 hidden w-48 lg:block" aria-hidden="true">
-          <div className="relative aspect-[240/370] overflow-hidden rounded-3xl bg-highlight p-2">
-            {fitur.items.map((item) => (
-              <div key={item.id} data-preview-shot className="invisible absolute inset-2 overflow-hidden rounded-2xl opacity-0">
-                <Image src={screenImages[item.screen]} alt="" fill sizes="192px" className="object-cover object-top" />
-              </div>
-            ))}
-          </div>
         </div>
       </section>
     </div>

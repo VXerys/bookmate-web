@@ -1,6 +1,7 @@
 import assert from "node:assert/strict";
 import { test } from "node:test";
 
+import { demoBooks } from "./app-data.ts";
 import { chapters } from "./navigation.ts";
 import { textPairs } from "./palette.ts";
 import { screens } from "./screens.ts";
@@ -18,8 +19,24 @@ test("the story runs find, borrow, read, talk, celebrate, start (F-014 FR-002)",
   kickers.forEach((kicker, index) => assert.match(kicker, new RegExp(`^Bab ${index + 1} · `), kicker));
 });
 
+test("the shelf shows ten distinct demo books, opening with the hero's three", () => {
+  assert.equal(buku.featured.length, 10);
+  assert.equal(new Set(buku.featured).size, 10);
+  const keys = new Set(demoBooks.map((book) => book.key));
+  for (const key of buku.featured) assert.ok(keys.has(key), key);
+  assert.deepEqual(buku.featured.slice(0, 3), ["aCourtOfThornsAndRoses", "thePumpkinSpiceCafe", "remarkablyBrightCreatures"]);
+});
+
+test("every borrow step names one of the four step icons", () => {
+  assert.deepEqual(
+    pinjam.steps.map((step) => step.art),
+    ["cari", "pinjam", "chat", "ulas"],
+  );
+});
+
 test("hero and closing copy is filled in", () => {
-  for (const value of [prolog.headlineLead, prolog.headlineEmphasis, prolog.body, prolog.secondary, prolog.stamp, epilog.statementLead, epilog.curve]) {
+  assert.equal(prolog.chips.length, 3);
+  for (const value of [prolog.eyebrow, prolog.headlineLead, prolog.headlineEmphasis, prolog.body, prolog.secondary, prolog.stamp, epilog.statementLead, epilog.curve, ...prolog.chips]) {
     assert.ok(filled(value));
   }
 });
