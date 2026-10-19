@@ -53,6 +53,7 @@ Situs harus menampilkan header dengan wordmark, tautan bab, dan CTA unduh, ditam
 - AC-006: Given motion diizinkan dan scroll lebih dari 120 px, when pengguna scroll ke bawah, then header bergeser keluar layar; when scroll ke atas, then header kembali. Header selalu terlihat saat elemen di dalamnya menerima fokus.
 - AC-007: Given section dengan label bab, when section itu melewati tengah viewport, then indikator di header menampilkan label bab tersebut.
 - AC-008: Given reduced motion, when pengguna scroll, then header tetap terlihat tanpa animasi.
+- AC-021: Given `src/content/navigation.ts`, when test konten berjalan, then setiap id bab unik dan berpola `[a-z-]+`, setiap bab punya label, tautan header paling banyak 5, dan setiap section halaman memakai id dan label dari model ini (BR-001).
 
 ### FR-003 — Slice transition
 

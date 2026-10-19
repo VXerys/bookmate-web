@@ -30,7 +30,7 @@ Evidence that acceptance criteria hold at a named commit. A claim without a comm
   tests 25 pass 0 fail; SDD 34 pass; lint exit 0; typecheck exit 0; build exit 0, static 3/3; dev handle absent from .next/static
   ```
 - date: 2026-10-18
-- commit: uncommitted on feat/F-002-shell-global (base 816573d)
+- commit: 694c5aa
 - covers: [AC-020]
 
 ### EV-002 — Kunci bertumpuk diterapkan ke Lenis dan overflow (T-001)
@@ -46,17 +46,79 @@ Evidence that acceptance criteria hold at a named commit. A claim without a comm
   setScrollLocked no longer exported
   ```
 - date: 2026-10-18
-- commit: uncommitted on feat/F-002-shell-global (base 816573d)
+- commit: 694c5aa
 - covers: [AC-020]
+
+### EV-003 — Model navigasi dan section halaman (T-002)
+- command: `npm test (navigation.test.ts); Browser pane on next dev: main#konten > section ids, data-chapter, headings`
+- output:
+  ```text
+  ✔ chapter ids are unique, lowercase anchors; ✔ the story opens with the prolog and closes with the epilog
+  ✔ every chapter has a label, and the header stays short; ✔ chapter numbers follow the story order
+  DOM: 10 sections prolog, manifesto, buka, bab, streak, kartu, diskusi, mulai, faq, epilog; data-chapter = id for all;
+  each section has an h1 or h2; exactly one <main id="konten">
+  ```
+- date: 2026-10-19
+- commit: uncommitted on feat/F-002-shell-global (base 694c5aa)
+- covers: [AC-021]
+
+### EV-004 — Keputusan sesi di boot script, jendela waktu sampul, toolchain (T-003)
+- command: `npm test && npm run test:sdd && npm run lint && npm run typecheck && npm run build` (each exit code checked)
+- output:
+  ```text
+  ✔ plays the sampul on the first load in a tab; ✔ skips the sampul once this tab has seen it
+  ✔ blocked sessionStorage still boots and plays the sampul
+  ✔ opening starts no earlier than 2.0 s and no later than 4.5 s after navigation start
+  ✔ the intro reports done before the boot fallback would drop html.js; ✔ the safety net only fires after a normal run would have ended
+  tests 36 pass 0 fail; SDD 34 pass; lint exit 0; typecheck exit 0; build exit 0, static 3/3; dev handle absent from .next/static
+  built CSS: .sampul{display:none} and only @media (prefers-reduced-motion:no-preference){html.js[data-sampul=play] .sampul{display:block}}
+  ```
+- date: 2026-10-19
+- commit: uncommitted on feat/F-002-shell-global (base 694c5aa)
+- covers: [AC-002, AC-003, AC-004]
+
+### EV-005 — Sampul jalur normal (T-003)
+- command: `Browser pane on next dev: sessionStorage.clear(), navigate, then gsap.ticker.tick() every 16 ms via window.__bookmateMotion (pane hidden)`
+- output:
+  ```text
+  first sample: data-sampul=play, overlay display block, lock owners [sampul], html overflow hidden, counter 001
+  counter 001 -> 032 -> 040 ... 098 -> 099 -> 100 (15 steps)
+  timeline start (page already past the window) -> intro done +1.15 s -> data-sampul=done +1.99 s
+  after: overlay display none, lock owners [], overflow (empty), sessionStorage bm:sampul = 1, html.js kept
+  halves: translate(-100%) rotateY(14deg) / translate(100%) rotateY(-14deg); spine scale(1, 0); title faded out
+  ```
+- date: 2026-10-19
+- commit: uncommitted on feat/F-002-shell-global (base 694c5aa)
+- covers: [AC-001, AC-002, AC-020]
+
+### EV-006 — Muat ulang di tab yang sama, hash, dan ticker macet (T-003)
+- command: `Browser pane on next dev: location.reload() at /#streak in the same tab; separately a first load left with the ticker stalled`
+- output:
+  ```text
+  reload: data-sampul=skip from boot, overlay display none, left half style untouched (never animated), lock owners [],
+  intro done, scrollY 2676 = top of #streak (EC-003)
+  stalled ticker (EC-002): boot fallback dropped html.js, safety net ended the sampul: data-sampul=done, overlay none,
+  lock owners [], intro done, bm:sampul = 1
+  ```
+- date: 2026-10-19
+- commit: uncommitted on feat/F-002-shell-global (base 694c5aa)
+- covers: [AC-003]
 
 ## Coverage
 
 | Criterion | Evidence | Result |
 |---|---|---|
-| AC-020 | EV-001, EV-002 | pass di tingkat registry dan penerapan; alur menu lalu slice end-to-end dicek di T-006 |
-| AC-001 to AC-019 | none | not_run (T-002 sampai T-009) |
+| AC-001 | EV-005 | pass (logika; tampil sejak paint pertama dijamin aturan CSS di EV-004) |
+| AC-002 | EV-004, EV-005 | pass (jendela 2,0 sampai 4,5 s dites di unit; di dev halaman sudah lewat jendela sehingga sampul langsung terbuka) |
+| AC-003 | EV-004, EV-006 | pass |
+| AC-004 | EV-004 | pass untuk tanpa JS lewat aturan CSS; reduced motion menunggu cek pemilik |
+| AC-020 | EV-001, EV-002, EV-005 | pass di registry, penerapan, dan sampul; alur menu lalu slice dicek di T-006 |
+| AC-021 | EV-003 | pass |
+| AC-005 to AC-019 | none | not_run (T-004 sampai T-009) |
 
 ## Not run
 
-- Kunci yang diminta sebelum Lenis dibuat (sampul mount lebih dulu) belum diuji di browser; jalurnya `scrollLock.isLocked()` saat Lenis dibuat, dicek saat sampul ada di T-003.
-- Pengaruh kunci pada wheel dan keyboard asli tidak diuji ulang karena Browser pane tersembunyi (rAF berhenti); perilaku penerapan sama dengan F-001 EV-007.
+- Kesan gerak sampul (counter, judul naik, sampul terbelah) dan rentang 2,0 detik minimum di build produksi belum dilihat langsung: Browser pane tersembunyi, jadi timeline digerakkan ticker manual dan halaman dev sudah lewat jendela waktu saat diukur. Cek pemilik di `next start`, tab baru.
+- Reduced motion (AC-004): Browser pane tidak bisa mengemulasikan media query; cek pemilik di DevTools Rendering.
+- Pengaruh kunci pada wheel dan keyboard asli tidak diuji ulang karena pane tersembunyi; penerapannya sama dengan F-001 EV-007.
+- Kunci yang diambil sampul sebelum Lenis dibuat: pemilik `sampul` dan `overflow: hidden` terbukti (EV-005), tetapi `lenis.isStopped` tidak dicatat pada sampel itu.

@@ -29,8 +29,10 @@ Dari F-001 (`3f9a8db`): `smooth-scroll.tsx` (Lenis, `setScrollLocked(boolean)`, 
 | `src/lib/motion/scroll-lock.ts` | baru: `createScrollLock()` dengan `lock(owner)`, `unlock(owner)`, `isLocked()`, `subscribe(fn)` + test | registry kunci murni |
 | `src/components/motion/smooth-scroll.tsx` | `setScrollLocked` diganti `lockScroll(owner)`, `unlockScroll(owner)` yang menerapkan registry ke Lenis dan `overflow` | satu penerap kunci |
 | `src/lib/motion/boot-script.ts` | tambah: baca `sessionStorage["bm:sampul"]` dalam `try`, set `data-sampul="skip"` atau `"play"` + test | keputusan sampul sebelum paint |
-| `src/content/navigation.ts` | baru: daftar bab `{ id, label, number, inNav }` + test (id unik, cocok pola `[a-z-]+`) | sumber label bab dan tautan |
-| `src/components/motion/sampul.tsx` | baru, menggantikan `intro-gate.tsx`: overlay dua belahan, counter, batas 2,0 sampai 4,5 s, `completeIntro()`; jalur lewati memakai `fonts.ready` | satu-satunya pemanggil `completeIntro()` |
+| `src/content/navigation.ts` | baru: daftar bab `{ id, label, navLabel? }`, `navChapters`, `chapterNumber(id)` + test (id unik, cocok pola `[a-z-]+`) | sumber label bab dan tautan |
+| `src/content/shell.ts` | baru: copy shell (kicker dan satuan counter sampul; tautan lewati, menu, footer menyusul) | sumber teks shell (BR-001) |
+| `src/lib/motion/sampul-timing.ts` | baru: konstanta jendela buka 2,0 sampai 4,5 s, jeda 0,8 s sebelum terbelah, `settleWaits(elapsed)` + test | waktu sampul yang bisa dites |
+| `src/components/motion/sampul.tsx` | baru, menggantikan `intro-gate.tsx`: overlay dua belahan, counter, jendela dari `sampul-timing.ts`, `completeIntro()`, pengaman `setTimeout`; jalur lewati memakai `fonts.ready` | satu-satunya pemanggil `completeIntro()` |
 | `src/components/motion/slice-transition.tsx` | baru: overlay 5 irisan + label, `navigateTo(id)`, flag `busy`, delegasi klik `a[href^="#"]`, `focusSection(id)`, `history.pushState` | navigasi antar bab |
 | `src/components/site/skip-link.tsx` | baru: "Lewati ke konten" ke `#konten` | AC-005 |
 | `src/components/site/header.tsx` | baru (client): wordmark, tautan bab, CTA magnetis, indikator bab, sembunyi saat scroll turun | AC-006 sampai AC-008 |

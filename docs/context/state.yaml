@@ -76,7 +76,7 @@ features:
     tasks:
       - id: T-001
         title: Kunci scroll per pemilik
-        status: review
+        status: done
         requirements:
           - FR-001
           - FR-003
@@ -87,20 +87,24 @@ features:
           - EV-002
       - id: T-002
         title: Model navigasi dan section stub
-        status: planned
+        status: review
         requirements:
           - FR-002
           - FR-003
         depends_on: []
-        evidence: []
+        evidence:
+          - EV-003
       - id: T-003
         title: Sampul dan keputusan sesi di boot script
-        status: planned
+        status: review
         requirements:
           - FR-001
         depends_on:
           - T-001
-        evidence: []
+        evidence:
+          - EV-004
+          - EV-005
+          - EV-006
       - id: T-004
         title: Skip link, header, dan indikator bab
         status: planned
@@ -160,7 +164,7 @@ features:
         evidence: []
 active:
   feature_id: F-002
-  task_id: T-001
+  task_id: T-003
 assumptions_open:
   - id: A-001
     feature: null
@@ -184,5 +188,5 @@ assumptions_open:
     feature: null
     title: Analytics yang dipakai
 blockers: []
-generated_at: 2026-10-18T06:41:16.013Z
-source_hash: 2feebab76df5e916e3f41649d3bf64090052e245cea27c5589344b1980c92368
+generated_at: 2026-10-19T02:05:33.504Z
+source_hash: 84c8f5e0a97fe3a89b96c8f2f44280b6fc727b35cd96369f8ed3926fc0872f19

@@ -21,7 +21,7 @@ Branch `feat/F-002-shell-global`, dibuat dari `feat/F-001-fondasi-motion-core` k
 ## Tasks
 
 ### T-001 — Kunci scroll per pemilik
-- status: review
+- status: done
 - requirements: [FR-001, FR-003, FR-004]
 - depends_on: []
 - evidence: [EV-001, EV-002]
@@ -31,20 +31,24 @@ Branch `feat/F-002-shell-global`, dibuat dari `feat/F-001-fondasi-motion-core` k
 Hasil: `ScrollLockOwner = "sampul" | "menu" | "slice"` mencegah salah ketik pemilik; listener hanya dipanggil saat transisi terkunci/terbuka, jadi Lenis tidak di-stop/start berulang. Dokumen yang menggambarkan keadaan sekarang ikut diperbarui (`docs/architecture/overview.md`, design dan arsitektur F-001).
 
 ### T-002 — Model navigasi dan section stub
-- status: planned
+- status: review
 - requirements: [FR-002, FR-003]
 - depends_on: []
-- evidence: []
+- evidence: [EV-003]
 
-`src/content/navigation.ts` + test; `src/app/page.tsx` mendapat section stub ber-id dan `data-chapter` untuk menguji navigasi. Acceptance: BR-001.
+`src/content/navigation.ts` + test; `src/app/page.tsx` mendapat section stub ber-id dan `data-chapter` untuk menguji navigasi. Acceptance: BR-001, diformalkan sebagai AC-021.
+
+Hasil: 10 bab sesuai urutan art direction; 5 punya `navLabel` untuk header. `<main id="konten">` dipindah dari halaman ke layout lebih awal (bagian T-004) agar halaman tidak kehilangan landmark `main` di antara task.
 
 ### T-003 — Sampul dan keputusan sesi di boot script
-- status: planned
+- status: review
 - requirements: [FR-001]
 - depends_on: [T-001]
-- evidence: []
+- evidence: [EV-004, EV-005, EV-006]
 
 `boot-script.ts` + test (data-sampul, sessionStorage melempar), `src/components/motion/sampul.tsx` menggantikan `intro-gate.tsx`, CSS tampil sampul. Acceptance: AC-001 sampai AC-004, EC-002, EC-003, EC-004.
+
+Hasil: `completeIntro()` pindah ke `sampul.tsx` dan `intro-gate.tsx` dihapus. Jendela waktu ada di `src/lib/motion/sampul-timing.ts` + test; karena sampul butuh 0,8 detik (counter ke 100, judul keluar) sebelum terbelah, penantian "halaman siap" berakhir 0,8 detik lebih awal, sehingga sampul mulai terbuka di 2,0 sampai 4,5 detik dan intro selesai sebelum fallback boot 6 detik. Copy shell di `src/content/shell.ts`. Kesan gerak dan reduced motion menunggu cek pemilik.
 
 ### T-004 — Skip link, header, dan indikator bab
 - status: planned

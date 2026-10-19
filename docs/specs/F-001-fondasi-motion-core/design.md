@@ -31,7 +31,7 @@ T-001 selesai: Next 16.4.2, React 19.3, Tailwind v4 lewat `@tailwindcss/turbopac
 | `src/lib/motion/gsap.ts` | baru: register ScrollTrigger, SplitText, `useGSAP` (Flip, ScrambleText menyusul bersama fiturnya); ekspor `MOTION_OK`, `DESKTOP_MOTION`, `POINTER_MOTION`, `EASE_OUT` | satu-satunya pintu masuk GSAP |
 | `src/lib/motion/intro-state.ts` | baru: `createIntroState()`, singleton `finishIntro()`, `whenIntroDone(cb)`, `isIntroDone()` | sinyal intro selesai |
 | `src/lib/motion/boot-script.ts` | baru: string boot script dan `BOOT_FALLBACK_MS` | dites langsung oleh `boot-script.test.ts` |
-| `src/components/motion/intro-gate.tsx` | baru: `completeIntro()` (set `data-intro="done"`, refresh, `finishIntro`) dan `IntroGate` (selesai saat `fonts.ready`) | penanda intro sampai sampul F-002 |
+| `src/components/motion/intro-gate.tsx` | baru: `completeIntro()` (set `data-intro="done"`, refresh, `finishIntro`) dan `IntroGate` (selesai saat `fonts.ready`); dihapus di F-002 T-003, `completeIntro()` pindah ke `sampul.tsx` | penanda intro sampai sampul F-002 |
 | `src/lib/color/contrast.ts` | baru: rasio kontras WCAG murni | dipakai test token |
 | `src/content/palette.ts` | baru: hex token + pasangan teks/latar yang diizinkan | sumber data test kontras |
 | `src/components/motion/smooth-scroll.tsx` | baru: Lenis singleton, `setScrollLocked` (diganti `lockScroll`/`unlockScroll` per pemilik di F-002 T-001), `scrollToTarget`, `jumpToTarget` | smooth scroll |

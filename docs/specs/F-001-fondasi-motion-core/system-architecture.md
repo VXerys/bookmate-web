@@ -44,7 +44,7 @@ boot script (head) -> SmoothScroll (Lenis + GSAP ticker) -> ScrollTrigger -> sec
 | Boot script | kelas `html.js`, `scrollRestoration`, fallback 6 s | animasi | trusted (inline, tanpa input) |
 | `smooth-scroll.tsx` | instance Lenis, kunci scroll | posisi target section | trusted |
 | `intro-state.ts` | flag selesai dan antrean listener | DOM | trusted |
-| `intro-gate.tsx` (`completeIntro`) | `data-intro="done"`, `ScrollTrigger.refresh()` | kapan intro visual berakhir (F-002) | trusted |
+| `intro-gate.tsx` (`completeIntro`; sejak F-002 T-003: `sampul.tsx`) | `data-intro="done"`, `ScrollTrigger.refresh()` | kapan intro visual berakhir (F-002) | trusted |
 
 Invarian: hanya `completeIntro()` yang menyatakan intro selesai; hanya `smooth-scroll.tsx` yang membuat atau menghentikan Lenis; hanya `src/lib/motion/gsap.ts` yang mendaftarkan plugin.
 

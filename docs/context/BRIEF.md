@@ -1,6 +1,6 @@
 <!-- GENERATED FILE — DO NOT EDIT. Rendered by `npm run context:render`.
 Source: sdd.config.json, docs/steering/, docs/specs/F-*/, docs/context/ASSUMPTIONS.md, docs/handoff/current.md.
-source_hash: 2feebab76df5e916e3f41649d3bf64090052e245cea27c5589344b1980c92368 -->
+source_hash: 84c8f5e0a97fe3a89b96c8f2f44280b6fc727b35cd96369f8ed3926fc0872f19 -->
 
 # Brief
 
@@ -10,14 +10,15 @@ Project `BookMate Web`, tier `lite`. Rendered from sdd.config.json, docs/steerin
 
 ## Active
 Feature F-002 — Shell global: sampul, header, slice transition, menu, cursor, footer (`implementing`, docs/specs/F-002-shell-global/)
-Task T-001 — Kunci scroll per pemilik (`review`); requirements: FR-001, FR-003, FR-004; depends on: none
+Task T-003 — Sampul dan keputusan sesi di boot script (`review`); requirements: FR-001; depends on: T-001
 
-`src/lib/motion/scroll-lock.ts` + test, `smooth-scroll.tsx` memakai `lockScroll(owner)` dan `unlockScroll(owner)`; handle dev ikut diperbarui. Acceptance: EC-001, diformalkan sebagai AC-020 agar bisa dilacak oleh evidence. Tidak mengubah perilaku Lenis lainnya.
+`boot-script.ts` + test (data-sampul, sessionStorage melempar), `src/components/motion/sampul.tsx` menggantikan `intro-gate.tsx`, CSS tampil sampul. Acceptance: AC-001 sampai AC-004, EC-002, EC-003, EC-004.
 
-Hasil: `ScrollLockOwner = "sampul" | "menu" | "slice"` mencegah salah ketik pemilik; listener hanya dipanggil saat transisi terkunci/terbuka, jadi Lenis tidak di-stop/start berulang. Dokumen yang menggambarkan keadaan sekarang ikut diperbarui (`docs/architecture/overview.md`, design dan arsitektur F-001).
+Hasil: `completeIntro()` pindah ke `sampul.tsx` dan `intro-gate.tsx` dihapus. Jendela waktu ada di `src/lib/motion/sampul-timing.ts` + test; karena sampul butuh 0,8 detik (counter ke 100, judul keluar) sebelum terbelah, penantian "halaman siap" berakhir 0,8 detik lebih awal, sehingga sampul mulai terbuka di 2,0 sampai 4,5 detik dan intro selesai sebelum fallback boot 6 detik. Copy shell di `src/content/shell.ts`. Kesan gerak dan reduced motion menunggu cek pemilik.
 
 Acceptance criteria:
-- AC-020: Given dua overlay memegang kunci scroll (contoh menu lalu slice, EC-001), when overlay pertama selesai lebih dulu, then scroll tetap terkunci sampai pemegang terakhir melepas kuncinya.
+- AC-001: Given kunjungan pertama di tab dengan motion diizinkan, when halaman dimuat, then sampul terlihat sejak paint pertama, scroll terkunci, dan counter naik sampai 100.
+- AC-004: Given reduced motion atau JavaScript mati, when halaman dimuat, then tidak ada overlay sampul dan konten langsung terlihat.
 
 ## Rules
 Stop conditions:
@@ -46,11 +47,10 @@ None.
 ## Handoff
 Next step:
 
-Pemilik commit T-001 dan set `done` dengan hash. Lalu kerjakan T-002 (`src/content/navigation.ts` + test, section stub ber-id di `src/app/page.tsx`) dan T-003 (sampul + keputusan sesi di boot script). Verifikasi: `npm test && npm run lint && npm run typecheck && npm run build`, cek exit code satu per satu.
+Pemilik commit T-002 dan T-003, set keduanya `done` dengan hash. Lalu T-004: `src/components/site/skip-link.tsx`, `src/components/site/header.tsx` (wordmark, tautan dari `navChapters`, CTA, indikator bab, sembunyi saat scroll turun), copy di `src/content/shell.ts`. Verifikasi: `npm test && npm run lint && npm run typecheck && npm run build`, cek exit code satu per satu, lalu uji keyboard di Browser pane.
 
 ## Other open tasks
-- T-002 — Model navigasi dan section stub (`planned`)
-- T-003 — Sampul dan keputusan sesi di boot script (`planned`)
+- T-002 — Model navigasi dan section stub (`review`)
 - T-004 — Skip link, header, dan indikator bab (`planned`)
 - T-005 — Slice transition, fokus, dan hash (`planned`)
 - T-006 — Menu mobile (`planned`)
@@ -62,4 +62,4 @@ Pemilik commit T-001 dan set `done` dengan hash. Lalu kerjakan T-002 (`src/conte
 | Feature | Status | Phase | Done/Total |
 |---|---|---|---|
 | F-001 Fondasi dan motion core | implementing | in_progress | 4/5 |
-| F-002 Shell global: sampul, header, slice transition, menu, cursor, footer | implementing | in_progress | 0/9 |
+| F-002 Shell global: sampul, header, slice transition, menu, cursor, footer | implementing | in_progress | 1/9 |

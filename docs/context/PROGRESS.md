@@ -1,6 +1,6 @@
 <!-- GENERATED FILE — DO NOT EDIT. Rendered by `npm run context:render`.
 Source: sdd.config.json, docs/steering/, docs/specs/F-*/, docs/context/ASSUMPTIONS.md, docs/handoff/current.md.
-source_hash: 2feebab76df5e916e3f41649d3bf64090052e245cea27c5589344b1980c92368 -->
+source_hash: 84c8f5e0a97fe3a89b96c8f2f44280b6fc727b35cd96369f8ed3926fc0872f19 -->
 
 # Project Progress
 
@@ -18,9 +18,9 @@ source_hash: 2feebab76df5e916e3f41649d3bf64090052e245cea27c5589344b1980c92368 --
 
 | Task | Status | Requirements | Depends on | Evidence |
 |---|---|---|---|---|
-| T-001 Kunci scroll per pemilik | review | FR-001, FR-003, FR-004 |  | EV-001, EV-002 |
-| T-002 Model navigasi dan section stub | planned | FR-002, FR-003 |  |  |
-| T-003 Sampul dan keputusan sesi di boot script | planned | FR-001 | T-001 |  |
+| T-001 Kunci scroll per pemilik | done | FR-001, FR-003, FR-004 |  | EV-001, EV-002 |
+| T-002 Model navigasi dan section stub | review | FR-002, FR-003 |  | EV-003 |
+| T-003 Sampul dan keputusan sesi di boot script | review | FR-001 | T-001 | EV-004, EV-005, EV-006 |
 | T-004 Skip link, header, dan indikator bab | planned | FR-002 | T-002 |  |
 | T-005 Slice transition, fokus, dan hash | planned | FR-003 | T-001, T-002 |  |
 | T-006 Menu mobile | planned | FR-004 | T-004, T-005 |  |

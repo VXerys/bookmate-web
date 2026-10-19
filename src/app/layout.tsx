@@ -1,7 +1,7 @@
 import type { Metadata, Viewport } from "next";
 import { Inter, JetBrains_Mono, Newsreader } from "next/font/google";
 
-import { IntroGate } from "@/components/motion/intro-gate";
+import { Sampul } from "@/components/motion/sampul";
 import { SmoothScroll } from "@/components/motion/smooth-scroll";
 import { InlineScript } from "@/components/site/inline-script";
 import { palette } from "@/content/palette";
@@ -43,16 +43,16 @@ export const viewport: Viewport = {
 
 export default function RootLayout({ children }: LayoutProps<"/">) {
   return (
-    // The boot script adds html.js before hydration, so React must not flag the class difference.
+    // The boot script adds html.js and data-sampul before hydration, so React must not flag the attribute difference.
     <html lang="id" className={`${newsreader.variable} ${inter.variable} ${jetbrains.variable}`} suppressHydrationWarning>
       <head>
         <InlineScript html={bootScript} />
       </head>
       <body>
         <SmoothScroll />
-        <IntroGate />
+        <Sampul />
         <div className="grain" aria-hidden="true" />
-        {children}
+        <main id="konten">{children}</main>
       </body>
     </html>
   );
