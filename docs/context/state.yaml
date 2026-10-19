@@ -170,7 +170,7 @@ features:
           - EV-012
   - id: F-003
     title: Prolog (hero)
-    status: verification
+    status: superseded
     phase: complete
     spec_path: docs/specs/F-003-prolog
     tasks:
@@ -195,7 +195,7 @@ features:
           - EV-001
   - id: F-004
     title: Manifesto dan buka aplikasi
-    status: verification
+    status: superseded
     phase: complete
     spec_path: docs/specs/F-004-manifesto-buka
     tasks:
@@ -217,7 +217,7 @@ features:
           - EV-001
   - id: F-005
     title: Bab horizontal
-    status: verification
+    status: superseded
     phase: complete
     spec_path: docs/specs/F-005-bab-horizontal
     tasks:
@@ -241,7 +241,7 @@ features:
           - EV-001
   - id: F-006
     title: Streak dan kartu pembaca
-    status: verification
+    status: superseded
     phase: complete
     spec_path: docs/specs/F-006-streak-kartu
     tasks:
@@ -265,7 +265,7 @@ features:
           - EV-001
   - id: F-007
     title: Diskusi, cara mulai, FAQ, dan epilog
-    status: verification
+    status: superseded
     phase: complete
     spec_path: docs/specs/F-007-diskusi-epilog
     tasks:
@@ -395,7 +395,7 @@ features:
           - EV-001
   - id: F-012
     title: "Redesign Marginalia: satu hari pembaca"
-    status: verification
+    status: superseded
     phase: complete
     spec_path: docs/specs/F-012-marginalia
     tasks:
@@ -456,29 +456,40 @@ features:
           - EV-001
   - id: F-013
     title: Revamp gaya Aardvark
-    status: approved
-    phase: not_started
+    status: verification
+    phase: complete
     spec_path: docs/specs/F-013-gaya-aardvark
     tasks:
       - id: T-001
         title: Sistem visual dan gerak
-        status: planned
+        status: done
         requirements:
           - FR-001
           - FR-002
         depends_on: []
-        evidence: []
+        evidence:
+          - EV-001
       - id: T-002
         title: Section BookMate
-        status: planned
+        status: done
         requirements:
           - FR-003
         depends_on:
           - T-001
-        evidence: []
+        evidence:
+          - EV-001
+      - id: T-003
+        title: Rak buku dari data demo dan validasi REA
+        status: done
+        requirements:
+          - FR-004
+        depends_on:
+          - T-001
+        evidence:
+          - EV-001
 active:
-  feature_id: F-012
-  task_id: T-005
+  feature_id: F-013
+  task_id: T-003
 assumptions_open:
   - id: A-001
     feature: null
@@ -514,5 +525,5 @@ blockers:
   - feature_id: F-010
     task_id: T-003
     title: Deploy produksi
-generated_at: 2026-10-19T06:04:07.806Z
-source_hash: 2d7e7177532608ee427ca94f09a03d9cc494ee77424dc85b5d955a41b8b6e96e
+generated_at: 2026-10-19T06:38:41.238Z
+source_hash: ef1078541274b0b562d4b9003035c43b1f62e91b04bbb4c75467ada6aaaf8aaf

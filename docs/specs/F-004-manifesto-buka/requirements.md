@@ -2,7 +2,7 @@
 id: F-004
 title: "Manifesto dan buka aplikasi"
 type: requirements
-status: verification
+status: superseded
 tier: lite
 owner: "M Sechan Alfarisi"
 created: 2026-10-19
@@ -12,6 +12,8 @@ supersedes: null
 ---
 
 # Requirements: Manifesto dan buka aplikasi
+
+> Digantikan F-013 (2026-10-19): lapisan visual dan section ini diganti revamp gaya Aardvark. Dokumen ini disimpan sebagai riwayat.
 
 ## Problem
 

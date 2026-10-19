@@ -2,11 +2,11 @@
 status: active
 owner: M Sechan Alfarisi
 session_date: 2026-10-19
-branch: feat/F-012-marginalia
-base_commit: f173155
-current_commit: bc841eb
-feature_id: F-012
-task_id: T-005
+branch: feat/F-013-gaya-aardvark
+base_commit: d13bb04
+current_commit: 76167f3
+feature_id: F-013
+task_id: T-003
 expires_after: 2026-11-18
 ---
 
@@ -16,25 +16,25 @@ Current coding session delta. It does not replace product docs, architecture, AD
 
 ## Session objective
 
-Redesign menyeluruh: UI lama dinilai pemilik terlalu kosong. Arah Marginalia (buku yang dibaca bareng teman, satu hari pembaca), lalu didorong ke energi Aardvark Book Club atas permintaan pemilik.
+Revamp seluruh halaman ke gaya aardvarkbookclub.com (bulat, blok warna, gerak berpegas) dengan cerita BookMate, rak buku dari data demo app, dan validasi reverse engineering memakai REA.
 
 ## Context used
 
-- Riset Awwwards 2026-10-19 (Aardvark Book Club, Grail, MY STELLA, Modular Comic) dan inspeksi gaya situs Aardvark (font, warna, urutan section, stack GSAP + Lenis).
-- `docs/product/art-direction.md` (ditulis ulang + revisi Aardvark), spec `docs/specs/F-012-marginalia/`.
+- `docs/product/reference-aardvark.md` (reverse engineering, divalidasi REA), `docs/product/art-direction.md` (keputusan grilling Q1 sampai Q10)
+- Repo app `bookmeet`: `app_colors.dart`, `logo-bookmate.svg`, `lib/core/mock/mock_data_constants.dart` (20 buku demo)
 
 ## Completed
 
-- F-012 T-001 sampai T-006 done (EV-001). Commit: `aa712cf`, `44bda39` (docs), fondasi, `b562e97` (section Marginalia), `bc841eb` (revamp Aardvark).
-- Section baru: hari, rak, papan (menggantikan bab-track, streak, kartu, diskusi). Aset SVG/CSS buatan sendiri di `src/components/art/`.
+- F-013 T-001 sampai T-003 done (EV-001, commit `76167f3`). F-003 sampai F-007 dan F-012 ditandai superseded.
+- REA: CLI `analyze-javascript-application` dijalankan agent pada bundle publik; parameter gerak diverifikasi dari kode dan koreksinya diterapkan.
 
 ## Requirement coverage
 
-- AC-001 sampai AC-012 pass lewat EV-001, kecuali AC-002 sebagian: reduced motion tidak bisa diemulasikan di Browser pane.
+- AC-001 sampai AC-009 F-013 pass, kecuali AC-004 (reduced motion) yang belum bisa diemulasikan di Browser pane.
 
 ## Changed files
 
-Lihat `git diff --stat f173155..HEAD`.
+Lihat `git diff --stat d13bb04..HEAD`.
 
 ## Commands executed
 
@@ -45,12 +45,12 @@ npm run lint && npm run typecheck && npm test && npm run build && npm run contex
 Result:
 
 ```text
-lint clean; typecheck 0 errors; tests 51 pass; build ok; :3101 0 error console, tanpa overflow horizontal
+lint clean; typecheck 0 errors; tests 49 pass; build ok; :3101 0 error console, tanpa overflow di 1440/997/375
 ```
 
 ## Current implementation state
 
-Branch `feat/F-012-marginalia` bertumpuk di atas `feat/F-011-aset-motion-polish`; keduanya belum di-push. Gerak langsung belum dirasakan di browser yang terlihat (pane tersembunyi menahan rAF).
+Branch `feat/F-013-gaya-aardvark` bertumpuk di atas F-012 dan F-011; ketiganya belum di-push. REA juga terdaftar sebagai MCP server global (`~/.claude.json`, `rea-agents@6.7.0`) dan skill `reverse-engineer-anything` terpasang sejak 13:30; bukan dari perintah agent sesi ini, aktif setelah restart.
 
 ## Uncommitted work
 
@@ -58,8 +58,8 @@ Branch `feat/F-012-marginalia` bertumpuk di atas `feat/F-011-aset-motion-polish`
 
 ## Blockers
 
-- A-002 (screenshot sementara berisi sampul komersial dan data pribadi), A-001, A-003 sampai A-007 tetap open; rilis diblokir.
+- A-002 tetap open (screenshot sementara); sampul buku penerbit dari mock app sengaja tidak dipakai. A-001, A-003 sampai A-007 tetap open; rilis diblokir.
 
 ## Next step
 
-Pemilik mengecek `npm run dev` di browser yang terlihat (loader, balik halaman, buku 3D, reduced motion), lalu memutuskan push kedua branch dan satu PR gabungan ke `main`.
+Pemilik mengecek `npm run dev` di browser yang terlihat (loader, intro hero, kartu, pin buka, reduced motion), lalu memutuskan push branch dan satu PR gabungan ke `main`.

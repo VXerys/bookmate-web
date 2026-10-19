@@ -2,7 +2,7 @@
 id: F-007
 title: "Diskusi, cara mulai, FAQ, dan epilog"
 type: tasks
-status: verification
+status: superseded
 tier: lite
 owner: "M Sechan Alfarisi"
 created: 2026-10-19

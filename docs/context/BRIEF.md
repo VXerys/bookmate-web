@@ -1,6 +1,6 @@
 <!-- GENERATED FILE — DO NOT EDIT. Rendered by `npm run context:render`.
 Source: sdd.config.json, docs/steering/, docs/specs/F-*/, docs/context/ASSUMPTIONS.md, docs/handoff/current.md.
-source_hash: 2d7e7177532608ee427ca94f09a03d9cc494ee77424dc85b5d955a41b8b6e96e -->
+source_hash: ef1078541274b0b562d4b9003035c43b1f62e91b04bbb4c75467ada6aaaf8aaf -->
 
 # Brief
 
@@ -9,14 +9,14 @@ BookMate Web adalah situs pemasaran untuk aplikasi BookMate yang mengajak pembac
 Project `BookMate Web`, tier `lite`. Rendered from sdd.config.json, docs/steering/, docs/specs/F-*/, docs/context/ASSUMPTIONS.md, docs/handoff/current.md.
 
 ## Active
-Feature F-012 — Redesign Marginalia: satu hari pembaca (`verification`, docs/specs/F-012-marginalia/)
-Task T-005 — Navigasi, audit visual, checks (`done`); requirements: FR-005; depends on: T-002, T-003, T-004
+Feature F-013 — Revamp gaya Aardvark (`verification`, docs/specs/F-013-gaya-aardvark/)
+Task T-003 — Rak buku dari data demo dan validasi REA (`done`); requirements: FR-004; depends on: T-001
 
-Acceptance: AC-009, AC-010.
+`src/content/books.ts` (dari mock app), `typo-cover.tsx`, `card-shelf.tsx`, `buku.tsx`, koreksi REA. Acceptance: AC-008, AC-009.
 
 Acceptance criteria:
-- AC-009: Given chapters baru, when tautan menu diklik, then section tujuan tiba di bawah header dan indikator menampilkan bab itu.
-- AC-010: Given 1440 dan 375 px, then tidak ada overflow horizontal, tidak ada error console, dan lint, typecheck, test, build lulus.
+- AC-008: Given section buku, then 20 kartu tampil dengan data persis dari mock app, tanpa gambar sampul penerbit, masing-masing berlabel data demo.
+- AC-009: Given validasi REA atas aardvarkbookclub.com, then parameter gerak di reference-aardvark.md cocok dengan kode situs atau ditandai belum terverifikasi, dan koreksinya diterapkan (callout 1.075, header tidak bersembunyi, durasi default 0.6, Lenis lerp 0.2).
 
 ## Rules
 Stop conditions:
@@ -53,14 +53,14 @@ None.
 |---|---|---|---|
 | F-001 Fondasi dan motion core | implementing | in_progress | 4/5 |
 | F-002 Shell global: sampul, header, slice transition, menu, cursor, footer | verification | complete | 9/9 |
-| F-003 Prolog (hero) | verification | complete | 2/2 |
-| F-004 Manifesto dan buka aplikasi | verification | complete | 2/2 |
-| F-005 Bab horizontal | verification | complete | 2/2 |
-| F-006 Streak dan kartu pembaca | verification | complete | 2/2 |
-| F-007 Diskusi, cara mulai, FAQ, dan epilog | verification | complete | 2/2 |
+| F-003 Prolog (hero) | superseded | complete | 2/2 |
+| F-004 Manifesto dan buka aplikasi | superseded | complete | 2/2 |
+| F-005 Bab horizontal | superseded | complete | 2/2 |
+| F-006 Streak dan kartu pembaca | superseded | complete | 2/2 |
+| F-007 Diskusi, cara mulai, FAQ, dan epilog | superseded | complete | 2/2 |
 | F-008 SEO dan halaman legal | implementing | blocked | 1/4 |
 | F-009 WebGL hover distortion (opsional) | draft | complete | 0/1 |
 | F-010 QA dan rilis | implementing | blocked | 2/3 |
 | F-011 Screenshot sementara dan perbaikan bug animasi | verification | complete | 3/3 |
-| F-012 Redesign Marginalia: satu hari pembaca | verification | complete | 6/6 |
-| F-013 Revamp gaya Aardvark | approved | not_started | 0/2 |
+| F-012 Redesign Marginalia: satu hari pembaca | superseded | complete | 6/6 |
+| F-013 Revamp gaya Aardvark | verification | complete | 3/3 |

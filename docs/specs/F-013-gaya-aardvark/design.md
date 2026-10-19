@@ -2,14 +2,14 @@
 id: F-013
 title: "Revamp gaya Aardvark"
 type: design
-status: approved
+status: verification
 tier: lite
 owner: "M Sechan Alfarisi"
 created: 2026-10-19
 last_updated: 2026-10-19
 last_verified: 2026-10-19
-requirements: [FR-001, FR-002, FR-003]
-supersedes: null
+requirements: [FR-001, FR-002, FR-003, FR-004]
+supersedes: F-012
 ---
 
 # Design: Revamp gaya Aardvark
@@ -27,6 +27,10 @@ Token dan bentuk di globals.css; ease di src/lib/motion/gsap.ts; komponen bersam
 | `src/components/site/button-alt.tsx`, `logo.tsx` | baru | tombol dua kapsul, logo app |
 | `src/components/motion/pop-title.tsx`, `hand-note.tsx`, `blobs.tsx` | baru | judul per kata, tulisan tangan per huruf, blob bernapas |
 | `src/components/sections/*` | baru, ubah | hero, fitur, hari, buka, daftar, manfaat, rak, faq, epilog |
+
+## Validasi REA
+
+`rea-agents@6.7.0 analyze-javascript-application` memetakan script dan fungsi, tetapi tidak mengekstrak parameter tween. Parameter diverifikasi dengan membaca kode langsung dan dicatat di `docs/product/reference-aardvark.md`. Koreksi yang diterapkan: callout memilih kartu per porsi horizontal (scale 1.075), header hanya turun saat intro, `gsap.defaults` 0.6, Lenis lerp 0.2.
 
 ## Motion and fallbacks
 
