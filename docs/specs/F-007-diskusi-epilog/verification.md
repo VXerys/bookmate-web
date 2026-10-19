@@ -27,7 +27,7 @@ supersedes: null
   cara mulai progress scaleY 0.68 midway; FAQ: 4 native <details>; epilog line scale 1.21 at entry -> 1.00 at centre
   ```
 - date: 2026-10-19
-- commit: uncommitted on feat/M3-signature-konversi (base 93e3e0f)
+- commit: 0c8cfaa
 - covers: [AC-001, AC-002, AC-003, AC-004, AC-005]
 
 ## Coverage

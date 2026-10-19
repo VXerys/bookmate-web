@@ -1,6 +1,6 @@
 <!-- GENERATED FILE — DO NOT EDIT. Rendered by `npm run context:render`.
 Source: sdd.config.json, docs/steering/, docs/specs/F-*/, docs/context/ASSUMPTIONS.md, docs/handoff/current.md.
-source_hash: 9037eb7bb040c971ceeef5c7cd5e51ee211ed2c7b51627f8552ef12ca5468a48 -->
+source_hash: a2b395d7d2f703001cd0bb6897b80baca1ed990ace19556cd768ace98f94133d -->
 
 # Project Progress
 

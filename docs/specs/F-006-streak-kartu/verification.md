@@ -28,7 +28,7 @@ supersedes: null
   card button: aria-pressed true, front aria-hidden true, back shows "Tamatkan minimal 3 buku bacaan."; ripple scale 22.6 while hovered
   ```
 - date: 2026-10-19
-- commit: uncommitted on feat/M3-signature-konversi (base 93e3e0f)
+- commit: 0c8cfaa
 - covers: [AC-001, AC-003, AC-004, AC-005, AC-006, AC-007]
 
 ## Coverage
