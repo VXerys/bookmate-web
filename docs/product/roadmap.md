@@ -76,3 +76,4 @@ Prinsip urutan: fondasi motion dulu (sekali benar, dipakai semua section), lalu 
 | Date | Change | Rationale | Approved by |
 |---|---|---|---|
 | 2026-10-16 | roadmap awal M1 sampai M4 | setup proyek | menunggu |
+| 2026-10-19 | semua fase dikerjakan tanpa konfirmasi per langkah; F-009 ditunda; bagian F-008 dan F-010 diblokir A-004, A-005, A-007 | instruksi pemilik | M Sechan Alfarisi (2026-10-19) |

@@ -1,13 +1,13 @@
 ---
 status: active
 owner: M Sechan Alfarisi
-session_date: 2026-10-16
-branch: main
-base_commit: none
-current_commit: uncommitted
-feature_id: F-001
-task_id: T-001
-expires_after: 2026-11-15
+session_date: 2026-10-19
+branch: feat/M4-seo-qa
+base_commit: e7f302c
+current_commit: acd87e4
+feature_id: F-010
+task_id: T-003
+expires_after: 2026-11-18
 ---
 
 # Session Handoff
@@ -16,79 +16,73 @@ Current coding session delta. It does not replace product docs, architecture, AD
 
 ## Session objective
 
-Membuat repo BookMate Web dari template SDD v2.0.0, scaffold Next.js dengan stack yang sama dengan `sechan-portfolio`, dan menulis rencana per fase (art direction, PRD, roadmap, ADR, spec F-001).
+Selesaikan semua fase roadmap tanpa menunggu konfirmasi per langkah (instruksi pemilik 2026-10-19), commit setiap fase.
 
 ## Context used
 
-- Repo app `bookmeet`: `AGENTS.md`, `docs/product/prd.md`, `lib/core/constants/app_colors.dart`, `pubspec.yaml`, `about_us_page.dart`, `proposal_rebranding_tabaca/`.
-- Repo `sechan-portfolio`: `package.json`, `next.config.ts`, `docs/steering/tech.md`, arsitektur motion di `src/components/motion/` dan `src/lib/motion/`.
-- Template `ai-assisted-sdd-project-template` tag `v2.0.0` (bukan branch WIP v2.1).
+- `docs/product/{art-direction,roadmap,prd}.md`, semua spec `docs/specs/F-00*/`
+- Repo app `bookmeet`: `reading_achievement_resolver.dart` (30 lencana), `settings_page.dart`, `help_center_data.dart`, `RELEASE_NOTES.md`, `marketing_assets/.../content.md`
 
 ## Completed
 
-- Repo dibuat dari `git archive v2.0.0`, `git init -b main`, `npm run sdd:init` (lite, nextjs, db none, tools claude + codex, bahasa Indonesia).
-- T-001: scaffold Next 16.4.2 + React 19.3 + Tailwind v4 + GSAP 3.15 + `@gsap/react` + Lenis 1.3; `src/content/site.ts` + test; CI proyek menggantikan workflow template.
-- Dokumen: `docs/product/art-direction.md`, PRD, roadmap M1 sampai M4, idea brief, glossary, steering product/tech/structure/rules, `docs/architecture/overview.md`, ADR-0001, registry F-001 sampai F-010, spec lengkap F-001, A-001 sampai A-007.
+- F-002 shell global (`bdc4c6b`), M2 F-003 sampai F-005 (`c2669d2`), M3 F-006 dan F-007 (`0c8cfaa`), M4 F-008 T-001 dan F-010 T-001, T-002 (commit ini).
+- Branch bertumpuk: `feat/F-001-fondasi-motion-core` (PR #1) -> `feat/F-002-shell-global` -> `feat/M2-cerita-utama` -> `feat/M3-signature-konversi` -> `feat/M4-seo-qa`. Hanya F-001 yang sudah di-push.
 
 ## Requirement coverage
 
-- AC-001, AC-002: pass (EV-001 sampai EV-003).
-- AC-014: belum terbukti, butuh PR pertama di GitHub.
-- AC-003 sampai AC-013: belum dimulai (T-002 sampai T-005).
+- Semua AC yang bisa dibuktikan agent sudah punya EV. Yang tersisa per fitur ada di `verification.md` masing-masing: reduced motion dan kesan gerak (cek pemilik), serta item yang diblokir assumption.
 
 ## Changed files
 
-Semua file baru; belum ada commit.
+Lihat `git log e7f302c..HEAD` dan spec F-008 sampai F-010.
 
 ## Commands executed
 
 ```bash
-npm ci && npm run lint && npm run typecheck && npm test && npm run test:sdd && npm run build && npm run context:validate -- --strict
+npm test && npm run test:sdd && npm run lint && npm run typecheck && npm run build && npm run context:validate -- --strict
 ```
 
 Result:
 
 ```text
-lint: no findings; typecheck: types generated, tsc clean
-npm test: 2 pass, 0 fail; npm run test:sdd: 34 pass, 0 fail
-build: compiled, 3 static pages (/ and /_not-found)
-Context validation passed: 0 error(s), 0 warning(s); strict
+tests 49 pass; SDD 34 pass; lint, typecheck, build exit 0; context validation passed strict (10 features)
+audit next start: security headers, OG 1200 x 630, JSON-LD, robots, one h1, landmarks, every section headed, no img without alt
+first-load JS 246.6 KB gzip, CSS 7.7 KB gzip
 ```
 
 ## Current implementation state
 
-Halaman `/` masih halaman uji polos (nama, tagline, tautan Google Play). Belum ada token, font, Lenis, atau animasi.
+Halaman `/` lengkap: sampul, header, menu, slice, cursor, Prolog, Manifesto, Buka, Bab, Streak, Kartu, Diskusi, Cara mulai, FAQ, Epilog, footer. Layar ponsel masih slot berlabel (A-002); kartu lencana tipografis tanpa gambar (A-003).
 
 ## Uncommitted work
 
-- Seluruh repo. Belum ada remote GitHub.
+- Tidak ada setelah commit ini.
 
 ## Blockers
 
-- Tidak ada untuk F-001. A-001 sampai A-007 menunggu keputusan pemilik dan memengaruhi F-003 dan seterusnya.
+- A-001 nama merek, A-002 screenshot, A-003 izin gambar lencana, A-004 domain, A-005 teks legal, A-006 tautan WhatsApp, A-007 analytics.
+- F-008 T-002 sampai T-004 dan F-010 T-003 `blocked`; F-009 `deferred` (butuh ADR-0002 dan dependency `three`).
+- Push branch M2 sampai M4 dan PR berikutnya menunggu izin pemilik.
 
 ## Decisions made during session
 
-- Nama tetap BookMate (A-001), karena rebranding Tabaca belum disetujui.
-- Konten dokumen dan UI dalam Bahasa Indonesia; teks framework template tetap Inggris.
-- Hover distortion baseline memakai filter SVG; WebGL hanya lewat F-009 dengan ADR-0002.
-- `"type": "module"` di `package.json` agar `node --test` memuat `.ts` tanpa peringatan.
+- Satu branch per milestone (M2, M3, M4) untuk kecepatan, commit per milestone.
+- Lencana diambil apa adanya dari kode app; gambar tidak dipakai sampai A-003.
+- Tidak ada CSP dulu: skrip RSC inline Next butuh nonce yang membuat halaman dinamis.
 
 ## Context updates
 
-- `npm ci` memperingatkan `allow-scripts` untuk postinstall `unrs-resolver`; lint tetap jalan. Cek di CI.
-- Template v2.0.0: `sdd:init` tidak mengganti `.github/workflows/context-integrity.yml` milik template (masih merujuk `examples/`). Sudah diganti manual di repo ini; layak jadi perbaikan di template.
+- Browser pane sesi ini tersembunyi: semua uji gerak memakai ticker GSAP manual; kesan gerak asli belum dilihat.
 
 ## Exact next step
 
-Pemilik review art direction dan roadmap, lalu commit awal. Setelah itu set T-001 ke `done` dengan hash commit di EV-001 sampai EV-003, dan jalankan `/sdd:task T-002` (token, font, gaya dasar: `src/content/palette.ts`, `src/lib/color/contrast.ts`, `src/app/globals.css`, `src/app/layout.tsx`). Verifikasi: `npm run lint && npm run typecheck && npm test && npm run build`.
+Pemilik: cek reduced motion dan kesan gerak di `next start`, jawab A-001 sampai A-007, lalu putuskan push branch bertumpuk dan PR. Setelah A-002 tersedia: ganti slot `PhoneFrame` dengan screenshot asli lewat `next/image` dan catat di `public/CREDITS.md`.
 
 ## Do not do next
 
-- Jangan mulai section (F-003 dan seterusnya) sebelum F-001 dan F-002 selesai.
-- Jangan memakai mockup AI dari `marketing_assets/` repo app atau sampul buku komersial.
-- Jangan menambah Three.js, Framer Motion, atau Locomotive tanpa ADR.
+- Jangan menulis teks kebijakan privasi sendiri (A-005).
+- Jangan menambah Three.js tanpa ADR-0002 yang disetujui.
 
 ## Validity
 
-Berlaku sampai 2026-11-15 atau sampai T-002 dimulai.
+Berlaku sampai 2026-11-18 atau sampai pemilik menjawab assumption.

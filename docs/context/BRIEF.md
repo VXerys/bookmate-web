@@ -1,6 +1,6 @@
 <!-- GENERATED FILE — DO NOT EDIT. Rendered by `npm run context:render`.
 Source: sdd.config.json, docs/steering/, docs/specs/F-*/, docs/context/ASSUMPTIONS.md, docs/handoff/current.md.
-source_hash: 2adada7da28a43eb6bbefdf6963a5d4d82ac1454623f1bf9ddcc857838463e2a -->
+source_hash: 737781f299a3dd05fabbfedfd15ec6af40e9941a1a6b9279a5e3672b9e656685 -->
 
 # Brief
 
@@ -9,15 +9,13 @@ BookMate Web adalah situs pemasaran untuk aplikasi BookMate yang mengajak pembac
 Project `BookMate Web`, tier `lite`. Rendered from sdd.config.json, docs/steering/, docs/specs/F-*/, docs/context/ASSUMPTIONS.md, docs/handoff/current.md.
 
 ## Active
-Feature F-001 — Fondasi dan motion core (`implementing`, docs/specs/F-001-fondasi-motion-core/)
-Task T-001 — Scaffold Next.js, toolchain, CI, dan sumber fakta merek (`review`); requirements: FR-001, FR-006; depends on: none
+Feature F-010 — QA dan rilis (`implementing`, docs/specs/F-010-qa-rilis/)
+Task T-003 — Deploy produksi (`blocked`); requirements: FR-003; depends on: none
 
-Scope: `package.json` (stack sama dengan `sechan-portfolio`, `"type": "module"`), `next.config.ts`, `tsconfig.json`, `eslint.config.mjs`, `.gitignore`, `src/app/{layout,page}.tsx`, `src/app/globals.css` minimal, `src/content/site.ts` + test, `.github/workflows/context-integrity.yml`. Dependency `gsap`, `@gsap/react`, `lenis` disetujui pemilik (2026-10-16). Acceptance: AC-001, AC-002, AC-014 (AC-014 baru terbukti di PR pertama). Menunggu commit pertama dan review pemilik.
+Diblokir A-004 dan persetujuan deploy pemilik. Acceptance: AC-004.
 
 Acceptance criteria:
-- AC-001: Given checkout bersih, when `npm ci`, `npm run lint`, `npm run typecheck`, `npm test`, `npm run build` dijalankan, then semuanya keluar dengan kode 0.
-- AC-002: Given `src/content/site.ts`, when test konten berjalan, then tautan Google Play memakai package id produksi dan semua field merek terisi.
-- AC-014: Given pull request ke `main`, when CI berjalan, then lint, typecheck, test konten, test SDD, build, dan `context:validate --strict` dijalankan dan gagal jika salah satu gagal.
+- AC-004: Given persetujuan pemilik dan domain (A-004), when deploy produksi, then situs dapat diakses di domain dan Lighthouse mobile memenuhi target PRD.
 
 ## Rules
 Stop conditions:
@@ -46,15 +44,21 @@ None.
 ## Handoff
 Next step:
 
-Pemilik review art direction dan roadmap, lalu commit awal. Setelah itu set T-001 ke `done` dengan hash commit di EV-001 sampai EV-003, dan jalankan `/sdd:task T-002` (token, font, gaya dasar: `src/content/palette.ts`, `src/lib/color/contrast.ts`, `src/app/globals.css`, `src/app/layout.tsx`). Verifikasi: `npm run lint && npm run typecheck && npm test && npm run build`.
+Pemilik: cek reduced motion dan kesan gerak di `next start`, jawab A-001 sampai A-007, lalu putuskan push branch bertumpuk dan PR. Setelah A-002 tersedia: ganti slot `PhoneFrame` dengan screenshot asli lewat `next/image` dan catat di `public/CREDITS.md`.
 
 ## Other open tasks
-- T-002 — Token desain, font, dan gaya dasar (`planned`)
-- T-003 — Hub GSAP, Lenis, state intro, dan boot script (`planned`)
-- T-004 — Primitive reveal teks (`planned`)
-- T-005 — Integrasi dan verifikasi fondasi (`planned`)
+None.
 
 ## Features
 | Feature | Status | Phase | Done/Total |
 |---|---|---|---|
-| F-001 Fondasi dan motion core | implementing | in_progress | 0/5 |
+| F-001 Fondasi dan motion core | implementing | in_progress | 4/5 |
+| F-002 Shell global: sampul, header, slice transition, menu, cursor, footer | verification | complete | 9/9 |
+| F-003 Prolog (hero) | verification | complete | 2/2 |
+| F-004 Manifesto dan buka aplikasi | verification | complete | 2/2 |
+| F-005 Bab horizontal | verification | complete | 2/2 |
+| F-006 Streak dan kartu pembaca | verification | complete | 2/2 |
+| F-007 Diskusi, cara mulai, FAQ, dan epilog | verification | complete | 2/2 |
+| F-008 SEO dan halaman legal | implementing | blocked | 1/4 |
+| F-009 WebGL hover distortion (opsional) | draft | complete | 0/1 |
+| F-010 QA dan rilis | implementing | blocked | 2/3 |

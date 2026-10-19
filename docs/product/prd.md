@@ -1,4 +1,4 @@
----
+verification |verification |verification |---
 id: PRD
 title: "BookMate Web"
 type: prd
@@ -88,15 +88,15 @@ Detail per phase di `docs/product/roadmap.md`.
 | Feature | Capability | Outcome | Depends on | Status |
 |---|---|---|---|---|
 | F-001 | Fondasi dan motion core | toolchain, token, font, Lenis + GSAP, reduced motion | none | implementing |
-| F-002 | Shell global | sampul, header, slice transition, cursor, footer reveal | F-001 | draft |
-| F-003 | Prolog (hero) | hero berlapis dengan CTA | F-002 | draft |
-| F-004 | Manifesto dan buka aplikasi | scrub text fill, scroll-linked scale | F-002 | draft |
-| F-005 | Bab horizontal | lima bab kemampuan | F-002 | draft |
-| F-006 | Streak dan kartu pembaca | kalender streak, dek tarot Flip + liquid | F-002 | draft |
-| F-007 | Diskusi, cara mulai, FAQ, epilog | sticky stack, marquee, CTA akhir | F-002 | draft |
-| F-008 | Legal dan SEO | privasi, hapus akun, metadata, analytics | F-001 | draft |
+| F-002 | Shell global | sampul, header, slice transition, menu, cursor, footer reveal | F-001 | verification |
+| F-003 | Prolog (hero) | hero berlapis dengan CTA | F-002 | verification |
+| F-004 | Manifesto dan buka aplikasi | scrub text fill, scroll-linked scale | F-002 | verification |
+| F-005 | Bab horizontal | lima bab kemampuan | F-002 | verification |
+| F-006 | Streak dan kartu pembaca | kalender streak, dek tarot Flip + liquid | F-002 | verification |
+| F-007 | Diskusi, cara mulai, FAQ, epilog | sticky stack, marquee, CTA akhir | F-002 | verification |
+| F-008 | Legal dan SEO | privasi, hapus akun, metadata, analytics | F-001 | implementing |
 | F-009 | WebGL hover (opsional) | shader distortion di kartu dan gambar | F-006, ADR | draft |
-| F-010 | QA dan rilis | audit performa, a11y, perangkat, deploy | semua | draft |
+| F-010 | QA dan rilis | audit performa, a11y, perangkat, deploy | semua | implementing |
 
 ## Approval
 

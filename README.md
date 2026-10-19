@@ -2,7 +2,7 @@
 
 Situs pemasaran untuk app [BookMate](https://play.google.com/store/apps/details?id=com.mangcoding.bookmate2), klub baca komunitas di Android. Konsepnya "Satu Halaman Lagi": situs terasa seperti membaca satu buku bersama, dengan preloader sampul, bab-bab yang di-scroll, dan motion editorial (GSAP + Lenis).
 
-Status: setup dan perencanaan. Lihat `docs/context/BRIEF.md` untuk task aktif.
+Status: semua section di `/` terbangun (F-001 sampai F-008 T-001, F-010 T-001 dan T-002). Menunggu: screenshot asli, izin gambar lencana, teks legal, domain, analytics (lihat `docs/context/ASSUMPTIONS.md`), dan keputusan WebGL (F-009). Detail di `docs/context/BRIEF.md`.
 
 ## Stack
 

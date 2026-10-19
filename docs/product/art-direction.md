@@ -51,7 +51,12 @@ Satu warna dominan per section, bukan gradien. Token di `src/app/globals.css` (`
 | `forest` | `#19382B` | bab Bedah Buku |
 | `slate` | `#64748B` | teks sekunder |
 
-Kontras teks wajib lolos WCAG AA di setiap pasangan latar dan teks yang dipakai.
+Kontras teks wajib lolos WCAG AA di setiap pasangan latar dan teks yang dipakai. Daftar pasangan yang diizinkan ada di `src/content/palette.ts` dan dites. Hasil ukur (F-001 T-002) yang membentuk aturan pemakaian:
+
+- `ember` adalah isian, bukan warna teks di atas `paper` (2,41:1). Teks `paper` di atas `ember` juga gagal (2,41:1), jadi tombol oranye selalu memakai teks `ink` (8,09:1).
+- `blue` dan `paper` saling 4,18:1: hanya untuk teks besar. Teks isi di bab Komunitas (latar `blue`) memakai `ink` (4,66:1).
+- `slate` di atas `paper` lolos tipis (4,53:1); di atas `peach-pale` dan `ink` hanya untuk teks besar.
+- `ember` di atas `plum` hanya teks besar (3,70:1); di atas `forest` dan `ink` aman untuk teks normal.
 
 ## Tipografi
 
