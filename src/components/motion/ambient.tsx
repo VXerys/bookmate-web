@@ -20,17 +20,21 @@ export function Ambient() {
   useGSAP(() => {
     const mm = gsap.matchMedia();
     mm.add(MOTION_OK, () => {
-      // Elements under [data-ambient-off] (the opening curtain) run their own motion, so ambient leaves them alone.
-      const pick = <T extends Element>(selector: string) => gsap.utils.toArray<T>(selector).filter((el) => !el.closest("[data-ambient-off]"));
+      const pick = <T extends Element>(selector: string) => gsap.utils.toArray<T>(selector);
       const loops: gsap.core.Animation[] = [];
+      // Loops wait for the opening to finish: running the hero's morphing swells under the cover only stole frames from
+      // the opening's sweep. Once the intro is done, every loop already on screen starts.
+      let live = false;
+      const watchers: { trigger: ScrollTrigger; animation: gsap.core.Animation }[] = [];
       const onScreen = (el: Element, animation: gsap.core.Animation) => {
         loops.push(animation);
-        ScrollTrigger.create({
+        const trigger = ScrollTrigger.create({
           trigger: el,
           start: "top bottom",
           end: "bottom top",
-          onToggle: (self) => (self.isActive ? animation.play() : animation.pause()),
+          onToggle: (self) => (live && self.isActive ? animation.play() : animation.pause()),
         });
+        watchers.push({ trigger, animation });
       };
 
       gsap.utils.toArray<SVGElement | HTMLElement>("[data-spin]").forEach((el) => {
@@ -134,6 +138,10 @@ export function Ambient() {
         });
       // whenIntroDone may call back outside this context, so its tween is killed by hand.
       let intro: gsap.core.Tween | undefined;
+      const startLoops = whenIntroDone(() => {
+        live = true;
+        watchers.forEach(({ trigger, animation }) => trigger.isActive && animation.play());
+      });
       const stop = whenIntroDone(() => {
         intro = gsap.to(introPops, { scale: 1, rotation: 0, duration: 1.2, ease: LAND, stagger: 0.12, delay: 0.7 });
       });
@@ -163,6 +171,7 @@ export function Ambient() {
 
       return () => {
         stop();
+        startLoops();
         intro?.kill();
         velocity.kill();
         straighten.kill();

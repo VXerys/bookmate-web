@@ -330,6 +330,22 @@ html.lenis body {
   }
 }
 
+/* Pure CSS so the opening mark is rising before hydration; the GSAP timeline only takes over its wrapper for the exit. */
+@keyframes sampul-rise {
+  from {
+    opacity: 0;
+    transform: translateY(40%);
+  }
+  to {
+    opacity: 1;
+    transform: none;
+  }
+}
+
+.sampul-rise {
+  animation: sampul-rise 0.9s var(--ease-expo) both;
+}
+
 /* Reveal text waits hidden only while JS is present and motion is allowed, until it has been split; visibility keeps
    its layout so SplitText measures real lines. No JS, the boot fallback, or reduced motion all leave it visible. */
 @media (prefers-reduced-motion: no-preference) {

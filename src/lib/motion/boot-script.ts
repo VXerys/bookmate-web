@@ -3,7 +3,7 @@
 // every reload after that (owner, F-014: every load and reload opens with the animation; this replaces F-002 AC-003's
 // skip), stops the browser restoring a mid-page scroll under the intro, and removes html.js again when
 // the intro has not reported "done" within the timeout, so a failed script never leaves content hidden.
-export const BOOT_FALLBACK_MS = 6000;
+export const BOOT_FALLBACK_MS = 8000;
 
 // Written by the sampul once it has played; sessionStorage keeps it per tab, so a new tab sees the full sampul again.
 export const SAMPUL_SESSION_KEY = "bm:sampul";

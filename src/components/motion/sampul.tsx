@@ -4,18 +4,19 @@ import { useRef } from "react";
 
 import { jumpToTarget, lockScroll, unlockScroll } from "@/components/motion/smooth-scroll";
 import { LogoMark } from "@/components/site/logo";
+import { site } from "@/content/site";
 import { SAMPUL_SESSION_KEY } from "@/lib/motion/boot-script";
 import { gsap, ScrollTrigger, useGSAP } from "@/lib/motion/gsap";
 import { finishIntro, isIntroDone } from "@/lib/motion/intro-state";
-import { SAMPUL_LEAD_MS, SAMPUL_OPEN_MAX_MS, SAMPUL_REPLAY_OPEN_MAX_MS, SAMPUL_SAFETY_MS, settleWaits } from "@/lib/motion/sampul-timing";
+import { SAMPUL_OPEN_MIN_MS, SAMPUL_REPLAY_OPEN_MIN_MS, SAMPUL_SAFETY_MS, settleWaits } from "@/lib/motion/sampul-timing";
 
-// The cover is three scribbles (after the reference's page transition, original paths): a giant blue stroke 70% of the
-// box wide that paints the whole screen, a lighter blue stroke over it, and a slim yellow ribbon that draws itself as
-// the loading progress. Blue leads, yellow is the accent; there is no flat backdrop at all.
+// The cover (after the reference's page transition, original paths): one giant blue scribble 70% of the box wide that
+// paints the whole screen, and a slim yellow ribbon that draws itself while the logo holds the centre. Only one large
+// stroke is ever redrawn, and its width is never animated, so the sweep stays smooth. Butt caps keep its leaving end
+// a clean diagonal instead of a giant round blob (owner: nothing round).
 const SCRIBBLE = "M-80 170C230-30 470 250 330 430S760 90 930 350 230 660 390 840 960 760 1160 1010";
-const SCRIBBLE_LIGHT = "M1160 120C860 -20 640 260 760 420S280 240 160 470 820 600 700 820 120 760 -80 1000";
-const RIBBON = "M-60 300C180 140 420 420 600 300S900 160 1140 320";
-const LIGHT = "color-mix(in srgb, var(--color-blue) 60%, var(--color-white))";
+// Sits just under the wordmark, inside the band a 16:9 screen keeps visible.
+const RIBBON = "M-60 700C220 600 420 760 640 670S960 600 1140 660";
 
 const wait = (ms: number) => new Promise<void>((resolve) => window.setTimeout(resolve, ms));
 
@@ -76,8 +77,6 @@ export function Sampul() {
     const replay = document.documentElement.dataset.sampul === "replay";
     window.scrollTo(0, 0);
     lockScroll("sampul");
-    // Slows the timeline through long frames instead of skipping ahead; Lenis turns lag smoothing off after the intro.
-    gsap.ticker.lagSmoothing(500, 33);
 
     let ended = false;
     let cancelled = false;
@@ -96,39 +95,32 @@ export function Sampul() {
     const safety = window.setTimeout(end, SAMPUL_SAFETY_MS);
 
     const q = gsap.utils.selector(el);
-    const span = (replay ? SAMPUL_REPLAY_OPEN_MAX_MS : SAMPUL_OPEN_MAX_MS) / 1000;
-    // The logo springs in (reference: scale 0, rotate -64 -> 1, 0, elastic) while the yellow ribbon draws itself as the
-    // loading progress; there is no number counter (owner, F-014).
-    const pop = gsap.fromTo(q("[data-sampul-logo]"), { scale: 0, rotate: -64 }, { scale: 1, rotate: 0, duration: 0.85, delay: 0.1, ease: "elastic.out(1, 0.72)" });
-    const counting = gsap
-      .timeline()
-      .fromTo(q("[data-sampul-ribbon]"), { drawSVG: "0%" }, { drawSVG: "90%", duration: span, ease: "power2.out" }, 0);
+    const hold = (replay ? SAMPUL_REPLAY_OPEN_MIN_MS : SAMPUL_OPEN_MIN_MS) / 1000;
+    // While the page loads underneath, the logo and wordmark rest in the centre (CSS raised them before hydration) and
+    // the yellow ribbon draws itself across the hold.
+    const drawing = gsap.fromTo(q("[data-sampul-ribbon]"), { drawSVG: "0%" }, { drawSVG: "100%", duration: hold, ease: "power1.inOut" });
 
     pageSettled(replay).then(() => {
       if (cancelled) return;
-      counting.kill();
-      const lead = SAMPUL_LEAD_MS / 1000;
-      const strokes = q("[data-sampul-brush]");
-      // One continuous move: the ribbon finishes drawing, and as it does the logo eases up and away, the three layers
-      // erase in a single overlapping sweep from the top layer down (yellow, light blue, blue) while each stroke narrows
-      // to 8% (reference: 0% 100% -> 100% 100%), and the hero starts landing while the sweep is still passing.
-      gsap
-        .timeline({ onComplete: end, defaults: { ease: "power3.inOut" } })
-        .to(q("[data-sampul-ribbon]"), { drawSVG: "100%", duration: lead * 0.5, ease: "power2.out" }, 0)
-        .addLabel("open", lead * 0.55)
-        .to(q("[data-sampul-logo]"), { yPercent: -40, scale: 0.6, rotate: 18, autoAlpha: 0, duration: 0.55, ease: "power3.in" }, "open-=0.15")
-        .to(q("[data-sampul-ribbon]"), { drawSVG: "100% 100%", duration: 0.9 }, "open")
-        .fromTo(strokes, { drawSVG: "0% 100%" }, { drawSVG: "100% 100%", duration: 1.3, stagger: { each: 0.09, from: "end" } }, "open+=0.08")
-        .to(strokes, { keyframes: { "0%": { attr: { "stroke-width": (i: number) => (i ? "30%" : "70%") } }, "95%": { attr: { "stroke-width": "8%" } } }, duration: 1.3, ease: "circ.out", stagger: { each: 0.09, from: "end" } }, "open+=0.08")
-        .call(completeIntro, [], "open+=0.45")
-        .set(el, { autoAlpha: 0 }, "open+=1.5");
+      drawing.progress(1).kill();
+      // The exit starts on a fresh frame after loading, then runs as one move: the mark lifts away, the ribbon and the
+      // scribble erase from their start (reference: 0% 100% -> 100% 100%), and the hero lands while the sweep passes.
+      window.requestAnimationFrame(() => {
+        if (cancelled) return;
+        gsap
+          .timeline({ onComplete: end, defaults: { ease: "power2.inOut" } })
+          .to(q("[data-sampul-mark]"), { yPercent: -60, autoAlpha: 0, duration: 0.6, ease: "power3.in" }, 0)
+          .to(q("[data-sampul-ribbon]"), { drawSVG: "100% 100%", duration: 0.8 }, 0.1)
+          .fromTo(q("[data-sampul-brush]"), { drawSVG: "0% 100%" }, { drawSVG: "100% 100%", duration: 1.2 }, 0.25)
+          .call(completeIntro, [], 0.7)
+          .set(el, { autoAlpha: 0 }, 1.5);
+      });
     });
 
     // Releases only what this run holds, so a remount (React Strict Mode in development) replays the sampul cleanly.
     return () => {
       cancelled = true;
-      pop.kill();
-      counting.kill();
+      drawing.kill();
       window.clearTimeout(safety);
       unlockScroll("sampul");
     };
@@ -136,17 +128,22 @@ export function Sampul() {
 
   return (
     <div ref={root} className="sampul fixed inset-0 z-[90] overflow-hidden" aria-hidden="true">
-      {/* The two blue strokes are fully drawn by default, so before hydration they already cover the screen; the yellow
-          ribbon starts undrawn. Later paths paint on top: blue, then light blue, then yellow. */}
+      {/* The scribble is fully drawn by default, so before hydration it already covers the screen. */}
       <svg viewBox="0 0 1080 1080" preserveAspectRatio="xMidYMid slice" className="absolute inset-0 h-full w-full">
-        <path data-sampul-brush d={SCRIBBLE} fill="none" stroke="var(--color-blue)" strokeWidth="70%" strokeLinecap="round" strokeLinejoin="round" />
-        <path data-sampul-brush d={SCRIBBLE_LIGHT} fill="none" stroke={LIGHT} strokeWidth="30%" strokeLinecap="round" strokeLinejoin="round" />
-        <path data-sampul-ribbon d={RIBBON} fill="none" stroke="var(--color-highlight)" strokeWidth="9%" strokeLinecap="round" strokeLinejoin="round" style={{ strokeDasharray: "0 99999" }} />
+        <path data-sampul-brush d={SCRIBBLE} fill="none" stroke="var(--color-blue)" strokeWidth="70%" strokeLinecap="butt" strokeLinejoin="round" />
+        <path data-sampul-ribbon d={RIBBON} fill="none" stroke="var(--color-highlight)" strokeWidth="5%" strokeLinecap="round" style={{ strokeDasharray: "0 99999" }} />
       </svg>
-      <div className="absolute inset-0 grid place-items-center">
-        <span data-sampul-logo className="block drop-shadow-[0_18px_30px_rgb(3_4_10/0.35)]">
-          <LogoMark className="w-[clamp(5.5rem,10vw,8.5rem)] text-white" />
+      <div data-sampul-mark className="absolute inset-0 flex flex-col items-center justify-center gap-4">
+        <span className="sampul-rise block">
+          <LogoMark className="w-[clamp(4.5rem,7vw,6rem)] text-white" />
         </span>
+        <p className="display flex overflow-hidden pb-[0.08em] text-[clamp(2.75rem,6vw,5rem)] text-white">
+          {[...site.name].map((letter, index) => (
+            <span key={`${letter}-${index}`} className="sampul-rise inline-block" style={{ animationDelay: `${0.15 + index * 0.045}s` }}>
+              {letter}
+            </span>
+          ))}
+        </p>
       </div>
     </div>
   );
