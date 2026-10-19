@@ -105,47 +105,41 @@ html.lenis body {
   transition-behavior: allow-discrete;
 }
 
-/* Bab track (F-005): BabTrack sets data-horizontal only on wide screens with motion allowed; otherwise panels stack. */
-.bab[data-horizontal] [data-bab-track] {
-  flex-direction: row;
-  width: max-content;
+/* Hari (F-012): the pinned book needs JS, a wide screen, and motion; everyone else reads the stacked pages. */
+.hari-book,
+.hari-sky {
+  display: none;
 }
 
-.bab[data-horizontal] [data-bab-panel] {
-  width: 100vw;
-  flex-shrink: 0;
+@media (min-width: 1024px) and (prefers-reduced-motion: no-preference) {
+  html.js .hari-book {
+    display: flex;
+  }
+
+  html.js .hari-sky {
+    display: block;
+  }
+
+  html.js .hari-stack {
+    display: none;
+  }
 }
 
-.bab[data-horizontal] .bab-indicator {
-  display: block;
+/* Rak (F-012): a pointer lifts a spine and the open one stands proud; translate and rotate compose with the GSAP
+   transform used for the drop-in, so the two never fight. */
+.spine {
+  transition:
+    translate 0.45s var(--ease-expo),
+    rotate 0.45s var(--ease-expo);
 }
 
-/* Streak calendar (F-006): a filled day is an ember square; all days start filled so no-JS shows the full month. */
-.streak-day[data-on] {
-  background: var(--color-ember);
-  border-color: var(--color-ember);
+.spine:hover {
+  translate: 0 -14px;
 }
 
-/* Badge deck (F-006): flipping is a 3D turn, instant under reduced motion through the global transition override. */
-.card-inner {
-  transform-style: preserve-3d;
-  transition: transform 0.7s var(--ease-expo);
-}
-
-.card-inner[data-flipped] {
-  transform: rotateY(180deg);
-}
-
-.card-face {
-  backface-visibility: hidden;
-}
-
-.card-back {
-  transform: rotateY(180deg);
-}
-
-.card.is-rippling .card-front {
-  filter: url(#liquid-ripple);
+.spine[aria-expanded="true"] {
+  translate: 0 -28px;
+  rotate: -2deg;
 }
 
 /* Ring states for the custom cursor; the GSAP-moved wrapper keeps x/y, the inner circle owns the scale. */
@@ -231,6 +225,21 @@ html.lenis body {
     font-style: italic;
     font-weight: 400;
     letter-spacing: -0.01em;
+  }
+
+  /* Faint ruled lines, like a notebook page under the hero. */
+  .ruled {
+    background-image: repeating-linear-gradient(to bottom, transparent 0 47px, rgb(3 4 10 / 0.06) 47px 48px);
+  }
+
+  /* A pen stroke through a phrase; GSAP tweens --strike, and without JS or motion the stroke is simply there. */
+  .mark-strike {
+    background-image: linear-gradient(var(--color-ember), var(--color-ember));
+    background-repeat: no-repeat;
+    background-position: 0 60%;
+    background-size: var(--strike, 100%) 0.1em;
+    box-decoration-break: clone;
+    -webkit-box-decoration-break: clone;
   }
 
   /* A club member's margin note. */

@@ -16,6 +16,9 @@ const ACCENT: Record<BookTone, string> = {
   sky: "var(--color-blue)",
 };
 
+// Trig results can differ in the last digit between server and browser; rounding keeps hydration identical.
+const r2 = (value: number) => Math.round(value * 100) / 100;
+
 function Pattern({ pattern, color, id }: { pattern: BookPattern; color: string; id: string }) {
   switch (pattern) {
     case "stripes":
@@ -49,7 +52,7 @@ function Pattern({ pattern, color, id }: { pattern: BookPattern; color: string; 
           <g stroke={color} strokeWidth="5" strokeLinecap="round">
             {Array.from({ length: 10 }, (_, i) => {
               const a = (i / 10) * Math.PI * 2;
-              return <line key={i} x1={66 + Math.cos(a) * 36} y1={70 + Math.sin(a) * 36} x2={66 + Math.cos(a) * 48} y2={70 + Math.sin(a) * 48} />;
+              return <line key={i} x1={r2(66 + Math.cos(a) * 36)} y1={r2(70 + Math.sin(a) * 36)} x2={r2(66 + Math.cos(a) * 48)} y2={r2(70 + Math.sin(a) * 48)} />;
             })}
           </g>
         </g>

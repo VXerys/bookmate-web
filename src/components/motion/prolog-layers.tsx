@@ -2,13 +2,16 @@
 
 import { useRef } from "react";
 
+import { BookCover } from "@/components/art/books";
+import { Sparkle, Tape } from "@/components/art/doodles";
 import { PhoneFrame } from "@/components/site/phone-frame";
 import { prolog } from "@/content/story";
+import { drawDoodle, prepareDoodles, revealDoodles } from "@/lib/motion/draw";
 import { EASE_OUT, gsap, MOTION_OK, POINTER_MOTION, useGSAP } from "@/lib/motion/gsap";
 import { whenIntroDone } from "@/lib/motion/intro-state";
 
 // Each layer has two wrappers: the outer one takes scroll parallax (yPercent) and the entrance (y), the inner one takes
-// pointer parallax (x, y), so no two effects write the same property (F-003 design).
+// pointer parallax (x, y), so no two effects write the same property (F-003 design). Deeper layers move more.
 export function PrologLayers() {
   const root = useRef<HTMLDivElement>(null);
 
@@ -23,23 +26,41 @@ export function PrologLayers() {
       const mm = gsap.matchMedia();
       mm.add(MOTION_OK, () => {
         let stopWaiting = () => {};
+        let intro: gsap.core.Timeline | undefined;
         if (document.documentElement.classList.contains("js")) {
+          prepareDoodles(el);
           stopWaiting = whenIntroDone(() => {
             el.dataset.revealReady = "";
-            gsap.from(layers, { y: 70, autoAlpha: 0, duration: 1.2, ease: EASE_OUT, stagger: 0.12, delay: 0.35 });
+            intro = gsap
+              .timeline({ delay: 0.3 })
+              .from(layers, {
+                y: (i: number) => 90 + i * 20,
+                rotation: (i: number) => (i % 2 ? 8 : -8),
+                autoAlpha: 0,
+                duration: 1.3,
+                ease: EASE_OUT,
+                stagger: 0.09,
+              })
+              .add(
+                gsap.utils.toArray<Element>("[data-draw]", el).map((doodle) => drawDoodle(doodle, { duration: 0.8 })),
+                0.9,
+              );
           });
         } else {
           el.dataset.revealReady = "";
         }
         layers.forEach((layer) => {
           gsap.to(layer, {
-            yPercent: -40 * depth(layer),
+            yPercent: -45 * depth(layer),
             ease: "none",
-            scrollTrigger: { trigger: section, start: "top top", end: "bottom top", scrub: true },
+            scrollTrigger: { trigger: section, start: "top top", end: "bottom top", scrub: 0.8 },
           });
         });
         return () => {
           stopWaiting();
+          intro?.kill();
+          gsap.set(layers, { clearProps: "transform,opacity,visibility" });
+          revealDoodles(el);
           delete el.dataset.revealReady;
         };
       });
@@ -58,8 +79,8 @@ export function PrologLayers() {
           const nx = event.clientX / window.innerWidth - 0.5;
           const ny = event.clientY / window.innerHeight - 0.5;
           for (const mover of movers) {
-            mover.x(nx * 60 * mover.depth);
-            mover.y(ny * 40 * mover.depth);
+            mover.x(nx * 70 * mover.depth);
+            mover.y(ny * 46 * mover.depth);
           }
         };
         window.addEventListener("pointermove", onMove);
@@ -72,22 +93,43 @@ export function PrologLayers() {
   );
 
   return (
-    <div ref={root} data-reveal="" className="relative mx-auto h-[min(78svh,620px)] w-full max-w-[520px]" aria-hidden="true">
-      {/* Centred with flex, not translate utilities: GSAP owns this element's transform (yPercent). */}
-      <div data-depth="0.3" className="absolute inset-0 flex items-center justify-center">
-        <div className="w-[min(62vw,270px)]">
-          <PhoneFrame screen={prolog.screen} eager decorative sizes="(min-width: 768px) 270px, 62vw" />
+    <div ref={root} data-reveal="" className="relative mx-auto h-[min(80svh,640px)] w-full max-w-[560px]" aria-hidden="true">
+      {/* Positioned with insets, not translate utilities: GSAP owns each layer's transform. */}
+      <div data-depth="1.1" className="absolute top-[4%] left-[2%] w-[24%]">
+        <div className="-rotate-12">
+          <BookCover tone="ember" pattern="sun" id="prolog-a" className="w-full drop-shadow-[6px_8px_0_var(--color-ink)]" />
         </div>
       </div>
-      <div data-depth="0.8" className="absolute top-[12%] left-0">
-        <div className="rounded-full bg-ember px-4 py-2 text-sm font-medium text-ink shadow-lg">{prolog.chips.streak}</div>
+      <div data-depth="0.7" className="absolute right-[0%] bottom-[8%] w-[26%]">
+        <div className="rotate-[14deg]">
+          <BookCover tone="plum" pattern="dots" id="prolog-b" className="w-full drop-shadow-[6px_8px_0_var(--color-ink)]" />
+        </div>
       </div>
-      <div data-depth="1" className="absolute bottom-[14%] left-[2%]">
-        <div className="rounded-2xl border border-ink/10 bg-paper px-4 py-3 text-sm text-ink shadow-lg">{prolog.chips.progress}</div>
+      <div data-depth="0.35" className="absolute inset-0 flex items-center justify-center">
+        <div className="w-[min(58vw,262px)] rotate-[4deg]">
+          <PhoneFrame screen={prolog.screen} eager decorative sizes="(min-width: 768px) 262px, 58vw" />
+        </div>
       </div>
-      <div data-depth="0.6" className="absolute top-[22%] right-0">
-        <div className="flex h-36 w-24 flex-col justify-end rounded-xl bg-plum p-3 text-paper shadow-lg">
-          <span className="label">{prolog.chips.badge}</span>
+      <div data-depth="0.9" className="absolute top-[16%] right-[2%]">
+        <div className="relative w-40 rotate-[5deg] rounded-sm bg-peach px-4 pt-6 pb-4 text-ink shadow-[4px_6px_0_var(--color-ink)]">
+          <Tape className="absolute -top-3 left-1/2 w-20 -translate-x-1/2 -rotate-3" />
+          <p className="hand text-2xl">{prolog.notes.page}</p>
+        </div>
+      </div>
+      <div data-depth="0.6" className="absolute bottom-[12%] left-[0%]">
+        <div className="relative w-44 -rotate-[6deg] rounded-sm bg-sky px-4 pt-6 pb-4 text-ink shadow-[4px_6px_0_var(--color-ink)]">
+          <Tape className="absolute -top-3 left-6 w-16 rotate-6" />
+          <p className="hand text-2xl">{prolog.notes.club}</p>
+        </div>
+      </div>
+      <div data-depth="1.3" className="absolute top-[2%] right-[30%]">
+        <div>
+          <Sparkle className="size-14 text-blue" />
+        </div>
+      </div>
+      <div data-depth="1.2" className="absolute bottom-[2%] left-[42%]">
+        <div>
+          <Sparkle className="size-10 text-ember" />
         </div>
       </div>
     </div>

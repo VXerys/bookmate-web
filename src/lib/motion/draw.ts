@@ -2,6 +2,8 @@ import { gsap } from "./gsap.ts";
 
 // The strokes inside a doodle that DrawSVG can draw; fills (highlighter swipes) are scaled instead.
 const STROKES = "path, line, polyline, circle, ellipse";
+// A doodle is either a group of strokes or, like the mulai ribbon, a single stroke carrying data-draw itself.
+const strokesOf = (doodle: Element) => (doodle.matches(STROKES) ? [doodle] : [...doodle.querySelectorAll(STROKES)]);
 
 /**
  * Puts every doodle under `root` in its undrawn state and lifts the CSS hiding rule (data-draw-ready), so the
@@ -10,7 +12,7 @@ const STROKES = "path, line, polyline, circle, ellipse";
 export function prepareDoodles(root: ParentNode) {
   const doodles = gsap.utils.toArray<SVGElement>("[data-draw]", root);
   doodles.forEach((doodle) => {
-    gsap.set(doodle.querySelectorAll(STROKES), { drawSVG: "0%" });
+    gsap.set(strokesOf(doodle), { drawSVG: "0%" });
     doodle.setAttribute("data-draw-ready", "");
   });
   const highlights = gsap.utils.toArray<SVGElement>("[data-highlight]", root);
@@ -20,7 +22,7 @@ export function prepareDoodles(root: ParentNode) {
 
 /** Tween that draws one doodle stroke by stroke, like a pen that does not lift for long. */
 export function drawDoodle(doodle: Element, vars: gsap.TweenVars = {}) {
-  return gsap.to(doodle.querySelectorAll(STROKES), {
+  return gsap.to(strokesOf(doodle), {
     drawSVG: "100%",
     duration: 0.9,
     ease: "power2.inOut",
@@ -37,7 +39,7 @@ export function sweepHighlight(highlight: Element, vars: gsap.TweenVars = {}) {
 /** Removes the undrawn state, for teardown and the reduced-motion branch. */
 export function revealDoodles(root: ParentNode) {
   gsap.utils.toArray<SVGElement>("[data-draw]", root).forEach((doodle) => {
-    gsap.set(doodle.querySelectorAll(STROKES), { clearProps: "strokeDasharray,strokeDashoffset" });
+    gsap.set(strokesOf(doodle), { clearProps: "strokeDasharray,strokeDashoffset" });
   });
   gsap.set(gsap.utils.toArray("[data-highlight]", root), { clearProps: "transform" });
 }

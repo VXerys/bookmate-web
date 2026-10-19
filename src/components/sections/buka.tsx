@@ -2,6 +2,7 @@
 
 import { useRef } from "react";
 
+import { Sparkle } from "@/components/art/doodles";
 import { PhoneFrame } from "@/components/site/phone-frame";
 import { buka } from "@/content/story";
 import { gsap, MOTION_OK, useGSAP } from "@/lib/motion/gsap";
@@ -29,6 +30,7 @@ export function Buka() {
           .to(frame, { scale: grow }, 0)
           .to("[data-buka-lead]", { y: () => -part(), autoAlpha: 0 }, 0)
           .to("[data-buka-tail]", { y: part, autoAlpha: 0 }, 0)
+          .to("[data-buka-note]", { x: 60, autoAlpha: 0 }, 0)
           .fromTo("[data-buka-frame] [data-phone-screen]", { scale: 1.12 }, { scale: 1 }, 0);
       });
       return () => mm.revert();
@@ -55,6 +57,10 @@ export function Buka() {
         </span>
       </p>
       <div className="pointer-events-none absolute inset-0 z-10 flex items-center justify-center">
+        <p data-buka-note className="hand absolute top-1/2 left-[calc(50%+min(13svh,8.5rem))] hidden -rotate-6 text-3xl text-blue md:flex md:items-center md:gap-2">
+          <Sparkle data-draw={undefined} className="size-10 text-ember" />
+          {buka.note}
+        </p>
         <div data-buka-frame className="aspect-[9/20] h-(--buka-phone) will-change-transform">
           <PhoneFrame screen={buka.screen} sizes="(min-width: 1024px) 480px, 80vw" />
         </div>

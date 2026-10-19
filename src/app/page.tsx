@@ -1,13 +1,12 @@
-import { BabTrack } from "@/components/sections/bab-track";
 import { Buka } from "@/components/sections/buka";
-import { Diskusi } from "@/components/sections/diskusi";
 import { Epilog } from "@/components/sections/epilog";
 import { Faq } from "@/components/sections/faq";
-import { Kartu } from "@/components/sections/kartu";
+import { Hari } from "@/components/sections/hari";
 import { Manifesto } from "@/components/sections/manifesto";
 import { Mulai } from "@/components/sections/mulai";
+import { Papan } from "@/components/sections/papan";
 import { Prolog } from "@/components/sections/prolog";
-import { Streak } from "@/components/sections/streak";
+import { Rak } from "@/components/sections/rak";
 import { mobileApplicationJsonLd } from "@/lib/structured-data";
 
 // Section order follows docs/product/art-direction.md and src/content/navigation.ts.
@@ -19,10 +18,9 @@ export default function Home() {
       <Prolog />
       <Manifesto />
       <Buka />
-      <BabTrack />
-      <Streak />
-      <Kartu />
-      <Diskusi />
+      <Hari />
+      <Rak />
+      <Papan />
       <Mulai />
       <Faq />
       <Epilog />
