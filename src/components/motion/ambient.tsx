@@ -2,7 +2,6 @@
 
 import { useGSAP } from "@gsap/react";
 
-import { jumpToTarget } from "@/components/motion/smooth-scroll";
 import { gsap, LAND, MOTION_OK, ScrollTrigger } from "@/lib/motion/gsap";
 import { whenIntroDone } from "@/lib/motion/intro-state";
 
@@ -180,19 +179,7 @@ export function Ambient() {
       };
     });
 
-    // A refresh on a chapter link (#komunitas) lets the browser jump before the pinned scenes add their spacers, which
-    // lands the reader in the wrong place; once every trigger has measured, jump again to the same chapter.
-    const target = window.location.hash.length > 1 ? document.getElementById(decodeURIComponent(window.location.hash.slice(1))) : null;
-    let settle = 0;
-    if (target) {
-      settle = window.requestAnimationFrame(() => {
-        ScrollTrigger.refresh();
-        jumpToTarget(target);
-      });
-    }
-
     return () => {
-      window.cancelAnimationFrame(settle);
       mm.revert();
     };
   });

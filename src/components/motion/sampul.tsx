@@ -8,15 +8,36 @@ import { site } from "@/content/site";
 import { SAMPUL_SESSION_KEY } from "@/lib/motion/boot-script";
 import { gsap, ScrollTrigger, useGSAP } from "@/lib/motion/gsap";
 import { finishIntro, isIntroDone } from "@/lib/motion/intro-state";
-import { SAMPUL_OPEN_MIN_MS, SAMPUL_REPLAY_OPEN_MIN_MS, SAMPUL_SAFETY_MS, settleWaits } from "@/lib/motion/sampul-timing";
+import { SAMPUL_SAFETY_MS, settleWaits } from "@/lib/motion/sampul-timing";
 
-// The cover (after the reference's page transition, original paths): one giant blue scribble 70% of the box wide that
-// paints the whole screen, and a slim yellow ribbon that draws itself while the logo holds the centre. Only one large
-// stroke is ever redrawn, and its width is never animated, so the sweep stays smooth. Butt caps keep its leaving end
-// a clean diagonal instead of a giant round blob (owner: nothing round).
-const SCRIBBLE = "M-80 170C230-30 470 250 330 430S760 90 930 350 230 660 390 840 960 760 1160 1010";
-// Sits just under the wordmark, inside the band a 16:9 screen keeps visible.
-const RIBBON = "M-60 700C220 600 420 760 640 670S960 600 1140 660";
+// The cover is a wave curtain (after the "Shape Overlays" transition pattern, Codrops): three stacked layers, blue on
+// top, a lighter blue and the yellow behind it. Each layer is a solid block moved with a transform (composited, cheap)
+// that drags a short strip below it: the strip's top is flat against the block and its lower edge is a wave whose swell
+// peaks mid-move and settles while its phase keeps flowing sideways. Only those strips are repainted per frame. The
+// layers follow one another on the same wave train, so the edges read as one current that lands on the hero's swells.
+const LAYERS = [
+  { key: "sun", fill: "var(--color-highlight)", delay: 0.28 },
+  { key: "sky", fill: "color-mix(in srgb, var(--color-blue) 55%, var(--color-white))", delay: 0.14 },
+  { key: "sea", fill: "var(--color-blue)", delay: 0 },
+] as const;
+const r2 = (value: number) => Math.round(value * 100) / 100;
+
+// The strip for progress t in a 100x40 box: flat top, wavy bottom. Nine samples joined with Catmull-Rom curves.
+function edge(t: number) {
+  const amp = 14 * Math.sin(Math.PI * t);
+  const phase = t * Math.PI * 1.8;
+  const pts = Array.from({ length: 11 }, (_, i) => {
+    const x = (i - 1) * 12.5;
+    return [x, 18 + amp * Math.sin((x / 100) * Math.PI * 2.4 + phase)] as const;
+  });
+  let d = `M0 0H100V${r2(pts[9][1])}`;
+  for (let i = 9; i > 1; i -= 1) {
+    const [p0, p1, p2, p3] = [pts[i + 1], pts[i], pts[i - 1], pts[i - 2]];
+    d += ` C${r2(p1[0] + (p2[0] - p0[0]) / 6)} ${r2(p1[1] + (p2[1] - p0[1]) / 6)} ${r2(p2[0] - (p3[0] - p1[0]) / 6)} ${r2(p2[1] - (p3[1] - p1[1]) / 6)} ${r2(p2[0])} ${r2(p2[1])}`;
+  }
+  return `${d}Z`;
+}
+const FLAT = "M0 0H100V18H0Z";
 
 const wait = (ms: number) => new Promise<void>((resolve) => window.setTimeout(resolve, ms));
 
@@ -45,6 +66,8 @@ function jumpToHash() {
   const id = decodeURIComponent(window.location.hash.slice(1));
   const target = id ? document.getElementById(id) : null;
   if (target) jumpToTarget(target);
+  // Honoured once, then cleared, so a later refresh opens at the top (owner, F-014).
+  if (window.location.hash) window.history.replaceState(null, "", window.location.pathname + window.location.search);
 }
 
 function rememberSampul() {
@@ -95,32 +118,35 @@ export function Sampul() {
     const safety = window.setTimeout(end, SAMPUL_SAFETY_MS);
 
     const q = gsap.utils.selector(el);
-    const hold = (replay ? SAMPUL_REPLAY_OPEN_MIN_MS : SAMPUL_OPEN_MIN_MS) / 1000;
-    // While the page loads underneath, the logo and wordmark rest in the centre (CSS raised them before hydration) and
-    // the yellow ribbon draws itself across the hold.
-    const drawing = gsap.fromTo(q("[data-sampul-ribbon]"), { drawSVG: "0%" }, { drawSVG: "100%", duration: hold, ease: "power1.inOut" });
+    const layers = gsap.utils.toArray<HTMLElement>("[data-sampul-layer]", el);
+    const edges = layers.map((layer) => layer.querySelector<SVGPathElement>("path"));
+    const states = layers.map(() => ({ t: 0 }));
+    // Each layer travels its own height plus its strip, so the wave clears the top of the screen.
+    const travel = () => -(window.innerHeight * 1.25);
+    const draw = () =>
+      layers.forEach((layer, i) => {
+        const t = states[i].t;
+        layer.style.transform = `translate3d(0, ${r2(travel() * t)}px, 0)`;
+        edges[i]?.setAttribute("d", t <= 0 || t >= 1 ? FLAT : edge(t));
+      });
 
     pageSettled(replay).then(() => {
       if (cancelled) return;
-      drawing.progress(1).kill();
-      // The exit starts on a fresh frame after loading, then runs as one move: the mark lifts away, the ribbon and the
-      // scribble erase from their start (reference: 0% 100% -> 100% 100%), and the hero lands while the sweep passes.
+      // The exit starts on a fresh frame after loading: the mark drifts up and fades, the layers lift one after another
+      // on the same flowing wave (1.7 s each, unhurried but not dragging), and the hero lands as the last one clears.
       window.requestAnimationFrame(() => {
         if (cancelled) return;
-        gsap
-          .timeline({ onComplete: end, defaults: { ease: "power2.inOut" } })
-          .to(q("[data-sampul-mark]"), { yPercent: -60, autoAlpha: 0, duration: 0.6, ease: "power3.in" }, 0)
-          .to(q("[data-sampul-ribbon]"), { drawSVG: "100% 100%", duration: 0.8 }, 0.1)
-          .fromTo(q("[data-sampul-brush]"), { drawSVG: "0% 100%" }, { drawSVG: "100% 100%", duration: 1.2 }, 0.25)
-          .call(completeIntro, [], 0.7)
-          .set(el, { autoAlpha: 0 }, 1.5);
+        const tl = gsap.timeline({ onComplete: end, onUpdate: draw });
+        tl.to(q("[data-sampul-mark]"), { yPercent: -45, autoAlpha: 0, duration: 0.7, ease: "power2.in" }, 0);
+        // DOM order is sun, sky, sea (sea paints on top); the sea leaves first.
+        LAYERS.forEach((layer, i) => tl.to(states[i], { t: 1, duration: 1.7, ease: "power2.inOut" }, 0.25 + layer.delay));
+        tl.call(completeIntro, [], 1.35).set(el, { autoAlpha: 0 }, 2.3);
       });
     });
 
     // Releases only what this run holds, so a remount (React Strict Mode in development) replays the sampul cleanly.
     return () => {
       cancelled = true;
-      drawing.kill();
       window.clearTimeout(safety);
       unlockScroll("sampul");
     };
@@ -128,11 +154,14 @@ export function Sampul() {
 
   return (
     <div ref={root} className="sampul fixed inset-0 z-[90] overflow-hidden" aria-hidden="true">
-      {/* The scribble is fully drawn by default, so before hydration it already covers the screen. */}
-      <svg viewBox="0 0 1080 1080" preserveAspectRatio="xMidYMid slice" className="absolute inset-0 h-full w-full">
-        <path data-sampul-brush d={SCRIBBLE} fill="none" stroke="var(--color-blue)" strokeWidth="70%" strokeLinecap="butt" strokeLinejoin="round" />
-        <path data-sampul-ribbon d={RIBBON} fill="none" stroke="var(--color-highlight)" strokeWidth="5%" strokeLinecap="round" style={{ strokeDasharray: "0 99999" }} />
-      </svg>
+      {/* Every layer starts as a full cover, so before hydration the screen is already blue. */}
+      {LAYERS.map((layer) => (
+        <div key={layer.key} data-sampul-layer className="absolute inset-0 will-change-transform" style={{ background: layer.fill }}>
+          <svg viewBox="0 0 100 40" preserveAspectRatio="none" className="absolute inset-x-0 top-full -mt-px h-[25vh] w-full">
+            <path d={FLAT} style={{ fill: layer.fill }} />
+          </svg>
+        </div>
+      ))}
       <div data-sampul-mark className="absolute inset-0 flex flex-col items-center justify-center gap-4">
         <span className="sampul-rise block">
           <LogoMark className="w-[clamp(4.5rem,7vw,6rem)] text-white" />

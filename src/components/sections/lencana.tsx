@@ -51,9 +51,10 @@ export function Lencana() {
           y: (i: number) => toDeck(cards[i]).y,
           rotation: (i: number) => (i % 2 ? 14 : -14),
           scale: 0.8,
-          ease: "power2.inOut",
-          stagger: 0.12,
-          scrollTrigger: { trigger: grid, start: "top 80%", end: "center 55%", scrub: 0.8, invalidateOnRefresh: true },
+          ease: "power1.inOut",
+          stagger: 0.3,
+          // A long scroll range and a heavy scrub, so the cards glide out of the deck one by one (owner: too fast before).
+          scrollTrigger: { trigger: grid, start: "top 90%", end: "bottom 60%", scrub: 1.6, invalidateOnRefresh: true },
         });
       });
       // A card held under a fine pointer tilts toward it (under 7 degrees), like turning a real card to the light.
@@ -102,7 +103,7 @@ export function Lencana() {
           </HandNote>
         </div>
 
-        <div className="relative mx-auto mt-12 max-w-5xl">
+        <div className="relative mx-auto mt-12 max-w-[52rem]">
           <div className="absolute -top-12 -right-2 z-20 w-24 lg:-top-16 lg:right-[-3%] lg:w-32">
             <div data-pop>
               <Starburst tone="highlight" text="navy" spin={-14} className="aspect-square w-full rotate-12 font-display text-base lg:text-xl">
@@ -110,7 +111,7 @@ export function Lencana() {
               </Starburst>
             </div>
           </div>
-          <ul data-deck className="grid grid-cols-2 gap-4 [perspective:1600px] sm:gap-6 lg:grid-cols-3">
+          <ul data-deck className="grid grid-cols-2 gap-x-4 gap-y-6 [perspective:1600px] sm:gap-x-8 sm:gap-y-10 lg:grid-cols-3">
             {hand.map((badge, index) => {
               const isFlipped = Boolean(flipped[badge.code]);
               return (

@@ -38,8 +38,8 @@ function focusSection(section: HTMLElement) {
 function land(section: HTMLElement) {
   jumpToTarget(section);
   ScrollTrigger.update();
-  // pushState instead of location.hash, so the browser does not run its own second jump (AC-010).
-  if (window.location.hash !== `#${section.id}`) window.history.pushState(null, "", `#${section.id}`);
+  // The URL keeps no hash (owner, F-014): a refresh after a jump should start at the top, not at the last chapter.
+  if (window.location.hash) window.history.replaceState(null, "", window.location.pathname + window.location.search);
   focusSection(section);
 }
 

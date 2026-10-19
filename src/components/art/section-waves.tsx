@@ -68,11 +68,11 @@ const VARIANTS: Record<Variant, { ground: string; swells: readonly Swell[] }> = 
   },
   // Night sea under the tarot cards: deep gradient swells with a thin yellow crest.
   lencana: {
-    ground: `radial-gradient(120% 80% at 50% 0%, ${mix(BLUE, 30, NAVY)} 0%, ${NAVY} 60%)`,
+    ground: `radial-gradient(55% 45% at 50% 42%, ${mix(BLUE, 45, NAVY)} 0%, transparent 100%), linear-gradient(180deg, ${mix(BLUE, 18, NAVY)} 0%, ${NAVY} 55%, ${mix(NAVY, 80, "black")} 100%)`,
     swells: [
-      { id: "mist", from: "top", base: 200, rise: 80, amplitude: 40, humps: 2, top: "none", bottom: "none", crest: WHITE, crestOpacity: 0.08, crestWidth: 1.5, speed: 0.04 },
-      { id: "swell", base: 660, rise: 200, amplitude: 52, humps: 3, top: mix(BLUE, 34, NAVY), bottom: mix(BLUE, 12, NAVY), crest: YELLOW, crestOpacity: 0.65, crestWidth: 2, speed: 0.08 },
-      { id: "deep", base: 820, rise: -120, amplitude: 30, humps: 4, top: mix(BLUE, 20, NAVY), bottom: NAVY, crest: WHITE, crestOpacity: 0.12, crestWidth: 1.5, speed: 0.14 },
+      { id: "far", base: 600, rise: 140, amplitude: 70, humps: 1.25, top: mix(BLUE, 30, NAVY), bottom: mix(BLUE, 12, NAVY), crest: WHITE, crestOpacity: 0.1, crestWidth: 1.5, speed: 0.05 },
+      { id: "mid", base: 730, rise: -160, amplitude: 60, humps: 1.5, top: mix(BLUE, 22, NAVY), bottom: NAVY, crest: YELLOW, crestOpacity: 0.7, crestWidth: 1.5, speed: 0.1 },
+      { id: "near", base: 860, rise: 90, amplitude: 40, humps: 1.75, top: mix(NAVY, 85, "black"), bottom: mix(NAVY, 70, "black"), crest: WHITE, crestOpacity: 0, speed: 0.16 },
     ],
   },
 };

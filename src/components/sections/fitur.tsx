@@ -68,7 +68,7 @@ export function Fitur() {
         });
         // The phones lean with the scroll as the list passes, opposite ways, like the reference's tilted covers.
         cards.forEach((card, i) => {
-          gsap.fromTo(card, { y: 60, rotation: i ? 14 : -14 }, { y: -60, rotation: i ? 6 : -6, ease: "none", scrollTrigger: { trigger: "[data-list]", start: "top bottom", end: "bottom top", scrub: 1 } });
+          gsap.fromTo(card, { y: 60, rotationY: i ? -10 : 10 }, { y: -60, rotationY: i ? 8 : -8, ease: "none", scrollTrigger: { trigger: "[data-list]", start: "top bottom", end: "bottom top", scrub: 1 } });
         });
         return () => offs.forEach((off) => off());
       });
@@ -93,14 +93,27 @@ export function Fitur() {
           {/* Decorative: the screenshots show what each feature looks like; the words and descriptions carry the meaning.
               The phones ride a sticky layer, so they stay level with the middle of the screen while the list scrolls. */}
           <div className="pointer-events-none absolute inset-0 hidden lg:block" aria-hidden="true">
-            <div className="sticky top-[calc(50svh-13rem)] flex h-[26rem] items-center justify-between px-[3%]">
+            <div className="sticky top-[calc(50svh-13rem)] flex h-[26rem] items-center justify-between px-[3%] [perspective:1400px]">
               {[0, 1].map((side) => (
-                <div key={side} data-side-card className="relative aspect-[9/19] w-[clamp(9.5rem,12.5vw,14rem)] overflow-hidden rounded-[1.8rem] border-[6px] border-highlight bg-white shadow-[0_30px_60px_-25px_rgb(3_4_10/0.6)]" style={{ rotate: side ? "8deg" : "-8deg" }}>
-                  {fitur.items.map((item, index) => (
-                    <div key={item.id} data-side-shot={index} className={`absolute inset-0 ${index === side ? "" : "invisible opacity-0"}`}>
-                      <Image src={screenImages[item.screen]} alt="" fill sizes="224px" className="object-cover object-top" />
+                // A black phone in 3D, turned toward the list: a body of stacked edge plates, side buttons, a dynamic
+                // island, and a glass glare. data-side-card is the pop and scroll-lean target.
+                <div key={side} className="[transform-style:preserve-3d]" style={{ transform: side ? "rotateY(-24deg) rotateZ(6deg)" : "rotateY(24deg) rotateZ(-6deg)" }}>
+                  <div data-side-card className="phone-black relative aspect-[9/19.5] w-[clamp(9.5rem,12.5vw,14rem)] [transform-style:preserve-3d]">
+                    {Array.from({ length: 14 }, (_, i) => (
+                      <span key={i} className="phone-black-slab" style={{ transform: `translateZ(${-(i + 1) * 1.3}px)` }} />
+                    ))}
+                    <span className="absolute top-[22%] -left-[2%] h-[9%] w-[2.2%] rounded-l-sm bg-[#2a2d35]" />
+                    <span className="absolute top-[22%] -right-[2%] h-[13%] w-[2.2%] rounded-r-sm bg-[#2a2d35]" />
+                    <div className="absolute inset-[3%] overflow-hidden rounded-[13%/6%] bg-white">
+                      {fitur.items.map((item, index) => (
+                        <div key={item.id} data-side-shot={index} className={`absolute inset-0 ${index === side ? "" : "invisible opacity-0"}`}>
+                          <Image src={screenImages[item.screen]} alt="" fill sizes="224px" className="object-cover object-top" />
+                        </div>
+                      ))}
+                      <span className="absolute top-[1.8%] left-1/2 z-10 h-[3.4%] w-[30%] -translate-x-1/2 rounded-full bg-black" />
+                      <span className="absolute inset-0 z-10" style={{ background: "linear-gradient(118deg, rgb(255 255 255 / 0.18) 0%, rgb(255 255 255 / 0.04) 30%, transparent 45%)" }} />
                     </div>
-                  ))}
+                  </div>
                 </div>
               ))}
             </div>
