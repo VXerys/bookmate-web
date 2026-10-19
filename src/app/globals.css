@@ -101,6 +101,15 @@ html.lenis body {
   transition-behavior: allow-discrete;
 }
 
+/* Ring states for the custom cursor; the GSAP-moved wrapper keeps x/y, the inner circle owns the scale. */
+.cursor-circle {
+  transition: transform 0.35s var(--ease-expo);
+}
+
+.cursor-ring[data-cursor-state="link"] .cursor-circle {
+  transform: scale(1.6);
+}
+
 /* The sampul paints only when JS runs, this tab has not seen it (boot script sets data-sampul), and motion is allowed;
    a reload in the same tab, reduced motion, or no JS never paints it, so it cannot flash (F-002 AC-003, AC-004). */
 .sampul {

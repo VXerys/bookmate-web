@@ -126,7 +126,7 @@ features:
           - EV-008
       - id: T-006
         title: Menu mobile
-        status: review
+        status: done
         requirements:
           - FR-004
         depends_on:
@@ -136,11 +136,12 @@ features:
           - EV-009
       - id: T-007
         title: Custom cursor dan magnetic
-        status: planned
+        status: review
         requirements:
           - FR-005
         depends_on: []
-        evidence: []
+        evidence:
+          - EV-010
       - id: T-008
         title: Footer reveal
         status: planned
@@ -191,5 +192,5 @@ assumptions_open:
     feature: null
     title: Analytics yang dipakai
 blockers: []
-generated_at: 2026-10-19T02:59:47.409Z
-source_hash: 23573e7288dd4173bf1c5562dd4165dd239ab232c1e4ae2169472e61bbdd94e2
+generated_at: 2026-10-19T03:06:32.421Z
+source_hash: 6f75ba8388061836ee68cc3f0d9b540196606aed7c5e72e27bf283531399a4cd

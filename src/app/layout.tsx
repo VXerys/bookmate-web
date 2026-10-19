@@ -1,6 +1,7 @@
 import type { Metadata, Viewport } from "next";
 import { Inter, JetBrains_Mono, Newsreader } from "next/font/google";
 
+import { Cursor } from "@/components/motion/cursor";
 import { Sampul } from "@/components/motion/sampul";
 import { SliceTransition } from "@/components/motion/slice-transition";
 import { SmoothScroll } from "@/components/motion/smooth-scroll";
@@ -55,6 +56,7 @@ export default function RootLayout({ children }: LayoutProps<"/">) {
         <SmoothScroll />
         <Sampul />
         <SliceTransition />
+        <Cursor />
         <div className="grain" aria-hidden="true" />
         <SkipLink />
         <Header />

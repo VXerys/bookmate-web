@@ -1,5 +1,7 @@
+import { Magnetic } from "@/components/motion/magnetic";
 import { Reveal } from "@/components/motion/reveal";
 import { chapterNumber, chapters, type Chapter } from "@/content/navigation";
+import { shell } from "@/content/shell";
 import { site } from "@/content/site";
 
 // Foundation check page for F-001 and F-002: tokens, fonts, Reveal, and one anchor per chapter so the shell's
@@ -39,12 +41,15 @@ export default function Home() {
           </Reveal>
         </div>
         <div className="flex flex-wrap items-center gap-6">
-          <a
-            className="rounded-full bg-ember px-6 py-3 font-medium text-ink transition-transform duration-300 ease-expo hover:-translate-y-0.5"
-            href={site.app.playStoreUrl}
-          >
-            Unduh di Google Play
-          </a>
+          <Magnetic>
+            <a
+              className="inline-flex min-h-11 items-center rounded-full bg-ember px-6 py-3 font-medium text-ink"
+              href={site.app.playStoreUrl}
+              data-cursor-label={shell.header.cta}
+            >
+              Unduh di Google Play
+            </a>
+          </Magnetic>
           <p className="max-w-md text-slate">{site.description}</p>
         </div>
       </section>

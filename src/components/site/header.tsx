@@ -3,6 +3,7 @@
 import { useRef, useState } from "react";
 
 import { chapterNumber, chapters, navChapters } from "@/content/navigation";
+import { Magnetic } from "@/components/motion/magnetic";
 import { Menu } from "@/components/site/menu";
 import { shell } from "@/content/shell";
 import { site } from "@/content/site";
@@ -103,12 +104,15 @@ export function Header() {
             ))}
           </ul>
         </nav>
-        <a
-          href={site.app.playStoreUrl}
-          className="ml-auto inline-flex min-h-11 items-center rounded-full bg-ember px-5 text-sm font-medium text-ink md:ml-0"
-        >
-          {shell.header.cta}
-        </a>
+        <Magnetic className="ml-auto md:ml-0">
+          <a
+            href={site.app.playStoreUrl}
+            data-cursor-label={shell.header.cta}
+            className="inline-flex min-h-11 items-center rounded-full bg-ember px-5 text-sm font-medium text-ink"
+          >
+            {shell.header.cta}
+          </a>
+        </Magnetic>
         <Menu />
       </div>
     </header>

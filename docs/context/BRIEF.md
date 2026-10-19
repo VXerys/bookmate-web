@@ -1,6 +1,6 @@
 <!-- GENERATED FILE — DO NOT EDIT. Rendered by `npm run context:render`.
 Source: sdd.config.json, docs/steering/, docs/specs/F-*/, docs/context/ASSUMPTIONS.md, docs/handoff/current.md.
-source_hash: 23573e7288dd4173bf1c5562dd4165dd239ab232c1e4ae2169472e61bbdd94e2 -->
+source_hash: 6f75ba8388061836ee68cc3f0d9b540196606aed7c5e72e27bf283531399a4cd -->
 
 # Brief
 
@@ -50,8 +50,7 @@ Next step:
 Pemilik commit T-005 dan set `done`. Lalu T-006: `src/components/site/menu.tsx` (tombol "Menu" di bawah 768 px, panel curtain, kunci `menu`, focus trap, Esc, tutup saat lebar ≥ 768 px, pilih tautan memanggil `navigateTo(id, { onCovered: close })`), copy menu di `src/content/shell.ts`. Ini juga menguji AC-020 end-to-end (menu lalu slice).
 
 ## Other open tasks
-- T-006 — Menu mobile (`review`)
-- T-007 — Custom cursor dan magnetic (`planned`)
+- T-007 — Custom cursor dan magnetic (`review`)
 - T-008 — Footer reveal (`planned`)
 - T-009 — Integrasi dan verifikasi shell (`planned`)
 
@@ -59,4 +58,4 @@ Pemilik commit T-005 dan set `done`. Lalu T-006: `src/components/site/menu.tsx` 
 | Feature | Status | Phase | Done/Total |
 |---|---|---|---|
 | F-001 Fondasi dan motion core | implementing | in_progress | 4/5 |
-| F-002 Shell global: sampul, header, slice transition, menu, cursor, footer | implementing | in_progress | 5/9 |
+| F-002 Shell global: sampul, header, slice transition, menu, cursor, footer | implementing | in_progress | 6/9 |

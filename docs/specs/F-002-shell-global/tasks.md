@@ -71,7 +71,7 @@ Hasil: `main` diberi `tabIndex={-1}` agar skip link memindahkan fokus, bukan han
 Hasil: aturan klik mana yang dicegat ada di `src/lib/motion/in-page-link.ts` + test (modifier, tombol tengah, `data-slice="off"`, `#` kosong, halaman lain tetap native). `navigateTo(id, { onCovered })` disiapkan untuk menu T-006. Pengaman `setTimeout` 3 detik mendaratkan pengunjung bila ticker macet. Catatan verifikasi: Lenis 1.3 sudah menghormati `scroll-margin-top`, jadi offset manual yang sempat ditambahkan ke `jumpToTarget` dicabut lagi karena membuat jarak ganda (144 px).
 
 ### T-006 — Menu mobile
-- status: review
+- status: done
 - requirements: [FR-004]
 - depends_on: [T-004, T-005]
 - evidence: [EV-009]
@@ -79,10 +79,10 @@ Hasil: aturan klik mana yang dicegat ada di `src/lib/motion/in-page-link.ts` + t
 `menu.tsx`: curtain wipe, focus trap, Esc, tutup saat lebar ≥ 768 px. Acceptance: AC-012, AC-013, EC-005.
 
 ### T-007 — Custom cursor dan magnetic
-- status: planned
+- status: review
 - requirements: [FR-005]
 - depends_on: []
-- evidence: []
+- evidence: [EV-010]
 
 `cursor.tsx`, `magnetic.tsx`, CTA header dan halaman uji memakai `Magnetic` dan `data-cursor-label="Unduh"`. Acceptance: AC-014 sampai AC-017.
 

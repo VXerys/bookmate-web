@@ -1,6 +1,6 @@
 <!-- GENERATED FILE — DO NOT EDIT. Rendered by `npm run context:render`.
 Source: sdd.config.json, docs/steering/, docs/specs/F-*/, docs/context/ASSUMPTIONS.md, docs/handoff/current.md.
-source_hash: 23573e7288dd4173bf1c5562dd4165dd239ab232c1e4ae2169472e61bbdd94e2 -->
+source_hash: 6f75ba8388061836ee68cc3f0d9b540196606aed7c5e72e27bf283531399a4cd -->
 
 # Project Progress
 
@@ -23,7 +23,7 @@ source_hash: 23573e7288dd4173bf1c5562dd4165dd239ab232c1e4ae2169472e61bbdd94e2 --
 | T-003 Sampul dan keputusan sesi di boot script | done | FR-001 | T-001 | EV-004, EV-005, EV-006 |
 | T-004 Skip link, header, dan indikator bab | done | FR-002 | T-002 | EV-007 |
 | T-005 Slice transition, fokus, dan hash | done | FR-003 | T-001, T-002 | EV-008 |
-| T-006 Menu mobile | review | FR-004 | T-004, T-005 | EV-009 |
-| T-007 Custom cursor dan magnetic | planned | FR-005 |  |  |
+| T-006 Menu mobile | done | FR-004 | T-004, T-005 | EV-009 |
+| T-007 Custom cursor dan magnetic | review | FR-005 |  | EV-010 |
 | T-008 Footer reveal | planned | FR-006 | T-004 |  |
 | T-009 Integrasi dan verifikasi shell | planned | FR-001, FR-002, FR-003, FR-004, FR-005, FR-006 | T-003, T-006, T-007, T-008 |  |
