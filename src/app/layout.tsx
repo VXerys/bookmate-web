@@ -1,5 +1,5 @@
 import type { Metadata, Viewport } from "next";
-import { Inter, JetBrains_Mono, Newsreader } from "next/font/google";
+import { Bricolage_Grotesque, Caveat, Inter, JetBrains_Mono, Newsreader } from "next/font/google";
 
 import { Cursor } from "@/components/motion/cursor";
 import { Sampul } from "@/components/motion/sampul";
@@ -21,6 +21,22 @@ const newsreader = Newsreader({
   style: ["normal", "italic"],
   axes: ["opsz"],
   display: "swap",
+});
+
+// Display face for every big heading; opsz and wdth let one file serve both the chunky hero and calmer statements.
+const bricolage = Bricolage_Grotesque({
+  variable: "--font-bricolage",
+  subsets: ["latin"],
+  axes: ["opsz", "wdth"],
+  display: "swap",
+});
+
+// Margin notes only, never body text, so it skips the preload request.
+const caveat = Caveat({
+  variable: "--font-caveat",
+  subsets: ["latin"],
+  display: "swap",
+  preload: false,
 });
 
 const inter = Inter({
@@ -62,7 +78,7 @@ export const viewport: Viewport = {
 export default function RootLayout({ children }: LayoutProps<"/">) {
   return (
     // The boot script adds html.js and data-sampul before hydration, so React must not flag the attribute difference.
-    <html lang="id" className={`${newsreader.variable} ${inter.variable} ${jetbrains.variable}`} suppressHydrationWarning>
+    <html lang="id" className={`${bricolage.variable} ${newsreader.variable} ${caveat.variable} ${inter.variable} ${jetbrains.variable}`} suppressHydrationWarning>
       <head>
         <InlineScript html={bootScript} />
       </head>
