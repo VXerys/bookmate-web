@@ -1,6 +1,6 @@
 <!-- GENERATED FILE — DO NOT EDIT. Rendered by `npm run context:render`.
 Source: sdd.config.json, docs/steering/, docs/specs/F-*/, docs/context/ASSUMPTIONS.md, docs/handoff/current.md.
-source_hash: 84c8f5e0a97fe3a89b96c8f2f44280b6fc727b35cd96369f8ed3926fc0872f19 -->
+source_hash: a997e4b8f6650c6e36d776413359f83f1c403b82fd73e0763bd2a3a2b51ac5f0 -->
 
 # Brief
 
@@ -10,15 +10,15 @@ Project `BookMate Web`, tier `lite`. Rendered from sdd.config.json, docs/steerin
 
 ## Active
 Feature F-002 — Shell global: sampul, header, slice transition, menu, cursor, footer (`implementing`, docs/specs/F-002-shell-global/)
-Task T-003 — Sampul dan keputusan sesi di boot script (`review`); requirements: FR-001; depends on: T-001
+Task T-004 — Skip link, header, dan indikator bab (`review`); requirements: FR-002; depends on: T-002
 
-`boot-script.ts` + test (data-sampul, sessionStorage melempar), `src/components/motion/sampul.tsx` menggantikan `intro-gate.tsx`, CSS tampil sampul. Acceptance: AC-001 sampai AC-004, EC-002, EC-003, EC-004.
+`skip-link.tsx`, `header.tsx`, `<main id="konten">` di layout. Acceptance: AC-005 sampai AC-008.
 
-Hasil: `completeIntro()` pindah ke `sampul.tsx` dan `intro-gate.tsx` dihapus. Jendela waktu ada di `src/lib/motion/sampul-timing.ts` + test; karena sampul butuh 0,8 detik (counter ke 100, judul keluar) sebelum terbelah, penantian "halaman siap" berakhir 0,8 detik lebih awal, sehingga sampul mulai terbuka di 2,0 sampai 4,5 detik dan intro selesai sebelum fallback boot 6 detik. Copy shell di `src/content/shell.ts`. Kesan gerak dan reduced motion menunggu cek pemilik.
+Hasil: `main` diberi `tabIndex={-1}` agar skip link memindahkan fokus, bukan hanya posisi scroll; section diberi `scroll-margin-top` agar tidak tertutup header. Header memakai bar `bg-paper/90` (kontras teks terjamin di atas bab gelap), indikator berjalan juga di reduced motion, dan header muncul kembali saat ada fokus di dalamnya. Temuan saat verifikasi yang ikut diperbaiki: scope `useGSAP` membuat selector section kosong (indikator diam); `not-sr-only` Tailwind me-reset padding skip link; target nav di bawah 44 px. AC-008 menunggu cek reduced motion pemilik.
 
 Acceptance criteria:
-- AC-001: Given kunjungan pertama di tab dengan motion diizinkan, when halaman dimuat, then sampul terlihat sejak paint pertama, scroll terkunci, dan counter naik sampai 100.
-- AC-004: Given reduced motion atau JavaScript mati, when halaman dimuat, then tidak ada overlay sampul dan konten langsung terlihat.
+- AC-005: Given halaman dimuat, when pengguna menekan Tab pertama kali, then tautan "Lewati ke konten" muncul dan memindahkan fokus ke `<main>`.
+- AC-008: Given reduced motion, when pengguna scroll, then header tetap terlihat tanpa animasi.
 
 ## Rules
 Stop conditions:
@@ -47,11 +47,9 @@ None.
 ## Handoff
 Next step:
 
-Pemilik commit T-002 dan T-003, set keduanya `done` dengan hash. Lalu T-004: `src/components/site/skip-link.tsx`, `src/components/site/header.tsx` (wordmark, tautan dari `navChapters`, CTA, indikator bab, sembunyi saat scroll turun), copy di `src/content/shell.ts`. Verifikasi: `npm test && npm run lint && npm run typecheck && npm run build`, cek exit code satu per satu, lalu uji keyboard di Browser pane.
+Pemilik commit T-004 dan set `done`. Lalu T-005: `src/components/motion/slice-transition.tsx` dengan `navigateTo(id)`, delegasi klik `a[href^="#"]` (kecuali `data-slice="off"`), fokus ke heading target, `history.pushState`, kunci `slice`. Verifikasi seperti biasa, lalu uji keyboard dan hash di Browser pane.
 
 ## Other open tasks
-- T-002 — Model navigasi dan section stub (`review`)
-- T-004 — Skip link, header, dan indikator bab (`planned`)
 - T-005 — Slice transition, fokus, dan hash (`planned`)
 - T-006 — Menu mobile (`planned`)
 - T-007 — Custom cursor dan magnetic (`planned`)
@@ -62,4 +60,4 @@ Pemilik commit T-002 dan T-003, set keduanya `done` dengan hash. Lalu T-004: `sr
 | Feature | Status | Phase | Done/Total |
 |---|---|---|---|
 | F-001 Fondasi dan motion core | implementing | in_progress | 4/5 |
-| F-002 Shell global: sampul, header, slice transition, menu, cursor, footer | implementing | in_progress | 1/9 |
+| F-002 Shell global: sampul, header, slice transition, menu, cursor, footer | implementing | in_progress | 3/9 |

@@ -31,7 +31,7 @@ Branch `feat/F-002-shell-global`, dibuat dari `feat/F-001-fondasi-motion-core` k
 Hasil: `ScrollLockOwner = "sampul" | "menu" | "slice"` mencegah salah ketik pemilik; listener hanya dipanggil saat transisi terkunci/terbuka, jadi Lenis tidak di-stop/start berulang. Dokumen yang menggambarkan keadaan sekarang ikut diperbarui (`docs/architecture/overview.md`, design dan arsitektur F-001).
 
 ### T-002 — Model navigasi dan section stub
-- status: review
+- status: done
 - requirements: [FR-002, FR-003]
 - depends_on: []
 - evidence: [EV-003]
@@ -41,7 +41,7 @@ Hasil: `ScrollLockOwner = "sampul" | "menu" | "slice"` mencegah salah ketik pemi
 Hasil: 10 bab sesuai urutan art direction; 5 punya `navLabel` untuk header. `<main id="konten">` dipindah dari halaman ke layout lebih awal (bagian T-004) agar halaman tidak kehilangan landmark `main` di antara task.
 
 ### T-003 — Sampul dan keputusan sesi di boot script
-- status: review
+- status: done
 - requirements: [FR-001]
 - depends_on: [T-001]
 - evidence: [EV-004, EV-005, EV-006]
@@ -51,12 +51,14 @@ Hasil: 10 bab sesuai urutan art direction; 5 punya `navLabel` untuk header. `<ma
 Hasil: `completeIntro()` pindah ke `sampul.tsx` dan `intro-gate.tsx` dihapus. Jendela waktu ada di `src/lib/motion/sampul-timing.ts` + test; karena sampul butuh 0,8 detik (counter ke 100, judul keluar) sebelum terbelah, penantian "halaman siap" berakhir 0,8 detik lebih awal, sehingga sampul mulai terbuka di 2,0 sampai 4,5 detik dan intro selesai sebelum fallback boot 6 detik. Copy shell di `src/content/shell.ts`. Kesan gerak dan reduced motion menunggu cek pemilik.
 
 ### T-004 — Skip link, header, dan indikator bab
-- status: planned
+- status: review
 - requirements: [FR-002]
 - depends_on: [T-002]
-- evidence: []
+- evidence: [EV-007]
 
 `skip-link.tsx`, `header.tsx`, `<main id="konten">` di layout. Acceptance: AC-005 sampai AC-008.
+
+Hasil: `main` diberi `tabIndex={-1}` agar skip link memindahkan fokus, bukan hanya posisi scroll; section diberi `scroll-margin-top` agar tidak tertutup header. Header memakai bar `bg-paper/90` (kontras teks terjamin di atas bab gelap), indikator berjalan juga di reduced motion, dan header muncul kembali saat ada fokus di dalamnya. Temuan saat verifikasi yang ikut diperbaiki: scope `useGSAP` membuat selector section kosong (indikator diam); `not-sr-only` Tailwind me-reset padding skip link; target nav di bawah 44 px. AC-008 menunggu cek reduced motion pemilik.
 
 ### T-005 — Slice transition, fokus, dan hash
 - status: planned

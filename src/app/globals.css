@@ -45,6 +45,11 @@
     color: var(--color-ink);
   }
 
+  /* Native anchor jumps (skip link, no-JS hash links) land below the fixed header instead of under it. */
+  main [data-chapter] {
+    scroll-margin-top: 4.5rem;
+  }
+
   /* currentColor already passes contrast on every allowed background, so the ring stays visible on paper and on dark chapters. */
   :focus-visible {
     outline: 2px solid currentColor;

@@ -87,7 +87,7 @@ features:
           - EV-002
       - id: T-002
         title: Model navigasi dan section stub
-        status: review
+        status: done
         requirements:
           - FR-002
           - FR-003
@@ -96,7 +96,7 @@ features:
           - EV-003
       - id: T-003
         title: Sampul dan keputusan sesi di boot script
-        status: review
+        status: done
         requirements:
           - FR-001
         depends_on:
@@ -107,12 +107,13 @@ features:
           - EV-006
       - id: T-004
         title: Skip link, header, dan indikator bab
-        status: planned
+        status: review
         requirements:
           - FR-002
         depends_on:
           - T-002
-        evidence: []
+        evidence:
+          - EV-007
       - id: T-005
         title: Slice transition, fokus, dan hash
         status: planned
@@ -164,7 +165,7 @@ features:
         evidence: []
 active:
   feature_id: F-002
-  task_id: T-003
+  task_id: T-004
 assumptions_open:
   - id: A-001
     feature: null
@@ -188,5 +189,5 @@ assumptions_open:
     feature: null
     title: Analytics yang dipakai
 blockers: []
-generated_at: 2026-10-19T02:05:33.504Z
-source_hash: 84c8f5e0a97fe3a89b96c8f2f44280b6fc727b35cd96369f8ed3926fc0872f19
+generated_at: 2026-10-19T02:12:53.474Z
+source_hash: a997e4b8f6650c6e36d776413359f83f1c403b82fd73e0763bd2a3a2b51ac5f0

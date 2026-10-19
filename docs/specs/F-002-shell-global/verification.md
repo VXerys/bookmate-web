@@ -59,7 +59,7 @@ Evidence that acceptance criteria hold at a named commit. A claim without a comm
   each section has an h1 or h2; exactly one <main id="konten">
   ```
 - date: 2026-10-19
-- commit: uncommitted on feat/F-002-shell-global (base 694c5aa)
+- commit: dda1721
 - covers: [AC-021]
 
 ### EV-004 — Keputusan sesi di boot script, jendela waktu sampul, toolchain (T-003)
@@ -74,7 +74,7 @@ Evidence that acceptance criteria hold at a named commit. A claim without a comm
   built CSS: .sampul{display:none} and only @media (prefers-reduced-motion:no-preference){html.js[data-sampul=play] .sampul{display:block}}
   ```
 - date: 2026-10-19
-- commit: uncommitted on feat/F-002-shell-global (base 694c5aa)
+- commit: dda1721
 - covers: [AC-002, AC-003, AC-004]
 
 ### EV-005 — Sampul jalur normal (T-003)
@@ -88,7 +88,7 @@ Evidence that acceptance criteria hold at a named commit. A claim without a comm
   halves: translate(-100%) rotateY(14deg) / translate(100%) rotateY(-14deg); spine scale(1, 0); title faded out
   ```
 - date: 2026-10-19
-- commit: uncommitted on feat/F-002-shell-global (base 694c5aa)
+- commit: dda1721
 - covers: [AC-001, AC-002, AC-020]
 
 ### EV-006 — Muat ulang di tab yang sama, hash, dan ticker macet (T-003)
@@ -101,8 +101,27 @@ Evidence that acceptance criteria hold at a named commit. A claim without a comm
   lock owners [], intro done, bm:sampul = 1
   ```
 - date: 2026-10-19
-- commit: uncommitted on feat/F-002-shell-global (base 694c5aa)
+- commit: dda1721
 - covers: [AC-003]
+
+### EV-007 — Skip link, header, dan indikator bab (T-004)
+- command: `npm test && npm run test:sdd && npm run lint && npm run typecheck && npm run build` (exit codes checked); Browser pane on next dev with real Tab and Enter keys, gsap.ticker driven by hand
+- output:
+  ```text
+  tests 37 pass (✔ every shell string is filled in); SDD 34 pass; lint, typecheck, build exit 0; dev handle absent from .next/static
+  first Tab -> "Lewati ke konten" (175 x 44, top 12 px once focused); Enter -> document.activeElement = MAIN#konten, hash #konten
+  next Tab -> "Unduh di Google Play" in the hero (header skipped)
+  header yPercent: top 0, at 80 px 0, down to 700 -> -110, up to 500 -> 0, down to 1200 -> -110,
+  focus a header link -> 0, scroll down while focused -> 0, blur then down -> -110
+  indicator at each section centre: 01 Prolog, 02 Manifesto, 03 Buka aplikasinya, 04 Bab 01 sampai 05, 05 Api streak,
+  06 Kartu pembaca, 07 Ruang diskusi, 08 Cara mulai, 09 Pertanyaan, 10 Epilog; aria-current=location on Fitur, Streak,
+  Lencana, Komunitas, FAQ at their chapters; back at top -> 01 Prolog
+  1440 px: nav and indicator shown; 360 px: hidden (menu comes in T-006), no horizontal overflow
+  header targets at 1024 px: BookMate 95x44, Fitur 54x44, Streak 66x44, Lencana 80x44, Komunitas 93x44, FAQ 51x44, Unduh 84x44
+  ```
+- date: 2026-10-19
+- commit: uncommitted on feat/F-002-shell-global (base dda1721)
+- covers: [AC-005, AC-006, AC-007]
 
 ## Coverage
 
@@ -114,7 +133,9 @@ Evidence that acceptance criteria hold at a named commit. A claim without a comm
 | AC-004 | EV-004 | pass untuk tanpa JS lewat aturan CSS; reduced motion menunggu cek pemilik |
 | AC-020 | EV-001, EV-002, EV-005 | pass di registry, penerapan, dan sampul; alur menu lalu slice dicek di T-006 |
 | AC-021 | EV-003 | pass |
-| AC-005 to AC-019 | none | not_run (T-004 sampai T-009) |
+| AC-005, AC-006, AC-007 | EV-007 | pass |
+| AC-008 | none | not_run (reduced motion, cek pemilik; secara kode logika sembunyi hanya ada di cabang `MOTION_OK`) |
+| AC-009 to AC-019 | none | not_run (T-005 sampai T-009) |
 
 ## Not run
 

@@ -4,4 +4,10 @@ export const shell = {
     kicker: "Klub baca di saku kamu",
     counterUnit: "halaman",
   },
+  skipLink: "Lewati ke konten",
+  header: {
+    navLabel: "Navigasi utama",
+    homeLabel: "ke awal halaman",
+    cta: "Unduh",
+  },
 } as const;

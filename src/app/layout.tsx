@@ -3,7 +3,9 @@ import { Inter, JetBrains_Mono, Newsreader } from "next/font/google";
 
 import { Sampul } from "@/components/motion/sampul";
 import { SmoothScroll } from "@/components/motion/smooth-scroll";
+import { Header } from "@/components/site/header";
 import { InlineScript } from "@/components/site/inline-script";
+import { SkipLink } from "@/components/site/skip-link";
 import { palette } from "@/content/palette";
 import { site } from "@/content/site";
 import { bootScript } from "@/lib/motion/boot-script";
@@ -52,7 +54,12 @@ export default function RootLayout({ children }: LayoutProps<"/">) {
         <SmoothScroll />
         <Sampul />
         <div className="grain" aria-hidden="true" />
-        <main id="konten">{children}</main>
+        <SkipLink />
+        <Header />
+        {/* tabIndex -1 lets the skip link and in-page jumps move focus here, not only the scroll position. */}
+        <main id="konten" tabIndex={-1} className="focus:outline-none">
+          {children}
+        </main>
       </body>
     </html>
   );
