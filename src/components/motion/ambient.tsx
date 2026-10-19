@@ -20,6 +20,8 @@ export function Ambient() {
   useGSAP(() => {
     const mm = gsap.matchMedia();
     mm.add(MOTION_OK, () => {
+      // Elements under [data-ambient-off] (the opening curtain) run their own motion, so ambient leaves them alone.
+      const pick = <T extends Element>(selector: string) => gsap.utils.toArray<T>(selector).filter((el) => !el.closest("[data-ambient-off]"));
       const loops: gsap.core.Animation[] = [];
       const onScreen = (el: Element, animation: gsap.core.Animation) => {
         loops.push(animation);
@@ -36,13 +38,13 @@ export function Ambient() {
         onScreen(el, gsap.to(el, { rotation: seconds < 0 ? -360 : 360, duration: Math.abs(seconds), ease: "none", repeat: -1, paused: true, transformOrigin: "50% 50%" }));
       });
 
-      gsap.utils.toArray<HTMLElement>("[data-marquee]").forEach((el) => {
+      pick<HTMLElement>("[data-marquee]").forEach((el) => {
         const seconds = Number(el.dataset.marquee) || 30;
         const [from, to] = seconds < 0 ? [0, -50] : [-50, 0];
         onScreen(el, gsap.fromTo(el, { xPercent: from }, { xPercent: to, duration: Math.abs(seconds), ease: "none", repeat: -1, paused: true }));
       });
 
-      gsap.utils.toArray<SVGPathElement>("[data-morph]").forEach((el, index) => {
+      pick<SVGPathElement>("[data-morph]").forEach((el, index) => {
         const shapes = (el.dataset.morph ?? el.getAttribute("data-morph") ?? "").split("|").filter(Boolean);
         if (!shapes.length) return;
         const original = el.getAttribute("d") ?? "";
@@ -54,7 +56,7 @@ export function Ambient() {
       });
 
       // Rings ripple outward from the centre one after another, like a phone's signal.
-      gsap.utils.toArray<SVGSVGElement>("[data-pulse]").forEach((el) => {
+      pick<SVGSVGElement>("[data-pulse]").forEach((el) => {
         const rings = el.querySelectorAll("circle");
         const box = el.viewBox.baseVal;
         const origin = `${box.width / 2} ${box.height / 2}`;
@@ -64,17 +66,17 @@ export function Ambient() {
         onScreen(el, ripple);
       });
 
-      gsap.utils.toArray<SVGTextPathElement>("[data-curve]").forEach((el) => {
+      pick<SVGTextPathElement>("[data-curve]").forEach((el) => {
         const [from, to] = (el.getAttribute("data-curve") ?? "0%|-40%").split("|");
         const svg = el.ownerSVGElement ?? el;
         gsap.fromTo(el, { attr: { startOffset: from } }, { attr: { startOffset: to }, ease: "none", scrollTrigger: { trigger: svg, start: "top bottom", end: "bottom top", scrub: 0.6 } });
       });
 
-      gsap.utils.toArray<HTMLElement>("[data-float]").forEach((el, index) => {
+      pick<HTMLElement>("[data-float]").forEach((el, index) => {
         onScreen(el, gsap.to(el, { y: index % 2 ? -14 : 14, rotation: index % 2 ? 3 : -3, duration: 2.6 + (index % 4) * 0.4, ease: "sine.inOut", yoyo: true, repeat: -1, paused: true }));
       });
 
-      gsap.utils.toArray<HTMLElement>("[data-speed]").forEach((el) => {
+      pick<HTMLElement>("[data-speed]").forEach((el) => {
         const speed = Number(el.dataset.speed) || 0;
         gsap.fromTo(el, { y: () => speed * 160 }, { y: () => speed * -160, ease: "none", scrollTrigger: { trigger: el, start: "top bottom", end: "bottom top", scrub: 0.4, invalidateOnRefresh: true } });
       });
@@ -100,7 +102,7 @@ export function Ambient() {
 
       // Reading order inside a chapter: kicker, lead, and supporting items rise out of a light blur once, in sequence
       // (data-rise holds an optional delay), after the elastic title has landed.
-      const rises = gsap.utils.toArray<HTMLElement>("[data-rise]");
+      const rises = pick<HTMLElement>("[data-rise]");
       rises.forEach((el) => {
         gsap.fromTo(
           el,
@@ -120,7 +122,7 @@ export function Ambient() {
       const progress = document.querySelector<HTMLElement>("[data-progress]");
       if (progress) gsap.fromTo(progress, { scaleX: 0 }, { scaleX: 1, ease: "none", scrollTrigger: { start: 0, end: "max", scrub: 0.3 } });
 
-      const pops = gsap.utils.toArray<HTMLElement>("[data-pop]");
+      const pops = pick<HTMLElement>("[data-pop]");
       const introPops = pops.filter((el) => el.dataset.pop === "intro");
       gsap.set(pops, { scale: 0, rotation: (i: number) => (i % 2 ? 40 : -40) });
       // Starting states are in place: release the CSS guard that kept these hidden through hydration.
@@ -140,7 +142,7 @@ export function Ambient() {
       const pace = { value: 1 };
       const apply = () => loops.forEach((loop) => loop.timeScale(pace.value));
       // data-skew rows lean against the scroll direction while it moves, then straighten once it settles.
-      const skews = gsap.utils.toArray<HTMLElement>("[data-skew]").map((el) => gsap.quickTo(el, "skewX", { duration: 0.5, ease: "power3.out" }));
+      const skews = pick<HTMLElement>("[data-skew]").map((el) => gsap.quickTo(el, "skewX", { duration: 0.5, ease: "power3.out" }));
       const straighten = gsap.delayedCall(0.15, () => skews.forEach((to) => to(0))).pause();
       const velocity = ScrollTrigger.create({
         start: 0,

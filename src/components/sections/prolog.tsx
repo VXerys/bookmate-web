@@ -32,9 +32,9 @@ const FACES = [
   { id: "21", spot: "-top-[2%] right-[22%]", size: "size-[clamp(3rem,5vw,4.5rem)]", tone: "bg-white" },
 ] as const;
 
-// The cover of the story (F-014): the BookMate-blue page with rolling hills opens from a corner, the title lands word by word, the phone and
-// three real books from the demo shelf tumble in with the club stamp and a sale sticker, and the waves along the bottom
-// roll into the white page below. Scrolling away sends the books flying and the phone sinking (cinematic hand-off).
+// The cover of the story (F-014): the BookMate-blue page with rolling swells sits under the opening scribbles, the
+// title lands word by word, the phone and three real books from the demo shelf tumble in with the club stamp and a sale
+// sticker, and the white wave seams into the page below. Scrolling away lifts the books out of the top of the screen.
 export function Prolog() {
   const root = useRef<HTMLElement>(null);
 
@@ -49,8 +49,6 @@ export function Prolog() {
 
       mm.add(MOTION_OK, () => {
         if (!document.documentElement.classList.contains("js")) return;
-        const wide = window.matchMedia("(min-width: 992px)").matches;
-        if (bg && wide) gsap.set(bg, { clipPath: "ellipse(20% 0% at 100% 100%)" });
         gsap.set(fades, { autoAlpha: 0, y: "-0.75em" });
         if (visual) gsap.set(visual, { autoAlpha: 0, y: "5em", rotate: -30 });
         section.dataset.heroReady = "";
@@ -59,7 +57,6 @@ export function Prolog() {
         let intro: gsap.core.Timeline | undefined;
         const stop = whenIntroDone(() => {
           intro = gsap.timeline();
-          if (bg && wide) intro.to(bg, { clipPath: "ellipse(150% 130% at 100% 100%)", duration: 1.1, ease: "circ.out" }, 0);
           intro.to(fades, { autoAlpha: 1, y: 0, duration: 0.35, ease: ENERGY, stagger: 0.075 }, 0.45);
           if (visual) intro.to(visual, { autoAlpha: 1, y: 0, rotate: 0, duration: 1.2, ease: LAND }, 0.3);
         });

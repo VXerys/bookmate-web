@@ -4,12 +4,18 @@ import { useRef } from "react";
 
 import { jumpToTarget, lockScroll, unlockScroll } from "@/components/motion/smooth-scroll";
 import { LogoMark } from "@/components/site/logo";
-import { shell } from "@/content/shell";
-import { site } from "@/content/site";
 import { SAMPUL_SESSION_KEY } from "@/lib/motion/boot-script";
 import { gsap, ScrollTrigger, useGSAP } from "@/lib/motion/gsap";
 import { finishIntro, isIntroDone } from "@/lib/motion/intro-state";
-import { SAMPUL_INTRO_AFTER_OPEN_MS, SAMPUL_LEAD_MS, SAMPUL_OPEN_MAX_MS, SAMPUL_REPLAY_OPEN_MAX_MS, SAMPUL_SAFETY_MS, settleWaits } from "@/lib/motion/sampul-timing";
+import { SAMPUL_LEAD_MS, SAMPUL_OPEN_MAX_MS, SAMPUL_REPLAY_OPEN_MAX_MS, SAMPUL_SAFETY_MS, settleWaits } from "@/lib/motion/sampul-timing";
+
+// The cover is three scribbles (after the reference's page transition, original paths): a giant blue stroke 70% of the
+// box wide that paints the whole screen, a lighter blue stroke over it, and a slim yellow ribbon that draws itself as
+// the loading progress. Blue leads, yellow is the accent; there is no flat backdrop at all.
+const SCRIBBLE = "M-80 170C230-30 470 250 330 430S760 90 930 350 230 660 390 840 960 760 1160 1010";
+const SCRIBBLE_LIGHT = "M1160 120C860 -20 640 260 760 420S280 240 160 470 820 600 700 820 120 760 -80 1000";
+const RIBBON = "M-60 300C180 140 420 420 600 300S900 160 1140 320";
+const LIGHT = "color-mix(in srgb, var(--color-blue) 60%, var(--color-white))";
 
 const wait = (ms: number) => new Promise<void>((resolve) => window.setTimeout(resolve, ms));
 
@@ -50,7 +56,6 @@ function rememberSampul() {
 
 export function Sampul() {
   const root = useRef<HTMLDivElement>(null);
-  const counter = useRef<HTMLSpanElement>(null);
 
   useGSAP(() => {
     const el = root.current;
@@ -91,66 +96,58 @@ export function Sampul() {
     const safety = window.setTimeout(end, SAMPUL_SAFETY_MS);
 
     const q = gsap.utils.selector(el);
-    const progress = { value: 1 };
-    const renderCount = () => {
-      if (counter.current) counter.current.textContent = String(Math.round(progress.value)).padStart(3, "0");
-    };
-    const pop = gsap.fromTo(q("[data-sampul-logo]"), { scale: 0, rotate: -64 }, { scale: 1, rotate: 0, duration: 0.65, delay: 0.1, ease: "elastic.out(1, 0.72)" });
-    const counting = gsap.to(progress, { value: 90, duration: (replay ? SAMPUL_REPLAY_OPEN_MAX_MS : SAMPUL_OPEN_MAX_MS) / 1000, ease: "power2.out", onUpdate: renderCount });
+    const span = (replay ? SAMPUL_REPLAY_OPEN_MAX_MS : SAMPUL_OPEN_MAX_MS) / 1000;
+    // The logo springs in (reference: scale 0, rotate -64 -> 1, 0, elastic) while the yellow ribbon draws itself as the
+    // loading progress; there is no number counter (owner, F-014).
+    const pop = gsap.fromTo(q("[data-sampul-logo]"), { scale: 0, rotate: -64 }, { scale: 1, rotate: 0, duration: 0.85, delay: 0.1, ease: "elastic.out(1, 0.72)" });
+    const counting = gsap
+      .timeline()
+      .fromTo(q("[data-sampul-ribbon]"), { drawSVG: "0%" }, { drawSVG: "90%", duration: span, ease: "power2.out" }, 0);
 
     pageSettled(replay).then(() => {
       if (cancelled) return;
       counting.kill();
       const lead = SAMPUL_LEAD_MS / 1000;
+      const strokes = q("[data-sampul-brush]");
+      // One continuous move: the ribbon finishes drawing, and as it does the logo eases up and away, the three layers
+      // erase in a single overlapping sweep from the top layer down (yellow, light blue, blue) while each stroke narrows
+      // to 8% (reference: 0% 100% -> 100% 100%), and the hero starts landing while the sweep is still passing.
       gsap
-        .timeline({ defaults: { ease: "expo.inOut" }, onComplete: end })
-        .to(progress, { value: 100, duration: lead * 0.6, ease: "power2.out", onUpdate: renderCount }, 0)
-        .to(q("[data-sampul-mark]"), { scale: 0.9, autoAlpha: 0, duration: lead * 0.5, ease: "power2.in" }, lead * 0.5)
-        .addLabel("open", lead)
-        // The reference's page transition: one enormous scribble covers the screen, the blue goes, and the scribble
-        // erases itself from its start to reveal the page (F-013 AC-011).
-        .fromTo(q("[data-sampul-brush]"), { drawSVG: "0% 0%" }, { drawSVG: "0% 100%", duration: 0.9, ease: "power2.inOut" }, "open")
-        .set(q("[data-sampul-cover]"), { autoAlpha: 0 }, "open+=0.95")
-        .to(q("[data-sampul-brush]"), { drawSVG: "100% 100%", duration: 1, ease: "osmo" }, "open+=1")
-        .set(el, { autoAlpha: 0 }, "open+=2")
-        .call(completeIntro, [], `open+=${SAMPUL_INTRO_AFTER_OPEN_MS / 1000 + 0.75}`);
+        .timeline({ onComplete: end, defaults: { ease: "power3.inOut" } })
+        .to(q("[data-sampul-ribbon]"), { drawSVG: "100%", duration: lead * 0.5, ease: "power2.out" }, 0)
+        .addLabel("open", lead * 0.55)
+        .to(q("[data-sampul-logo]"), { yPercent: -40, scale: 0.6, rotate: 18, autoAlpha: 0, duration: 0.55, ease: "power3.in" }, "open-=0.15")
+        .to(q("[data-sampul-ribbon]"), { drawSVG: "100% 100%", duration: 0.9 }, "open")
+        .fromTo(strokes, { drawSVG: "0% 100%" }, { drawSVG: "100% 100%", duration: 1.3, stagger: { each: 0.09, from: "end" } }, "open+=0.08")
+        .to(strokes, { keyframes: { "0%": { attr: { "stroke-width": (i: number) => (i ? "30%" : "70%") } }, "95%": { attr: { "stroke-width": "8%" } } }, duration: 1.3, ease: "circ.out", stagger: { each: 0.09, from: "end" } }, "open+=0.08")
+        .call(completeIntro, [], "open+=0.45")
+        .set(el, { autoAlpha: 0 }, "open+=1.5");
     });
 
     // Releases only what this run holds, so a remount (React Strict Mode in development) replays the sampul cleanly.
     return () => {
       cancelled = true;
       pop.kill();
+      counting.kill();
       window.clearTimeout(safety);
       unlockScroll("sampul");
     };
   });
 
   return (
-    <div ref={root} className="sampul fixed inset-0 z-[90] overflow-hidden text-paper" aria-hidden="true">
-      <div data-sampul-cover className="absolute inset-0 bg-blue" />
-      <div data-sampul-mark className="absolute inset-0 flex flex-col items-center justify-center gap-6">
-        <span data-sampul-logo className="grid size-28 place-items-center rounded-full bg-paper">
-          <LogoMark className="w-14 text-blue" />
-        </span>
-        <p className="display sampul-rise text-[clamp(3rem,9vw,6.5rem)]" style={{ animationDelay: "0.12s" }}>
-          {site.name}
-        </p>
-        <p className="label sampul-rise" style={{ animationDelay: "0.24s" }}>
-          <span ref={counter}>001</span> / 100 {shell.sampul.counterUnit}
-        </p>
-      </div>
+    <div ref={root} className="sampul fixed inset-0 z-[90] overflow-hidden" aria-hidden="true">
+      {/* The two blue strokes are fully drawn by default, so before hydration they already cover the screen; the yellow
+          ribbon starts undrawn. Later paths paint on top: blue, then light blue, then yellow. */}
       <svg viewBox="0 0 1080 1080" preserveAspectRatio="xMidYMid slice" className="absolute inset-0 h-full w-full">
-        <path
-          data-sampul-brush
-          d="M-80 170C230-30 470 250 330 430S760 90 930 350 230 660 390 840 960 760 1160 1010"
-          fill="none"
-          stroke="var(--color-highlight)"
-          strokeWidth="70%"
-          strokeLinecap="round"
-          strokeLinejoin="round"
-          style={{ strokeDasharray: "0 99999" }}
-        />
+        <path data-sampul-brush d={SCRIBBLE} fill="none" stroke="var(--color-blue)" strokeWidth="70%" strokeLinecap="round" strokeLinejoin="round" />
+        <path data-sampul-brush d={SCRIBBLE_LIGHT} fill="none" stroke={LIGHT} strokeWidth="30%" strokeLinecap="round" strokeLinejoin="round" />
+        <path data-sampul-ribbon d={RIBBON} fill="none" stroke="var(--color-highlight)" strokeWidth="9%" strokeLinecap="round" strokeLinejoin="round" style={{ strokeDasharray: "0 99999" }} />
       </svg>
+      <div className="absolute inset-0 grid place-items-center">
+        <span data-sampul-logo className="block drop-shadow-[0_18px_30px_rgb(3_4_10/0.35)]">
+          <LogoMark className="w-[clamp(5.5rem,10vw,8.5rem)] text-white" />
+        </span>
+      </div>
     </div>
   );
 }

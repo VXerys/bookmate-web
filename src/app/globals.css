@@ -317,8 +317,8 @@ html.lenis body {
   transform: scale(1.6);
 }
 
-/* The sampul paints only when JS runs, this tab has not seen it (boot script sets data-sampul), and motion is allowed;
-   a reload in the same tab, reduced motion, or no JS never paints it, so it cannot flash (F-002 AC-003, AC-004). */
+/* The sampul paints only when JS runs, the boot script chose "play" or "replay" (data-sampul), and motion is allowed;
+   reduced motion or no JS never paints it, so it cannot flash (F-002 AC-004; F-014 replays it on reload). */
 .sampul {
   display: none;
 }
@@ -328,22 +328,6 @@ html.lenis body {
   html.js[data-sampul="replay"] .sampul {
     display: block;
   }
-}
-
-/* Pure CSS so the title is rising before hydration; the GSAP timeline only takes over for the exit. */
-@keyframes sampul-rise {
-  from {
-    opacity: 0;
-    transform: translateY(35%);
-  }
-  to {
-    opacity: 1;
-    transform: none;
-  }
-}
-
-.sampul-rise {
-  animation: sampul-rise 0.9s var(--ease-expo) both;
 }
 
 /* Reveal text waits hidden only while JS is present and motion is allowed, until it has been split; visibility keeps
