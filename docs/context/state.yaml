@@ -170,7 +170,7 @@ features:
           - EV-012
   - id: F-003
     title: Prolog (hero)
-    status: verification
+    status: superseded
     phase: complete
     spec_path: docs/specs/F-003-prolog
     tasks:
@@ -195,7 +195,7 @@ features:
           - EV-001
   - id: F-004
     title: Manifesto dan buka aplikasi
-    status: verification
+    status: superseded
     phase: complete
     spec_path: docs/specs/F-004-manifesto-buka
     tasks:
@@ -217,7 +217,7 @@ features:
           - EV-001
   - id: F-005
     title: Bab horizontal
-    status: verification
+    status: superseded
     phase: complete
     spec_path: docs/specs/F-005-bab-horizontal
     tasks:
@@ -241,7 +241,7 @@ features:
           - EV-001
   - id: F-006
     title: Streak dan kartu pembaca
-    status: verification
+    status: superseded
     phase: complete
     spec_path: docs/specs/F-006-streak-kartu
     tasks:
@@ -265,7 +265,7 @@ features:
           - EV-001
   - id: F-007
     title: Diskusi, cara mulai, FAQ, dan epilog
-    status: verification
+    status: superseded
     phase: complete
     spec_path: docs/specs/F-007-diskusi-epilog
     tasks:
@@ -363,8 +363,132 @@ features:
           - FR-003
         depends_on: []
         evidence: []
+  - id: F-011
+    title: Screenshot sementara dan perbaikan bug animasi
+    status: verification
+    phase: complete
+    spec_path: docs/specs/F-011-aset-motion-polish
+    tasks:
+      - id: T-001
+        title: Screenshot di mockup
+        status: done
+        requirements:
+          - FR-001
+        depends_on: []
+        evidence:
+          - EV-001
+      - id: T-002
+        title: Posisi scroll dan trigger
+        status: done
+        requirements:
+          - FR-002
+        depends_on: []
+        evidence:
+          - EV-001
+      - id: T-003
+        title: Kualitas gerak
+        status: done
+        requirements:
+          - FR-003
+        depends_on: []
+        evidence:
+          - EV-001
+  - id: F-012
+    title: "Redesign Marginalia: satu hari pembaca"
+    status: superseded
+    phase: complete
+    spec_path: docs/specs/F-012-marginalia
+    tasks:
+      - id: T-001
+        title: Fondasi visual dan pustaka doodle
+        status: done
+        requirements:
+          - FR-001
+        depends_on: []
+        evidence:
+          - EV-001
+      - id: T-002
+        title: Sampul, prolog, manifesto, buka
+        status: done
+        requirements:
+          - FR-002
+        depends_on:
+          - T-001
+        evidence:
+          - EV-001
+      - id: T-003
+        title: Satu hari pembaca
+        status: done
+        requirements:
+          - FR-003
+        depends_on:
+          - T-001
+        evidence:
+          - EV-001
+      - id: T-004
+        title: Rak, papan, mulai, indeks, epilog, cursor
+        status: done
+        requirements:
+          - FR-004
+        depends_on:
+          - T-001
+        evidence:
+          - EV-001
+      - id: T-005
+        title: Navigasi, audit visual, checks
+        status: done
+        requirements:
+          - FR-005
+        depends_on:
+          - T-002
+          - T-003
+          - T-004
+        evidence:
+          - EV-001
+      - id: T-006
+        title: Energi Aardvark
+        status: done
+        requirements:
+          - FR-006
+        depends_on:
+          - T-001
+        evidence:
+          - EV-001
+  - id: F-013
+    title: Revamp gaya Aardvark
+    status: verification
+    phase: complete
+    spec_path: docs/specs/F-013-gaya-aardvark
+    tasks:
+      - id: T-001
+        title: Sistem visual dan gerak
+        status: done
+        requirements:
+          - FR-001
+          - FR-002
+        depends_on: []
+        evidence:
+          - EV-001
+      - id: T-002
+        title: Section BookMate
+        status: done
+        requirements:
+          - FR-003
+        depends_on:
+          - T-001
+        evidence:
+          - EV-001
+      - id: T-003
+        title: Rak buku dari data demo dan validasi REA
+        status: done
+        requirements:
+          - FR-004
+        depends_on:
+          - T-001
+        evidence:
+          - EV-001
 active:
-  feature_id: F-010
+  feature_id: F-013
   task_id: T-003
 assumptions_open:
   - id: A-001
@@ -401,5 +525,5 @@ blockers:
   - feature_id: F-010
     task_id: T-003
     title: Deploy produksi
-generated_at: 2026-10-19T03:38:37.544Z
-source_hash: 737781f299a3dd05fabbfedfd15ec6af40e9941a1a6b9279a5e3672b9e656685
+generated_at: 2026-10-19T06:38:41.238Z
+source_hash: ef1078541274b0b562d4b9003035c43b1f62e91b04bbb4c75467ada6aaaf8aaf

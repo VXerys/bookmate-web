@@ -33,7 +33,7 @@ export default function OpengraphImage() {
           <span style={{ background: palette.ember, color: palette.ink, padding: "12px 28px", borderRadius: 999 }}>
             Unduh di Google Play
           </span>
-          <span style={{ color: palette.slate }}>{prolog.kicker}</span>
+          <span style={{ color: palette.slate }}>{prolog.note}</span>
         </div>
       </div>
     ),

@@ -20,6 +20,7 @@ Where things live and which direction dependencies point. Document only what an 
 | `src/components/sections/` | one file per section of `/` (prolog, manifesto, bab, streak, and so on) | owns its own `useGSAP` timeline; reads copy from `src/content/` |
 | `src/components/motion/` | cross-section motion: smooth scroll, sampul, slice transition, cursor, reveal, magnetic, liquid filter | client components; no product copy |
 | `src/components/site/` | header, footer, menu, buttons, phone frame | props in, markup out |
+| `src/components/art/` | SVG illustrations, doodles, abstract covers and spines (F-012) | server-safe markup only; motion hooks in through `data-*` attributes; no copy |
 | `src/content/` | typed copy and data: `site.ts` (brand facts), chapters, badges, FAQ | the only place UI copy and brand names live; no React imports |
 | `src/lib/motion/` | GSAP plugin hub, media-query constants, eases, intro state | imports `gsap` and `lenis` only; no React components |
 | `src/assets/images/` | statically imported images (screenshots, badges) for `next/image` | provenance recorded in `public/CREDITS.md` |
@@ -46,13 +47,13 @@ Listed in `sdd.config.json` under `frozen`. Edits need explicit owner approval a
 ## Dependency direction
 
 ```text
-app (routes) -> components/sections -> components/{site,motion} -> lib/motion
+app (routes) -> components/sections -> components/{site,motion,art} -> lib/motion
 any layer    -> content (typed copy and brand facts; imports nothing back)
 ```
 
 - Inner layers never import outer layers.
 - Framework and provider SDKs stay behind a project-owned boundary.
-- Project-specific rule: `app -> components/sections -> components/{site,motion} -> lib/motion`; `src/content/` is imported by any layer and imports none of them.
+- Project-specific rule: `app -> components/sections -> components/{site,motion,art} -> lib/motion`; `src/content/` is imported by any layer and imports none of them.
 
 ## Naming
 

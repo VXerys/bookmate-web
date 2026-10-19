@@ -11,20 +11,41 @@
   --color-peach-pale: #fff4e6;
   --color-ember: #ff7f14;
   --color-blue: #3b6ff5;
+  --color-sky: #e8eefe;
+  --color-highlight: #ffd700;
+  --color-white: #ffffff;
+  --color-pale-orange: #ffecd8;
+  --color-green: #4caf50;
+  --color-soft-green: #e5f6e5;
+  --color-coral: #ff4d4d;
+  --color-soft-red: #ffd8d8;
+  --color-gold: #ffb300;
   --color-plum: #52405a;
   --color-forest: #19382b;
   --color-slate: #64748b;
 
-  --font-serif: var(--font-newsreader), ui-serif, Georgia, serif;
-  --font-sans: var(--font-inter), ui-sans-serif, system-ui, sans-serif;
-  --font-mono: var(--font-jetbrains), ui-monospace, monospace;
+  --font-sans: var(--font-jakarta), ui-sans-serif, system-ui, sans-serif;
+  --font-display: var(--font-rubik), ui-sans-serif, system-ui, sans-serif;
+  --font-hand: var(--font-caveat), "Comic Sans MS", cursive;
 
   --ease-expo: cubic-bezier(0.16, 1, 0.3, 1);
 }
 
 @layer base {
+  :root {
+    --shape-r: 3rem;
+    --shape-i: 0.5rem;
+  }
+
+  @media (min-width: 768px) {
+    :root {
+      --shape-r: 7.5rem;
+      --shape-i: 1.125rem;
+    }
+  }
+
   html {
-    background: var(--color-paper);
+    background: var(--color-white);
     color: var(--color-ink);
     color-scheme: light;
     /* Reserves the scrollbar lane, so locking scroll during the sampul does not reflow the page and stale every trigger. */
@@ -32,10 +53,11 @@
   }
 
   body {
-    background: var(--color-paper);
+    background: var(--color-white);
     font-family: var(--font-sans);
     font-size: 1.0625rem;
-    line-height: 1.6;
+    font-weight: 500;
+    line-height: 1.45;
     -webkit-font-smoothing: antialiased;
     text-rendering: optimizeLegibility;
   }
@@ -101,61 +123,150 @@ html.lenis body {
   transition-behavior: allow-discrete;
 }
 
-/* Bab track (F-005): BabTrack sets data-horizontal only on wide screens with motion allowed; otherwise panels stack. */
-.bab[data-horizontal] [data-bab-track] {
-  flex-direction: row;
-  width: max-content;
+/* Book3D (F-012 FR-006): six faces of a hardcover in preserve-3d; sizes come from --w, --h, --d on the wrapper. */
+.book3d {
+  width: var(--w);
+  height: var(--h);
+  perspective: 60em;
 }
 
-.bab[data-horizontal] [data-bab-panel] {
-  width: 100vw;
-  flex-shrink: 0;
-}
-
-.bab[data-horizontal] .bab-indicator {
-  display: block;
-}
-
-/* Streak calendar (F-006): a filled day is an ember square; all days start filled so no-JS shows the full month. */
-.streak-day[data-on] {
-  background: var(--color-ember);
-  border-color: var(--color-ember);
-}
-
-/* Badge deck (F-006): stacked only while JS with motion waits to deal it; flipping is a 3D turn, instant under
-   reduced motion through the global transition override. */
-.deck.deck-stacked {
-  display: block;
-  min-height: 20rem;
-}
-
-.deck.deck-stacked [data-card] {
-  position: absolute;
-  inset: 0 auto auto 50%;
-  width: min(80vw, 22rem);
-  /* margin, not translate: Flip measures transforms, and a leftover translate would shift the dealt grid. */
-  margin-left: calc(min(80vw, 22rem) / -2);
-}
-
-.card-inner {
+.book3d-box {
+  position: relative;
+  width: 100%;
+  height: 100%;
   transform-style: preserve-3d;
-  transition: transform 0.7s var(--ease-expo);
 }
 
-.card-inner[data-flipped] {
+.book3d-face {
+  position: absolute;
+  border: 0.18em solid var(--color-ink);
+}
+
+.book3d-front,
+.book3d-back {
+  inset: 0;
+  border: 0;
+}
+
+.book3d-front {
+  transform: translateZ(calc(var(--d) / 2));
+}
+
+.book3d-back {
+  border: 0.18em solid var(--color-ink);
+  border-radius: 0.4em;
+  transform: rotateY(180deg) translateZ(calc(var(--d) / 2));
+}
+
+.book3d-spine,
+.book3d-pages {
+  top: 0;
+  left: calc(50% - var(--d) / 2);
+  width: var(--d);
+  height: 100%;
+}
+
+.book3d-spine {
+  transform: rotateY(-90deg) translateZ(calc(var(--w) / 2));
+  filter: brightness(0.82);
+}
+
+/* Page block: fine lines like paper edges, slightly inset from the boards. */
+.book3d-pages {
+  transform: rotateY(90deg) translateZ(calc(var(--w) / 2 - 0.25em));
+  background: repeating-linear-gradient(90deg, var(--color-paper) 0 0.22em, var(--color-peach-pale) 0.22em 0.32em);
+}
+
+.book3d-top,
+.book3d-bottom {
+  left: 0;
+  top: calc(50% - var(--d) / 2);
+  width: calc(100% - 0.3em);
+  height: var(--d);
+  background: repeating-linear-gradient(0deg, var(--color-paper) 0 0.22em, var(--color-peach-pale) 0.22em 0.32em);
+}
+
+.book3d-top {
+  transform: rotateX(90deg) translateZ(calc(var(--h) / 2 - 0.2em));
+}
+
+.book3d-bottom {
+  transform: rotateX(-90deg) translateZ(calc(var(--h) / 2 - 0.2em));
+}
+
+/* Section shapes (F-013, docs/product/reference-aardvark.md): clip-path instead of border-radius, so a section can
+   round only its bottom corners, become a full capsule, or float inset from the viewport edge like a sticker. */
+.shape-bottom {
+  clip-path: inset(0 round 0 0 var(--shape-r) var(--shape-r));
+}
+
+.shape-capsule {
+  clip-path: inset(0 round var(--shape-r));
+}
+
+.shape-inset {
+  clip-path: inset(var(--shape-i) round var(--shape-r));
+}
+
+/* Buka (F-013): stacked by default; once the section pins (wide screens, motion allowed) the sentence wraps around
+   the phone and the start steps wait to the right of centre. */
+.buka .buka-gap {
+  display: none;
+}
+
+.buka[data-pinned] .buka-statement {
+  position: absolute;
+  inset-inline: 1.5rem;
+  top: 50%;
+  translate: 0 -50%;
+}
+
+.buka[data-pinned] .buka-gap {
+  display: block;
+  height: var(--buka-phone);
+  margin-block: 2svh;
+}
+
+.buka[data-pinned] .buka-stage {
+  position: absolute;
+  inset: 0;
+  max-width: none;
+  justify-content: center;
+}
+
+.buka[data-pinned] .buka-steps {
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  translate: 0 -50%;
+}
+
+/* Horizontal shelves scroll natively; the bar is hidden because the round buttons and the cut-off card already show
+   there is more. */
+.no-scrollbar {
+  scrollbar-width: none;
+}
+
+.no-scrollbar::-webkit-scrollbar {
+  display: none;
+}
+
+/* Rak (F-013): a badge card turns over; instant under reduced motion through the global transition override. */
+.flip-inner {
+  transform-style: preserve-3d;
+  transition: transform 0.8s cubic-bezier(0.625, 0.05, 0, 1);
+}
+
+.flip-inner[data-flipped] {
   transform: rotateY(180deg);
 }
 
-.card-face {
+.flip-face {
   backface-visibility: hidden;
 }
 
-.card-back {
+.flip-back {
   transform: rotateY(180deg);
-}
-
-.card.is-rippling .card-front {
-  filter: url(#liquid-ripple);
 }
 
 /* Ring states for the custom cursor; the GSAP-moved wrapper keeps x/y, the inner circle owns the scale. */
@@ -203,45 +314,80 @@ html.lenis body {
   }
 }
 
+/* Doodles (F-012) wait hidden only while JS runs with motion allowed, until their component has set the undrawn state;
+   without JS, with the boot fallback, or with reduced motion they show fully drawn. */
+@media (prefers-reduced-motion: no-preference) {
+  html.js [data-draw]:not([data-draw-ready]),
+  html.js [data-highlight]:not([data-draw-ready]) {
+    visibility: hidden;
+  }
+}
+
 @layer components {
+  /* Rubik at its heaviest with a leading under 1, like the reference's 120/96 and 78/62 headings. */
   .display {
-    font-family: var(--font-serif);
-    font-weight: 400;
-    font-size: clamp(3.25rem, 11vw, 13rem);
-    line-height: 0.92;
-    letter-spacing: -0.03em;
+    font-family: var(--font-display);
+    font-weight: 800;
+    font-size: clamp(3rem, 6.4vw, 6.75rem);
+    line-height: 0.82;
+    letter-spacing: -0.02em;
+    text-wrap: balance;
+  }
+
+  .heading {
+    font-family: var(--font-display);
+    font-weight: 800;
+    font-size: clamp(2.6rem, 5.4vw, 4.875rem);
+    line-height: 0.84;
+    letter-spacing: -0.015em;
     text-wrap: balance;
   }
 
   .statement {
-    font-family: var(--font-serif);
-    font-weight: 400;
-    font-size: clamp(1.75rem, 4.2vw, 4rem);
-    line-height: 1.1;
-    letter-spacing: -0.015em;
-    text-wrap: pretty;
+    font-family: var(--font-display);
+    font-weight: 700;
+    font-size: clamp(1.6rem, 2.4vw, 2rem);
+    line-height: 0.92;
+    letter-spacing: -0.01em;
   }
 
   .display em,
+  .heading em,
   .statement em {
-    font-style: italic;
+    font-style: normal;
+  }
+
+  .lead {
+    font-weight: 600;
+    font-size: clamp(1.125rem, 1.6vw, 1.5rem);
+    line-height: 1.2;
+    letter-spacing: -0.02em;
   }
 
   .label {
-    font-family: var(--font-mono);
+    font-weight: 700;
     font-size: 0.75rem;
     line-height: 1.4;
-    letter-spacing: 0.14em;
+    letter-spacing: 0.08em;
     text-transform: uppercase;
   }
 
-  /* Static paper texture; multiply keeps it visible on paper without greying dark chapters. */
+  /* A club member's handwriting: always BookMate blue, like the reference's violet. */
+  .hand {
+    font-family: var(--font-hand);
+    font-weight: 600;
+    font-size: clamp(1.4rem, 1.8vw, 1.6rem);
+    line-height: 1;
+    color: var(--color-blue);
+  }
+
+  /* Static paper texture; multiply keeps it visible on light blocks without greying dark ones. */
   .grain {
     pointer-events: none;
     position: fixed;
     inset: 0;
     z-index: 60;
-    opacity: 0.07;
+    opacity: 0.05;
     mix-blend-mode: multiply;
     background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='160' height='160'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='2' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
   }

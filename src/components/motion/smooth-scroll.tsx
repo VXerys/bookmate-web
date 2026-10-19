@@ -31,6 +31,8 @@ export function unlockScroll(owner: ScrollLockOwner) {
 
 export function scrollToTarget(target: string | HTMLElement | number) {
   if (instance) {
+    // A cheap re-measure first: a scroll limit cached before the last layout change would stop the scroll short.
+    instance.resize();
     instance.scrollTo(target, { duration: 1.4 });
     return;
   }
@@ -42,6 +44,7 @@ export function scrollToTarget(target: string | HTMLElement | number) {
 export function jumpToTarget(target: string | HTMLElement | number) {
   if (instance) {
     // Lenis already honours scroll-margin-top (sections clear the fixed header), so no extra offset is added here.
+    instance.resize();
     instance.scrollTo(target, { immediate: true, force: true });
     return;
   }
@@ -54,10 +57,15 @@ export function SmoothScroll() {
     // Under reduced motion the browser's native scroll is the final state; Lenis never starts.
     if (!window.matchMedia(MOTION_OK).matches) return;
 
-    const lenis = new Lenis({ lerp: 0.09, smoothWheel: true });
+    // lerp 0.2 matches the reference's snappier smoothing (reference-aardvark.md, validated with REA).
+    const lenis = new Lenis({ lerp: 0.2, smoothWheel: true });
     instance = lenis;
     if (scrollLock.isLocked()) lenis.stop();
     lenis.on("scroll", ScrollTrigger.update);
+    // Pins add spacers on refresh; Lenis caches the scroll limit, so it re-measures with them or in-page links stop
+    // short of the lower sections (F-011).
+    const resize = () => lenis.resize();
+    ScrollTrigger.addEventListener("refresh", resize);
     const tick = (time: number) => lenis.raf(time * 1000);
     gsap.ticker.add(tick);
     // Lag smoothing stays on during the intro so its timeline does not skip frames, then goes off so Lenis and
@@ -73,10 +81,22 @@ export function SmoothScroll() {
 
     return () => {
       stopWaiting();
+      ScrollTrigger.removeEventListener("refresh", resize);
       gsap.ticker.remove(tick);
       lenis.destroy();
       instance = null;
     };
+  }, []);
+
+  useEffect(() => {
+    // Triggers are created child-first and per component, and gsap.matchMedia re-creates a pin (bab, at 1024px) after
+    // the triggers below it, so every refresh first puts them back in page order; otherwise a later pin's spacer is
+    // missing from the positions of triggers measured before it.
+    const sortBeforeRefresh = () => ScrollTrigger.sort();
+    ScrollTrigger.addEventListener("refreshInit", sortBeforeRefresh);
+    // Declared after the Lenis effect, so this first refresh also re-measures Lenis through its refresh listener.
+    ScrollTrigger.refresh();
+    return () => ScrollTrigger.removeEventListener("refreshInit", sortBeforeRefresh);
   }, []);
 
   return null;

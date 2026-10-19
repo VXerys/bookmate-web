@@ -1,6 +1,6 @@
 <!-- GENERATED FILE — DO NOT EDIT. Rendered by `npm run context:render`.
 Source: sdd.config.json, docs/steering/, docs/specs/F-*/, docs/context/ASSUMPTIONS.md, docs/handoff/current.md.
-source_hash: 737781f299a3dd05fabbfedfd15ec6af40e9941a1a6b9279a5e3672b9e656685 -->
+source_hash: ef1078541274b0b562d4b9003035c43b1f62e91b04bbb4c75467ada6aaaf8aaf -->
 
 # Brief
 
@@ -9,13 +9,14 @@ BookMate Web adalah situs pemasaran untuk aplikasi BookMate yang mengajak pembac
 Project `BookMate Web`, tier `lite`. Rendered from sdd.config.json, docs/steering/, docs/specs/F-*/, docs/context/ASSUMPTIONS.md, docs/handoff/current.md.
 
 ## Active
-Feature F-010 — QA dan rilis (`implementing`, docs/specs/F-010-qa-rilis/)
-Task T-003 — Deploy produksi (`blocked`); requirements: FR-003; depends on: none
+Feature F-013 — Revamp gaya Aardvark (`verification`, docs/specs/F-013-gaya-aardvark/)
+Task T-003 — Rak buku dari data demo dan validasi REA (`done`); requirements: FR-004; depends on: T-001
 
-Diblokir A-004 dan persetujuan deploy pemilik. Acceptance: AC-004.
+`src/content/books.ts` (dari mock app), `typo-cover.tsx`, `card-shelf.tsx`, `buku.tsx`, koreksi REA. Acceptance: AC-008, AC-009.
 
 Acceptance criteria:
-- AC-004: Given persetujuan pemilik dan domain (A-004), when deploy produksi, then situs dapat diakses di domain dan Lighthouse mobile memenuhi target PRD.
+- AC-008: Given section buku, then 20 kartu tampil dengan data persis dari mock app, tanpa gambar sampul penerbit, masing-masing berlabel data demo.
+- AC-009: Given validasi REA atas aardvarkbookclub.com, then parameter gerak di reference-aardvark.md cocok dengan kode situs atau ditandai belum terverifikasi, dan koreksinya diterapkan (callout 1.075, header tidak bersembunyi, durasi default 0.6, Lenis lerp 0.2).
 
 ## Rules
 Stop conditions:
@@ -42,9 +43,7 @@ Frozen: none
 None.
 
 ## Handoff
-Next step:
-
-Pemilik: cek reduced motion dan kesan gerak di `next start`, jawab A-001 sampai A-007, lalu putuskan push branch bertumpuk dan PR. Setelah A-002 tersedia: ganti slot `PhoneFrame` dengan screenshot asli lewat `next/image` dan catat di `public/CREDITS.md`.
+Active handoff without an "Exact next step" section.
 
 ## Other open tasks
 None.
@@ -54,11 +53,14 @@ None.
 |---|---|---|---|
 | F-001 Fondasi dan motion core | implementing | in_progress | 4/5 |
 | F-002 Shell global: sampul, header, slice transition, menu, cursor, footer | verification | complete | 9/9 |
-| F-003 Prolog (hero) | verification | complete | 2/2 |
-| F-004 Manifesto dan buka aplikasi | verification | complete | 2/2 |
-| F-005 Bab horizontal | verification | complete | 2/2 |
-| F-006 Streak dan kartu pembaca | verification | complete | 2/2 |
-| F-007 Diskusi, cara mulai, FAQ, dan epilog | verification | complete | 2/2 |
+| F-003 Prolog (hero) | superseded | complete | 2/2 |
+| F-004 Manifesto dan buka aplikasi | superseded | complete | 2/2 |
+| F-005 Bab horizontal | superseded | complete | 2/2 |
+| F-006 Streak dan kartu pembaca | superseded | complete | 2/2 |
+| F-007 Diskusi, cara mulai, FAQ, dan epilog | superseded | complete | 2/2 |
 | F-008 SEO dan halaman legal | implementing | blocked | 1/4 |
 | F-009 WebGL hover distortion (opsional) | draft | complete | 0/1 |
 | F-010 QA dan rilis | implementing | blocked | 2/3 |
+| F-011 Screenshot sementara dan perbaikan bug animasi | verification | complete | 3/3 |
+| F-012 Redesign Marginalia: satu hari pembaca | superseded | complete | 6/6 |
+| F-013 Revamp gaya Aardvark | verification | complete | 3/3 |

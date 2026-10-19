@@ -9,14 +9,14 @@ export type Chapter = {
 
 export const chapters: readonly Chapter[] = [
   { id: "prolog", label: "Prolog" },
-  { id: "manifesto", label: "Manifesto" },
+  { id: "buku", label: "Buku di rak teman", navLabel: "Buku" },
+  { id: "fitur", label: "Fitur", navLabel: "Fitur" },
+  { id: "hari", label: "Satu hari", navLabel: "Satu hari" },
   { id: "buka", label: "Buka aplikasinya" },
-  { id: "bab", label: "Bab 01 sampai 05", navLabel: "Fitur" },
-  { id: "streak", label: "Api streak", navLabel: "Streak" },
-  { id: "kartu", label: "Kartu pembaca", navLabel: "Lencana" },
-  { id: "diskusi", label: "Ruang diskusi", navLabel: "Komunitas" },
-  { id: "mulai", label: "Cara mulai" },
-  { id: "faq", label: "Pertanyaan", navLabel: "FAQ" },
+  { id: "daftar", label: "Pilih fitur" },
+  { id: "manfaat", label: "Kenapa BookMate" },
+  { id: "rak", label: "Rak lencana", navLabel: "Lencana" },
+  { id: "indeks", label: "Pertanyaan", navLabel: "FAQ" },
   { id: "epilog", label: "Epilog" },
 ];
 

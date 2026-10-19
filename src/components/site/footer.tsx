@@ -1,35 +1,34 @@
-import { Magnetic } from "@/components/motion/magnetic";
+import { LogoMark } from "@/components/site/logo";
+import { ButtonAlt } from "@/components/site/button-alt";
 import { shell } from "@/content/shell";
 import { site } from "@/content/site";
 
-// Sticky at the bottom underneath the page layer (see layout), so the last chapter lifts away to reveal it. Pure CSS:
-// it reads the same with reduced motion or without JavaScript (AC-019).
+// Sticky at the bottom underneath the page layer (see layout), so the rounded last section lifts away to reveal it.
+// Pure CSS for the reveal: it reads the same with reduced motion or without JavaScript (AC-019); the epilog adds a
+// gentle parallax on [data-footer-inner] when motion is allowed.
 export function Footer() {
   return (
-    <footer className="sticky bottom-0 z-0 flex min-h-[70svh] flex-col justify-between gap-12 bg-ink px-4 pt-16 pb-8 text-paper md:px-10">
-      <div className="flex flex-col gap-6">
-        <p className="statement max-w-3xl text-peach">{site.tagline}</p>
-        <Magnetic className="self-start">
-          <a
-            href={site.app.playStoreUrl}
-            data-cursor-label={shell.header.cta}
-            className="inline-flex min-h-11 items-center rounded-full bg-ember px-6 py-3 font-medium text-ink"
-          >
+    <footer className="sticky bottom-0 z-0 overflow-hidden bg-blue text-ink">
+      <div data-footer-inner className="flex min-h-[70svh] flex-col justify-between gap-12 px-6 pt-40 pb-8 lg:px-10">
+        <div className="flex flex-col items-start gap-6">
+          <p className="heading max-w-4xl text-paper">{site.tagline}</p>
+          <ButtonAlt href={site.app.playStoreUrl} cursorLabel={shell.header.cta} tone="highlight" size="lg">
             {shell.footer.download}
-          </a>
-        </Magnetic>
-      </div>
-      <div className="flex flex-col gap-6">
-        <p className="display italic" aria-hidden="true">
-          {site.name}
-        </p>
-        <div className="label flex flex-wrap items-center justify-between gap-4 text-peach">
-          <p>
-            {shell.footer.madeBy} {site.publisher} · © {shell.footer.copyrightYear} {site.publisher}
+          </ButtonAlt>
+        </div>
+        <div className="flex flex-col gap-6">
+          <p className="flex items-center gap-[0.15em] font-display text-[clamp(4rem,16vw,15rem)] leading-[0.8] font-extrabold tracking-tight text-paper" aria-hidden="true">
+            <LogoMark className="w-[0.8em] text-paper" />
+            {site.name}
           </p>
-          <a href="#prolog" className="inline-flex min-h-11 items-center underline-offset-4 hover:underline">
-            {shell.footer.backToTop}
-          </a>
+          <div className="label flex flex-wrap items-center justify-between gap-4">
+            <p>
+              {shell.footer.madeBy} {site.publisher} · © {shell.footer.copyrightYear} {site.publisher}
+            </p>
+            <a href="#prolog" className="inline-flex min-h-11 items-center underline-offset-4 hover:underline">
+              {shell.footer.backToTop}
+            </a>
+          </div>
         </div>
       </div>
     </footer>

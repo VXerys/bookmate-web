@@ -2,7 +2,7 @@
 id: F-003
 title: "Prolog (hero)"
 type: requirements
-status: verification
+status: superseded
 tier: lite
 owner: "M Sechan Alfarisi"
 created: 2026-10-19
@@ -12,6 +12,8 @@ supersedes: null
 ---
 
 # Requirements: Prolog (hero)
+
+> Digantikan F-013 (2026-10-19): lapisan visual dan section ini diganti revamp gaya Aardvark. Dokumen ini disimpan sebagai riwayat.
 
 ## Problem
 

@@ -6,7 +6,9 @@ import { createPortal } from "react-dom";
 import { navigateTo } from "@/components/motion/slice-transition";
 import { lockScroll, unlockScroll } from "@/components/motion/smooth-scroll";
 import { chapterNumber, navChapters } from "@/content/navigation";
+import { ButtonAlt } from "@/components/site/button-alt";
 import { shell } from "@/content/shell";
+import { site } from "@/content/site";
 import { EASE_OUT, gsap, MOTION_OK } from "@/lib/motion/gsap";
 
 const DESKTOP = "(min-width: 768px)";
@@ -104,7 +106,7 @@ export function Menu() {
         aria-expanded={open}
         aria-controls="menu-panel"
         onClick={() => setOpen(true)}
-        className="inline-flex min-h-11 min-w-11 items-center justify-center rounded-full border border-ink/20 px-4 text-sm md:hidden"
+        className="inline-flex h-11 min-w-11 items-center justify-center rounded-3xl bg-peach-pale px-4 text-sm font-bold md:hidden"
       >
         {shell.menu.open}
       </button>
@@ -118,13 +120,13 @@ export function Menu() {
               aria-label={shell.menu.label}
               hidden={!open}
               onKeyDown={onKeyDown}
-              className="fixed inset-0 z-[70] flex flex-col bg-ink px-4 pt-3 pb-10 text-paper"
+              className="fixed inset-0 z-[70] flex flex-col bg-blue px-4 pt-3 pb-10 text-ink"
             >
               <div className="flex justify-end">
                 <button
                   type="button"
                   onClick={() => close()}
-                  className="inline-flex min-h-11 min-w-11 items-center justify-center rounded-full border border-paper/30 px-4 text-sm"
+                  className="inline-flex h-11 min-w-11 items-center justify-center rounded-3xl bg-white px-4 text-sm font-bold"
                 >
                   {shell.menu.close}
                 </button>
@@ -139,13 +141,19 @@ export function Menu() {
                         onClick={(event) => onLink(event, chapter.id)}
                         className="flex min-h-11 items-baseline gap-4 py-1"
                       >
-                        <span className="label text-peach">{chapterNumber(chapter.id)}</span>
-                        <span className="statement">{chapter.navLabel}</span>
+                        <span className="label">{chapterNumber(chapter.id)}</span>
+                        <span className="font-display text-[clamp(3rem,14vw,5rem)] leading-[0.9] font-extrabold">{chapter.navLabel}</span>
                       </a>
                     </li>
                   ))}
                 </ul>
               </nav>
+              {/* The header hides its download pill below 640px, so the menu carries it. */}
+              <div className="mt-8">
+                <ButtonAlt href={site.app.playStoreUrl} tone="highlight" size="lg">
+                  {shell.footer.download}
+                </ButtonAlt>
+              </div>
             </div>,
           document.body,
         )}

@@ -2,7 +2,7 @@
 id: F-006
 title: "Streak dan kartu pembaca"
 type: design
-status: verification
+status: superseded
 tier: lite
 owner: "M Sechan Alfarisi"
 created: 2026-10-19

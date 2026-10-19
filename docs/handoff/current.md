@@ -2,10 +2,10 @@
 status: active
 owner: M Sechan Alfarisi
 session_date: 2026-10-19
-branch: feat/M4-seo-qa
-base_commit: e7f302c
-current_commit: acd87e4
-feature_id: F-010
+branch: feat/F-013-gaya-aardvark
+base_commit: d13bb04
+current_commit: 76167f3
+feature_id: F-013
 task_id: T-003
 expires_after: 2026-11-18
 ---
@@ -16,73 +16,50 @@ Current coding session delta. It does not replace product docs, architecture, AD
 
 ## Session objective
 
-Selesaikan semua fase roadmap tanpa menunggu konfirmasi per langkah (instruksi pemilik 2026-10-19), commit setiap fase.
+Revamp seluruh halaman ke gaya aardvarkbookclub.com (bulat, blok warna, gerak berpegas) dengan cerita BookMate, rak buku dari data demo app, dan validasi reverse engineering memakai REA.
 
 ## Context used
 
-- `docs/product/{art-direction,roadmap,prd}.md`, semua spec `docs/specs/F-00*/`
-- Repo app `bookmeet`: `reading_achievement_resolver.dart` (30 lencana), `settings_page.dart`, `help_center_data.dart`, `RELEASE_NOTES.md`, `marketing_assets/.../content.md`
+- `docs/product/reference-aardvark.md` (reverse engineering, divalidasi REA), `docs/product/art-direction.md` (keputusan grilling Q1 sampai Q10)
+- Repo app `bookmeet`: `app_colors.dart`, `logo-bookmate.svg`, `lib/core/mock/mock_data_constants.dart` (20 buku demo)
 
 ## Completed
 
-- F-002 shell global (`bdc4c6b`), M2 F-003 sampai F-005 (`c2669d2`), M3 F-006 dan F-007 (`0c8cfaa`), M4 F-008 T-001 dan F-010 T-001, T-002 (commit ini).
-- Branch bertumpuk: `feat/F-001-fondasi-motion-core` (PR #1) -> `feat/F-002-shell-global` -> `feat/M2-cerita-utama` -> `feat/M3-signature-konversi` -> `feat/M4-seo-qa`. Hanya F-001 yang sudah di-push.
+- F-013 T-001 sampai T-003 done (EV-001, commit `76167f3`). F-003 sampai F-007 dan F-012 ditandai superseded.
+- REA: CLI `analyze-javascript-application` dijalankan agent pada bundle publik; parameter gerak diverifikasi dari kode dan koreksinya diterapkan.
 
 ## Requirement coverage
 
-- Semua AC yang bisa dibuktikan agent sudah punya EV. Yang tersisa per fitur ada di `verification.md` masing-masing: reduced motion dan kesan gerak (cek pemilik), serta item yang diblokir assumption.
+- AC-001 sampai AC-009 F-013 pass, kecuali AC-004 (reduced motion) yang belum bisa diemulasikan di Browser pane.
 
 ## Changed files
 
-Lihat `git log e7f302c..HEAD` dan spec F-008 sampai F-010.
+Lihat `git diff --stat d13bb04..HEAD`.
 
 ## Commands executed
 
 ```bash
-npm test && npm run test:sdd && npm run lint && npm run typecheck && npm run build && npm run context:validate -- --strict
+npm run lint && npm run typecheck && npm test && npm run build && npm run context:validate -- --strict
 ```
 
 Result:
 
 ```text
-tests 49 pass; SDD 34 pass; lint, typecheck, build exit 0; context validation passed strict (10 features)
-audit next start: security headers, OG 1200 x 630, JSON-LD, robots, one h1, landmarks, every section headed, no img without alt
-first-load JS 246.6 KB gzip, CSS 7.7 KB gzip
+lint clean; typecheck 0 errors; tests 49 pass; build ok; :3101 0 error console, tanpa overflow di 1440/997/375
 ```
 
 ## Current implementation state
 
-Halaman `/` lengkap: sampul, header, menu, slice, cursor, Prolog, Manifesto, Buka, Bab, Streak, Kartu, Diskusi, Cara mulai, FAQ, Epilog, footer. Layar ponsel masih slot berlabel (A-002); kartu lencana tipografis tanpa gambar (A-003).
+Branch `feat/F-013-gaya-aardvark` bertumpuk di atas F-012 dan F-011; ketiganya belum di-push. REA juga terdaftar sebagai MCP server global (`~/.claude.json`, `rea-agents@6.7.0`) dan skill `reverse-engineer-anything` terpasang sejak 13:30; bukan dari perintah agent sesi ini, aktif setelah restart.
 
 ## Uncommitted work
 
-- Tidak ada setelah commit ini.
+- Tidak ada setelah commit dokumen ini.
 
 ## Blockers
 
-- A-001 nama merek, A-002 screenshot, A-003 izin gambar lencana, A-004 domain, A-005 teks legal, A-006 tautan WhatsApp, A-007 analytics.
-- F-008 T-002 sampai T-004 dan F-010 T-003 `blocked`; F-009 `deferred` (butuh ADR-0002 dan dependency `three`).
-- Push branch M2 sampai M4 dan PR berikutnya menunggu izin pemilik.
+- A-002 tetap open (screenshot sementara); sampul buku penerbit dari mock app sengaja tidak dipakai. A-001, A-003 sampai A-007 tetap open; rilis diblokir.
 
-## Decisions made during session
+## Next step
 
-- Satu branch per milestone (M2, M3, M4) untuk kecepatan, commit per milestone.
-- Lencana diambil apa adanya dari kode app; gambar tidak dipakai sampai A-003.
-- Tidak ada CSP dulu: skrip RSC inline Next butuh nonce yang membuat halaman dinamis.
-
-## Context updates
-
-- Browser pane sesi ini tersembunyi: semua uji gerak memakai ticker GSAP manual; kesan gerak asli belum dilihat.
-
-## Exact next step
-
-Pemilik: cek reduced motion dan kesan gerak di `next start`, jawab A-001 sampai A-007, lalu putuskan push branch bertumpuk dan PR. Setelah A-002 tersedia: ganti slot `PhoneFrame` dengan screenshot asli lewat `next/image` dan catat di `public/CREDITS.md`.
-
-## Do not do next
-
-- Jangan menulis teks kebijakan privasi sendiri (A-005).
-- Jangan menambah Three.js tanpa ADR-0002 yang disetujui.
-
-## Validity
-
-Berlaku sampai 2026-11-18 atau sampai pemilik menjawab assumption.
+Pemilik mengecek `npm run dev` di browser yang terlihat (loader, intro hero, kartu, pin buka, reduced motion), lalu memutuskan push branch dan satu PR gabungan ke `main`.

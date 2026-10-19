@@ -1,6 +1,6 @@
 <!-- GENERATED FILE — DO NOT EDIT. Rendered by `npm run context:render`.
 Source: sdd.config.json, docs/steering/, docs/specs/F-*/, docs/context/ASSUMPTIONS.md, docs/handoff/current.md.
-source_hash: 737781f299a3dd05fabbfedfd15ec6af40e9941a1a6b9279a5e3672b9e656685 -->
+source_hash: ef1078541274b0b562d4b9003035c43b1f62e91b04bbb4c75467ada6aaaf8aaf -->
 
 # Project Progress
 
@@ -28,35 +28,35 @@ source_hash: 737781f299a3dd05fabbfedfd15ec6af40e9941a1a6b9279a5e3672b9e656685 --
 | T-008 Footer reveal | done | FR-006 | T-004 | EV-011 |
 | T-009 Integrasi dan verifikasi shell | done | FR-001, FR-002, FR-003, FR-004, FR-005, FR-006 | T-003, T-006, T-007, T-008 | EV-012 |
 
-## F-003 — Prolog (hero) (`verification`, complete)
+## F-003 — Prolog (hero) (`superseded`, complete)
 
 | Task | Status | Requirements | Depends on | Evidence |
 |---|---|---|---|---|
 | T-001 Konten cerita dan bingkai ponsel | done | FR-001 |  | EV-001 |
 | T-002 Section Prolog dan lapisan bergerak | done | FR-001, FR-002, FR-003 | T-001 | EV-001 |
 
-## F-004 — Manifesto dan buka aplikasi (`verification`, complete)
+## F-004 — Manifesto dan buka aplikasi (`superseded`, complete)
 
 | Task | Status | Requirements | Depends on | Evidence |
 |---|---|---|---|---|
 | T-001 Helper salinan aksesibel dan Manifesto | done | FR-001 |  | EV-001 |
 | T-002 Buka aplikasinya | done | FR-002 |  | EV-001 |
 
-## F-005 — Bab horizontal (`verification`, complete)
+## F-005 — Bab horizontal (`superseded`, complete)
 
 | Task | Status | Requirements | Depends on | Evidence |
 |---|---|---|---|---|
 | T-001 Konten bab dan test kontras | done | FR-001 |  | EV-001 |
 | T-002 Track horizontal dan fallback vertikal | done | FR-001, FR-002 | T-001 | EV-001 |
 
-## F-006 — Streak dan kartu pembaca (`verification`, complete)
+## F-006 — Streak dan kartu pembaca (`superseded`, complete)
 
 | Task | Status | Requirements | Depends on | Evidence |
 |---|---|---|---|---|
 | T-001 Data lencana dan Api streak | done | FR-001, FR-002 |  | EV-001 |
 | T-002 Kartu pembaca | done | FR-002 | T-001 | EV-001 |
 
-## F-007 — Diskusi, cara mulai, FAQ, dan epilog (`verification`, complete)
+## F-007 — Diskusi, cara mulai, FAQ, dan epilog (`superseded`, complete)
 
 | Task | Status | Requirements | Depends on | Evidence |
 |---|---|---|---|---|
@@ -85,3 +85,30 @@ source_hash: 737781f299a3dd05fabbfedfd15ec6af40e9941a1a6b9279a5e3672b9e656685 --
 | T-001 Header keamanan | done | FR-001 |  | EV-001 |
 | T-002 Audit aksesibilitas struktur dan bundle | done | FR-002 |  | EV-001 |
 | T-003 Deploy produksi | blocked | FR-003 |  |  |
+
+## F-011 — Screenshot sementara dan perbaikan bug animasi (`verification`, complete)
+
+| Task | Status | Requirements | Depends on | Evidence |
+|---|---|---|---|---|
+| T-001 Screenshot di mockup | done | FR-001 |  | EV-001 |
+| T-002 Posisi scroll dan trigger | done | FR-002 |  | EV-001 |
+| T-003 Kualitas gerak | done | FR-003 |  | EV-001 |
+
+## F-012 — Redesign Marginalia: satu hari pembaca (`superseded`, complete)
+
+| Task | Status | Requirements | Depends on | Evidence |
+|---|---|---|---|---|
+| T-001 Fondasi visual dan pustaka doodle | done | FR-001 |  | EV-001 |
+| T-002 Sampul, prolog, manifesto, buka | done | FR-002 | T-001 | EV-001 |
+| T-003 Satu hari pembaca | done | FR-003 | T-001 | EV-001 |
+| T-004 Rak, papan, mulai, indeks, epilog, cursor | done | FR-004 | T-001 | EV-001 |
+| T-005 Navigasi, audit visual, checks | done | FR-005 | T-002, T-003, T-004 | EV-001 |
+| T-006 Energi Aardvark | done | FR-006 | T-001 | EV-001 |
+
+## F-013 — Revamp gaya Aardvark (`verification`, complete)
+
+| Task | Status | Requirements | Depends on | Evidence |
+|---|---|---|---|---|
+| T-001 Sistem visual dan gerak | done | FR-001, FR-002 |  | EV-001 |
+| T-002 Section BookMate | done | FR-003 | T-001 | EV-001 |
+| T-003 Rak buku dari data demo dan validasi REA | done | FR-004 | T-001 | EV-001 |

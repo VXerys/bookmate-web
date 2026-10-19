@@ -3,14 +3,13 @@
 import { useRef, useState } from "react";
 
 import { chapterNumber, chapters, navChapters } from "@/content/navigation";
-import { Magnetic } from "@/components/motion/magnetic";
+import { ButtonAlt } from "@/components/site/button-alt";
+import { LogoMark } from "@/components/site/logo";
 import { Menu } from "@/components/site/menu";
 import { shell } from "@/content/shell";
 import { site } from "@/content/site";
-import { EASE_OUT, gsap, MOTION_OK, ScrollTrigger, useGSAP } from "@/lib/motion/gsap";
-
-// Past this scroll depth the header may slide away on downward scroll (AC-006).
-const HIDE_AFTER_PX = 120;
+import { ENERGY, gsap, MOTION_OK, useGSAP } from "@/lib/motion/gsap";
+import { whenIntroDone } from "@/lib/motion/intro-state";
 
 export function Header() {
   const root = useRef<HTMLElement>(null);
@@ -24,53 +23,39 @@ export function Header() {
 
       // The indicator is information, not motion, so it updates under reduced motion too (AC-007, AC-008).
       // Queried on document: the useGSAP scope limits selector strings to the header, and sections live in <main>.
+      // The chapter under the viewport's centre line is read from live layout on scroll, so pinned sections count
+      // while pinned; ScrollTriggers made here mounted before the pins and were measured without their spacers (F-011).
       const sections = [...document.querySelectorAll<HTMLElement>("main [data-chapter]")];
-      const indicators = sections.map((section) =>
-        ScrollTrigger.create({
-          trigger: section,
-          start: "top center",
-          end: "bottom center",
-          onToggle: (self) => {
-            if (self.isActive && section.dataset.chapter) setActive(section.dataset.chapter);
-          },
-        }),
-      );
+      const readChapter = () => {
+        const centre = window.innerHeight / 2;
+        const current = sections.find((section) => {
+          const box = section.getBoundingClientRect();
+          return box.top <= centre && box.bottom > centre;
+        });
+        if (current?.dataset.chapter) setActive(current.dataset.chapter);
+      };
+      readChapter();
+      window.addEventListener("scroll", readChapter, { passive: true });
+      window.addEventListener("resize", readChapter);
 
+      // The header stays put while scrolling, like the reference (validated with REA); it only drops in with the intro.
+      // The intro callback can fire outside this context, so its tween is killed by hand.
       const mm = gsap.matchMedia();
       mm.add(MOTION_OK, () => {
-        let hidden = false;
-        let focused = false;
-        const slide = (hide: boolean) => {
-          const next = hide && !focused;
-          if (next === hidden) return;
-          hidden = next;
-          gsap.to(header, { yPercent: next ? -110 : 0, duration: 0.6, ease: EASE_OUT, overwrite: true });
-        };
-        const trigger = ScrollTrigger.create({
-          start: 0,
-          end: "max",
-          onUpdate: (self) => slide(self.scroll() > HIDE_AFTER_PX && self.direction === 1),
+        let drop: gsap.core.Tween | undefined;
+        const stop = whenIntroDone(() => {
+          drop = gsap.fromTo(header, { yPercent: -100 }, { yPercent: 0, duration: 0.5, ease: ENERGY, delay: 0.1 });
         });
-        // A keyboard user tabbing into a hidden header must see where focus is (AC-006).
-        const onFocusIn = () => {
-          focused = true;
-          slide(false);
-        };
-        const onFocusOut = (event: FocusEvent) => {
-          if (!header.contains(event.relatedTarget as Node | null)) focused = false;
-        };
-        header.addEventListener("focusin", onFocusIn);
-        header.addEventListener("focusout", onFocusOut);
         return () => {
-          trigger.kill();
-          header.removeEventListener("focusin", onFocusIn);
-          header.removeEventListener("focusout", onFocusOut);
-          gsap.set(header, { yPercent: 0 });
+          stop();
+          drop?.kill();
+          gsap.set(header, { clearProps: "transform" });
         };
       });
 
       return () => {
-        indicators.forEach((indicator) => indicator.kill());
+        window.removeEventListener("scroll", readChapter);
+        window.removeEventListener("resize", readChapter);
         mm.revert();
       };
     },
@@ -78,25 +63,28 @@ export function Header() {
   );
 
   return (
-    <header
-      ref={root}
-      className="fixed inset-x-0 top-0 z-50 border-b border-ink/10 bg-paper/90 backdrop-blur-sm will-change-transform"
-    >
-      <div className="flex items-center gap-6 px-4 py-3 md:px-10">
-        <a href="#prolog" className="inline-flex min-h-11 items-center font-serif text-2xl italic" aria-label={`${site.name}, ${shell.header.homeLabel}`}>
+    <header ref={root} className="pointer-events-none fixed inset-x-0 top-0 z-50 will-change-transform">
+      {/* Floating controls instead of a bar, so every coloured block shows through around them. */}
+      <div className="flex items-center gap-3 px-4 py-4 lg:px-8">
+        <a
+          href="#prolog"
+          className="pointer-events-auto inline-flex min-h-11 items-center gap-2 font-display text-2xl font-extrabold tracking-tight"
+          aria-label={`${site.name}, ${shell.header.homeLabel}`}
+        >
+          <LogoMark className="size-8 text-blue" />
           {site.name}
         </a>
-        <p className="label hidden text-slate sm:block" aria-hidden="true">
-          {chapterNumber(active)} — {activeLabel}
+        <p className="label pointer-events-auto hidden rounded-full bg-white/85 px-3 py-2 xl:block" aria-hidden="true">
+          {chapterNumber(active)} · {activeLabel}
         </p>
-        <nav aria-label={shell.header.navLabel} className="ml-auto hidden md:block">
-          <ul className="flex items-center gap-1">
+        <nav aria-label={shell.header.navLabel} className="pointer-events-auto mx-auto hidden md:block">
+          <ul className="flex items-center gap-1.5">
             {navChapters.map((chapter) => (
               <li key={chapter.id}>
                 <a
                   href={`#${chapter.id}`}
                   aria-current={active === chapter.id ? "location" : undefined}
-                  className="inline-flex min-h-11 min-w-11 items-center justify-center px-3 text-sm aria-[current=location]:underline aria-[current=location]:underline-offset-4"
+                  className="inline-flex h-11 min-w-11 items-center justify-center rounded-3xl bg-peach-pale px-4 text-sm font-bold transition-colors hover:bg-white aria-[current=location]:bg-ink aria-[current=location]:text-white"
                 >
                   {chapter.navLabel}
                 </a>
@@ -104,16 +92,15 @@ export function Header() {
             ))}
           </ul>
         </nav>
-        <Magnetic className="ml-auto md:ml-0">
-          <a
-            href={site.app.playStoreUrl}
-            data-cursor-label={shell.header.cta}
-            className="inline-flex min-h-11 items-center rounded-full bg-ember px-5 text-sm font-medium text-ink"
-          >
+        {/* Below 640px the menu carries the download link, so the bar fits a 360px phone. */}
+        <div className="pointer-events-auto ml-auto hidden sm:block md:ml-0">
+          <ButtonAlt href={site.app.playStoreUrl} cursorLabel={shell.header.cta} size="sm">
             {shell.header.cta}
-          </a>
-        </Magnetic>
-        <Menu />
+          </ButtonAlt>
+        </div>
+        <div className="pointer-events-auto ml-auto sm:ml-0">
+          <Menu />
+        </div>
       </div>
     </header>
   );

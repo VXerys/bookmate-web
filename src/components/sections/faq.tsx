@@ -1,20 +1,28 @@
+import { HandNote } from "@/components/motion/hand-note";
+import { PopTitle } from "@/components/motion/pop-title";
 import { faq } from "@/content/story";
 
-// Native <details>: opens with mouse, keyboard, and without JavaScript (F-007 AC-004).
+// FAQ as soft blue cards (F-013, reference "common questions"). Native <details>: opens with mouse, keyboard, and
+// without JavaScript (F-007 AC-004).
 export function Faq() {
   return (
-    <section id="faq" data-chapter="faq" className="flex flex-col gap-10 bg-peach-pale px-4 py-24 md:px-10">
-      <h2 className="label">{faq.kicker}</h2>
-      <div className="flex max-w-4xl flex-col divide-y divide-ink/15 border-y border-ink/15">
+    <section id="indeks" data-chapter="indeks" className="grid gap-12 bg-white px-6 py-28 md:grid-cols-[minmax(0,0.8fr)_minmax(0,1.2fr)] lg:px-10">
+      <div className="flex flex-col items-start gap-5">
+        <PopTitle className="heading">{faq.title}</PopTitle>
+        <HandNote decorative className="-rotate-2">
+          {faq.note}
+        </HandNote>
+      </div>
+      <div className="flex flex-col gap-3">
         {faq.items.map((item) => (
-          <details key={item.question} className="group py-2">
-            <summary className="flex min-h-11 cursor-pointer list-none items-center justify-between gap-6 py-3 text-xl [&::-webkit-details-marker]:hidden">
+          <details key={item.question} className="group rounded-[1.125rem] bg-sky px-6 transition-colors open:bg-soft-green">
+            <summary className="flex min-h-[4.5rem] cursor-pointer list-none items-center justify-between gap-6 py-4 text-[clamp(1.1rem,1.6vw,1.5rem)] font-bold tracking-tight [&::-webkit-details-marker]:hidden">
               {item.question}
-              <span className="text-2xl transition-transform duration-300 group-open:rotate-45" aria-hidden="true">
+              <span className="grid size-10 shrink-0 place-items-center rounded-full bg-white text-2xl leading-none transition-transform duration-300 group-open:rotate-45" aria-hidden="true">
                 +
               </span>
             </summary>
-            <p className="max-w-2xl pb-4 text-lg">{item.answer}</p>
+            <p className="max-w-2xl pb-6 text-lg font-semibold">{item.answer}</p>
           </details>
         ))}
       </div>

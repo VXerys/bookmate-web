@@ -2,7 +2,7 @@
 id: F-005
 title: "Bab horizontal"
 type: design
-status: verification
+status: superseded
 tier: lite
 owner: "M Sechan Alfarisi"
 created: 2026-10-19

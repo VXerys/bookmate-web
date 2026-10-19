@@ -3,6 +3,7 @@
 import { useRef } from "react";
 
 import { jumpToTarget, lockScroll, unlockScroll } from "@/components/motion/smooth-scroll";
+import { LogoMark } from "@/components/site/logo";
 import { shell } from "@/content/shell";
 import { site } from "@/content/site";
 import { SAMPUL_SESSION_KEY } from "@/lib/motion/boot-script";
@@ -93,6 +94,7 @@ export function Sampul() {
     const renderCount = () => {
       if (counter.current) counter.current.textContent = String(Math.round(progress.value)).padStart(3, "0");
     };
+    const pop = gsap.fromTo(q("[data-sampul-logo]"), { scale: 0, rotate: -64 }, { scale: 1, rotate: 0, duration: 0.65, delay: 0.1, ease: "elastic.out(1, 0.72)" });
     const counting = gsap.to(progress, { value: 90, duration: SAMPUL_OPEN_MAX_MS / 1000, ease: "power2.out", onUpdate: renderCount });
 
     pageSettled().then(() => {
@@ -102,36 +104,52 @@ export function Sampul() {
       gsap
         .timeline({ defaults: { ease: "expo.inOut" }, onComplete: end })
         .to(progress, { value: 100, duration: lead * 0.6, ease: "power2.out", onUpdate: renderCount }, 0)
-        .to(q("[data-sampul-text]"), { yPercent: -18, autoAlpha: 0, duration: lead * 0.5, ease: "power3.in" }, lead * 0.5)
+        .to(q("[data-sampul-mark]"), { scale: 0.9, autoAlpha: 0, duration: lead * 0.5, ease: "power2.in" }, lead * 0.5)
         .addLabel("open", lead)
-        .to(q("[data-sampul-spine]"), { scaleY: 0, duration: 0.5, ease: "power2.in" }, "open")
-        .to(q("[data-sampul-left]"), { xPercent: -100, rotateY: 14, duration: 1.2 }, "open")
-        .to(q("[data-sampul-right]"), { xPercent: 100, rotateY: -14, duration: 1.2 }, "open")
-        .call(completeIntro, [], `open+=${SAMPUL_INTRO_AFTER_OPEN_MS / 1000}`);
+        // The reference's page transition: one enormous scribble covers the screen, the blue goes, and the scribble
+        // erases itself from its start to reveal the page (F-013 AC-011).
+        .fromTo(q("[data-sampul-brush]"), { drawSVG: "0% 0%" }, { drawSVG: "0% 100%", duration: 0.9, ease: "power2.inOut" }, "open")
+        .set(q("[data-sampul-cover]"), { autoAlpha: 0 }, "open+=0.95")
+        .to(q("[data-sampul-brush]"), { drawSVG: "100% 100%", duration: 1, ease: "osmo" }, "open+=1")
+        .set(el, { autoAlpha: 0 }, "open+=2")
+        .call(completeIntro, [], `open+=${SAMPUL_INTRO_AFTER_OPEN_MS / 1000 + 0.75}`);
     });
 
     // Releases only what this run holds, so a remount (React Strict Mode in development) replays the sampul cleanly.
     return () => {
       cancelled = true;
+      pop.kill();
       window.clearTimeout(safety);
       unlockScroll("sampul");
     };
   });
 
   return (
-    <div ref={root} className="sampul fixed inset-0 z-[90] [perspective:1600px]" aria-hidden="true">
-      <div data-sampul-left className="absolute inset-y-0 left-0 w-1/2 origin-left bg-ink" />
-      <div data-sampul-right className="absolute inset-y-0 right-0 w-1/2 origin-right bg-ink" />
-      <div data-sampul-spine className="absolute inset-y-[12%] left-1/2 w-px -translate-x-1/2 bg-paper/20" />
-      <div data-sampul-text className="relative flex h-full flex-col items-center justify-center gap-6 px-4 text-center text-paper">
-        <p className="label sampul-rise text-peach">{shell.sampul.kicker}</p>
-        <p className="display sampul-rise italic" style={{ animationDelay: "0.12s" }}>
+    <div ref={root} className="sampul fixed inset-0 z-[90] overflow-hidden text-paper" aria-hidden="true">
+      <div data-sampul-cover className="absolute inset-0 bg-blue" />
+      <div data-sampul-mark className="absolute inset-0 flex flex-col items-center justify-center gap-6">
+        <span data-sampul-logo className="grid size-28 place-items-center rounded-full bg-paper">
+          <LogoMark className="w-14 text-blue" />
+        </span>
+        <p className="display sampul-rise text-[clamp(3rem,9vw,6.5rem)]" style={{ animationDelay: "0.12s" }}>
           {site.name}
         </p>
-        <p className="label sampul-rise text-peach" style={{ animationDelay: "0.24s" }}>
+        <p className="label sampul-rise" style={{ animationDelay: "0.24s" }}>
           <span ref={counter}>001</span> / 100 {shell.sampul.counterUnit}
         </p>
       </div>
+      <svg viewBox="0 0 1080 1080" preserveAspectRatio="xMidYMid slice" className="absolute inset-0 h-full w-full">
+        <path
+          data-sampul-brush
+          d="M-80 170C230-30 470 250 330 430S760 90 930 350 230 660 390 840 960 760 1160 1010"
+          fill="none"
+          stroke="var(--color-highlight)"
+          strokeWidth="70%"
+          strokeLinecap="round"
+          strokeLinejoin="round"
+          style={{ strokeDasharray: "0 99999" }}
+        />
+      </svg>
     </div>
   );
 }

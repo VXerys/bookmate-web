@@ -2,7 +2,7 @@
 id: F-004
 title: "Manifesto dan buka aplikasi"
 type: design
-status: verification
+status: superseded
 tier: lite
 owner: "M Sechan Alfarisi"
 created: 2026-10-19
