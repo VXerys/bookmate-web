@@ -27,7 +27,7 @@ supersedes: null
   first-load JS 246.6 KB gzip in 9 files (F-001 baseline 223.7 KB), CSS 7.7 KB gzip
   ```
 - date: 2026-10-19
-- commit: uncommitted on feat/M4-seo-qa (base e7f302c)
+- commit: acd87e4
 - covers: [AC-001, AC-002, AC-003]
 
 ## Coverage

@@ -27,7 +27,7 @@ supersedes: null
   JSON-LD MobileApplication, ANDROID, price 0, installUrl Google Play; robots.txt "User-Agent: * | Allow: /"; og:image host is localhost until A-004
   ```
 - date: 2026-10-19
-- commit: uncommitted on feat/M4-seo-qa (base e7f302c)
+- commit: acd87e4
 - covers: [AC-001, AC-002, AC-003, AC-004]
 
 ## Coverage

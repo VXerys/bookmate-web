@@ -401,5 +401,5 @@ blockers:
   - feature_id: F-010
     task_id: T-003
     title: Deploy produksi
-generated_at: 2026-10-19T03:38:26.210Z
-source_hash: da45f2842cad20a2f5d0f1709e2e20c228db58323f9b4c2339edc13aa80d27ee
+generated_at: 2026-10-19T03:38:37.544Z
+source_hash: 737781f299a3dd05fabbfedfd15ec6af40e9941a1a6b9279a5e3672b9e656685

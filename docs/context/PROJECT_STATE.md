@@ -1,10 +1,10 @@
 <!-- GENERATED FILE — DO NOT EDIT. Rendered by `npm run context:render`.
 Source: sdd.config.json, docs/steering/, docs/specs/F-*/, docs/context/ASSUMPTIONS.md, docs/handoff/current.md.
-source_hash: da45f2842cad20a2f5d0f1709e2e20c228db58323f9b4c2339edc13aa80d27ee -->
+source_hash: 737781f299a3dd05fabbfedfd15ec6af40e9941a1a6b9279a5e3672b9e656685 -->
 
 # Project State
 
-- Generated at: 2026-10-19T03:38:26.210Z
+- Generated at: 2026-10-19T03:38:37.544Z
 - Project: BookMate Web (tier `lite`)
 - Active: F-010 / T-003
 - Open assumptions: 7
@@ -29,14 +29,14 @@ source_hash: da45f2842cad20a2f5d0f1709e2e20c228db58323f9b4c2339edc13aa80d27ee --
 ## Git
 
 - Branch: `feat/M4-seo-qa`
-- HEAD: `e7f302c`
+- HEAD: `acd87e4`
 - Worktree: dirty
 
 Recent commits:
 
+- `acd87e4 feat(M4): F-008 metadata, OG image, robots, JSON-LD; F-010 security headers and audit`
 - `e7f302c docs(M3): record evidence hash`
 - `0c8cfaa feat(M3): F-006 streak and reader cards, F-007 discussion, steps, FAQ, epilog`
 - `93e3e0f docs(M2): record evidence hash, move F-003 to F-005 to verification`
 - `c2669d2 feat(M2): F-003 prolog, F-004 manifesto and buka, F-005 bab track`
-- `bdc4c6b feat(F-002): T-008 footer reveal and T-009 shell integration`
 <!-- GENERATED:GIT_FACTS:END -->
