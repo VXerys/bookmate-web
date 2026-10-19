@@ -88,7 +88,7 @@ Detail per phase di `docs/product/roadmap.md`.
 | Feature | Capability | Outcome | Depends on | Status |
 |---|---|---|---|---|
 | F-001 | Fondasi dan motion core | toolchain, token, font, Lenis + GSAP, reduced motion | none | implementing |
-| F-002 | Shell global | sampul, header, slice transition, menu, cursor, footer reveal | F-001 | implementing |
+| F-002 | Shell global | sampul, header, slice transition, menu, cursor, footer reveal | F-001 | verification |
 | F-003 | Prolog (hero) | hero berlapis dengan CTA | F-002 | draft |
 | F-004 | Manifesto dan buka aplikasi | scrub text fill, scroll-linked scale | F-002 | draft |
 | F-005 | Bab horizontal | lima bab kemampuan | F-002 | draft |

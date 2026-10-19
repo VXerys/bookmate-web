@@ -2,7 +2,7 @@
 id: F-002
 title: "Shell global: sampul, header, slice transition, menu, cursor, footer"
 type: verification
-status: implementing
+status: verification
 tier: full
 owner: "M Sechan Alfarisi"
 created: 2026-10-18
@@ -135,8 +135,32 @@ Evidence that acceptance criteria hold at a named commit. A claim without a comm
   move over h1 to (300, 400): dot (300, 400), ring (297, 396) after 80 ms then (300, 400), state idle, native cursor untouched; over a header link: state link; next start computed ring circle transform matrix(1.6, 0, 0, 1.6, 0, 0), idle none; over the hero CTA: state label, pill opacity 1 with text "Unduh", ring opacity 0; pointerleave on the document: dot and ring opacity 0; pointerType touch: ignored, cursor stays where the last mouse event put it; magnetic CTA, pointer 40 px right of centre: element x 12 px (0.3 x 40), steady over 1.6 s; pointerleave -> 0, 0
   ```
 - date: 2026-10-19
-- commit: uncommitted on feat/F-002-shell-global (base fa3d7d2)
+- commit: a3c71bf
 - covers: [AC-014, AC-015, AC-016]
+
+### EV-011 — Footer reveal (T-008)
+- command: `npm test && npm run lint && npm run typecheck && npm run build` (exit codes checked); Browser pane on next start at 1440, 768, 360 px
+- output:
+  ```text
+  tests 41 pass; lint, typecheck, build exit 0; prerendered HTML contains the footer credit "Dibuat oleh Mangcoding"
+  footer position sticky, z 0; page layer z 10; 400 px before the end the layer still covers it (layer bottom 604 > footer top 205)
+  at the end the layer stops at 205 = footer top, footer bottom 900 = viewport; footer links last in tab order; 360 px fits one screen
+  ```
+- date: 2026-10-19
+- commit: uncommitted on feat/F-002-shell-global (base a3c71bf)
+- covers: [AC-018, AC-019]
+
+### EV-012 — Integrasi shell (T-009)
+- command: `npm test && npm run test:sdd && npm run lint && npm run typecheck && npm run build && npm run context:validate -- --strict`; Browser pane on next start
+- output:
+  ```text
+  tests 41 pass; SDD 34 pass; lint, typecheck, build exit 0; context validation passed strict; no console errors on next start
+  768 and 360 px: no horizontal overflow; reload in the same tab: data-sampul=skip, intro done
+  per-feature evidence: sampul EV-004 to EV-006, header EV-007, slice EV-008, menu EV-009, cursor EV-010, footer EV-011
+  ```
+- date: 2026-10-19
+- commit: uncommitted on feat/F-002-shell-global (base a3c71bf)
+- covers: [AC-001, AC-005, AC-009, AC-018]
 
 ## Coverage
 
@@ -154,7 +178,7 @@ Evidence that acceptance criteria hold at a named commit. A claim without a comm
 | AC-012, AC-013 | EV-009 | pass |
 | AC-014, AC-015, AC-016 | EV-010 | pass |
 | AC-017 | none | not_run (layar sentuh nyata dan reduced motion; secara kode efek hanya di POINTER_MOTION dan event touch diabaikan) |
-| AC-018, AC-019 | none | not_run (T-008) |
+| AC-018, AC-019 | EV-011, EV-012 | pass (AC-019 tanpa JS dari CSS sticky murni; reduced motion tidak mengubah footer) |
 
 ## Not run
 

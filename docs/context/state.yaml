@@ -70,8 +70,8 @@ features:
           - EV-012
   - id: F-002
     title: "Shell global: sampul, header, slice transition, menu, cursor, footer"
-    status: implementing
-    phase: in_progress
+    status: verification
+    phase: complete
     spec_path: docs/specs/F-002-shell-global
     tasks:
       - id: T-001
@@ -136,7 +136,7 @@ features:
           - EV-009
       - id: T-007
         title: Custom cursor dan magnetic
-        status: review
+        status: done
         requirements:
           - FR-005
         depends_on: []
@@ -144,15 +144,16 @@ features:
           - EV-010
       - id: T-008
         title: Footer reveal
-        status: planned
+        status: done
         requirements:
           - FR-006
         depends_on:
           - T-004
-        evidence: []
+        evidence:
+          - EV-011
       - id: T-009
         title: Integrasi dan verifikasi shell
-        status: planned
+        status: done
         requirements:
           - FR-001
           - FR-002
@@ -165,7 +166,8 @@ features:
           - T-006
           - T-007
           - T-008
-        evidence: []
+        evidence:
+          - EV-012
 active:
   feature_id: F-002
   task_id: T-005
@@ -192,5 +194,5 @@ assumptions_open:
     feature: null
     title: Analytics yang dipakai
 blockers: []
-generated_at: 2026-10-19T03:06:32.421Z
-source_hash: 6f75ba8388061836ee68cc3f0d9b540196606aed7c5e72e27bf283531399a4cd
+generated_at: 2026-10-19T03:09:04.366Z
+source_hash: c6526459961ad0e148dda67ca83179ab653a8734655db5410ad8422a0d95cc56

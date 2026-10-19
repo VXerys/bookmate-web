@@ -1,6 +1,6 @@
 <!-- GENERATED FILE — DO NOT EDIT. Rendered by `npm run context:render`.
 Source: sdd.config.json, docs/steering/, docs/specs/F-*/, docs/context/ASSUMPTIONS.md, docs/handoff/current.md.
-source_hash: 6f75ba8388061836ee68cc3f0d9b540196606aed7c5e72e27bf283531399a4cd -->
+source_hash: c6526459961ad0e148dda67ca83179ab653a8734655db5410ad8422a0d95cc56 -->
 
 # Project Progress
 
@@ -14,7 +14,7 @@ source_hash: 6f75ba8388061836ee68cc3f0d9b540196606aed7c5e72e27bf283531399a4cd --
 | T-004 Primitive reveal teks | done | FR-005 | T-003 | EV-009, EV-010 |
 | T-005 Integrasi dan verifikasi fondasi | review | FR-001, FR-002, FR-003, FR-004, FR-005, FR-006 | T-004 | EV-011, EV-012 |
 
-## F-002 — Shell global: sampul, header, slice transition, menu, cursor, footer (`implementing`, in_progress)
+## F-002 — Shell global: sampul, header, slice transition, menu, cursor, footer (`verification`, complete)
 
 | Task | Status | Requirements | Depends on | Evidence |
 |---|---|---|---|---|
@@ -24,6 +24,6 @@ source_hash: 6f75ba8388061836ee68cc3f0d9b540196606aed7c5e72e27bf283531399a4cd --
 | T-004 Skip link, header, dan indikator bab | done | FR-002 | T-002 | EV-007 |
 | T-005 Slice transition, fokus, dan hash | done | FR-003 | T-001, T-002 | EV-008 |
 | T-006 Menu mobile | done | FR-004 | T-004, T-005 | EV-009 |
-| T-007 Custom cursor dan magnetic | review | FR-005 |  | EV-010 |
-| T-008 Footer reveal | planned | FR-006 | T-004 |  |
-| T-009 Integrasi dan verifikasi shell | planned | FR-001, FR-002, FR-003, FR-004, FR-005, FR-006 | T-003, T-006, T-007, T-008 |  |
+| T-007 Custom cursor dan magnetic | done | FR-005 |  | EV-010 |
+| T-008 Footer reveal | done | FR-006 | T-004 | EV-011 |
+| T-009 Integrasi dan verifikasi shell | done | FR-001, FR-002, FR-003, FR-004, FR-005, FR-006 | T-003, T-006, T-007, T-008 | EV-012 |

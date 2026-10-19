@@ -2,7 +2,7 @@
 id: F-002
 title: "Shell global: sampul, header, slice transition, menu, cursor, footer"
 type: tasks
-status: implementing
+status: verification
 tier: full
 owner: "M Sechan Alfarisi"
 created: 2026-10-18
@@ -79,7 +79,7 @@ Hasil: aturan klik mana yang dicegat ada di `src/lib/motion/in-page-link.ts` + t
 `menu.tsx`: curtain wipe, focus trap, Esc, tutup saat lebar ≥ 768 px. Acceptance: AC-012, AC-013, EC-005.
 
 ### T-007 — Custom cursor dan magnetic
-- status: review
+- status: done
 - requirements: [FR-005]
 - depends_on: []
 - evidence: [EV-010]
@@ -87,18 +87,18 @@ Hasil: aturan klik mana yang dicegat ada di `src/lib/motion/in-page-link.ts` + t
 `cursor.tsx`, `magnetic.tsx`, CTA header dan halaman uji memakai `Magnetic` dan `data-cursor-label="Unduh"`. Acceptance: AC-014 sampai AC-017.
 
 ### T-008 — Footer reveal
-- status: planned
+- status: done
 - requirements: [FR-006]
 - depends_on: [T-004]
-- evidence: []
+- evidence: [EV-011]
 
 `footer.tsx` sticky di belakang konten, lapisan konten `relative z-10 bg-paper`. Acceptance: AC-018, AC-019.
 
 ### T-009 — Integrasi dan verifikasi shell
-- status: planned
+- status: done
 - requirements: [FR-001, FR-002, FR-003, FR-004, FR-005, FR-006]
 - depends_on: [T-003, T-006, T-007, T-008]
-- evidence: []
+- evidence: [EV-012]
 
 Semua cek dari `tech.md`, uji keyboard dan fokus di Browser pane, layout di 360, 768, 1440 px, CLS, NFR-001 sampai NFR-003, PR ke `main`. Kesan gerak dan reduced motion dicek pemilik di browser terlihat.
 

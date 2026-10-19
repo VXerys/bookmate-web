@@ -1,6 +1,6 @@
 <!-- GENERATED FILE — DO NOT EDIT. Rendered by `npm run context:render`.
 Source: sdd.config.json, docs/steering/, docs/specs/F-*/, docs/context/ASSUMPTIONS.md, docs/handoff/current.md.
-source_hash: 6f75ba8388061836ee68cc3f0d9b540196606aed7c5e72e27bf283531399a4cd -->
+source_hash: c6526459961ad0e148dda67ca83179ab653a8734655db5410ad8422a0d95cc56 -->
 
 # Brief
 
@@ -9,7 +9,7 @@ BookMate Web adalah situs pemasaran untuk aplikasi BookMate yang mengajak pembac
 Project `BookMate Web`, tier `lite`. Rendered from sdd.config.json, docs/steering/, docs/specs/F-*/, docs/context/ASSUMPTIONS.md, docs/handoff/current.md.
 
 ## Active
-Feature F-002 — Shell global: sampul, header, slice transition, menu, cursor, footer (`implementing`, docs/specs/F-002-shell-global/)
+Feature F-002 — Shell global: sampul, header, slice transition, menu, cursor, footer (`verification`, docs/specs/F-002-shell-global/)
 Task T-005 — Slice transition, fokus, dan hash (`done`); requirements: FR-003; depends on: T-001, T-002
 
 `slice-transition.tsx` dengan `navigateTo(id)`, delegasi klik tautan internal, `focusSection`, `history.pushState`. Acceptance: AC-009 sampai AC-011.
@@ -50,12 +50,10 @@ Next step:
 Pemilik commit T-005 dan set `done`. Lalu T-006: `src/components/site/menu.tsx` (tombol "Menu" di bawah 768 px, panel curtain, kunci `menu`, focus trap, Esc, tutup saat lebar ≥ 768 px, pilih tautan memanggil `navigateTo(id, { onCovered: close })`), copy menu di `src/content/shell.ts`. Ini juga menguji AC-020 end-to-end (menu lalu slice).
 
 ## Other open tasks
-- T-007 — Custom cursor dan magnetic (`review`)
-- T-008 — Footer reveal (`planned`)
-- T-009 — Integrasi dan verifikasi shell (`planned`)
+None.
 
 ## Features
 | Feature | Status | Phase | Done/Total |
 |---|---|---|---|
 | F-001 Fondasi dan motion core | implementing | in_progress | 4/5 |
-| F-002 Shell global: sampul, header, slice transition, menu, cursor, footer | implementing | in_progress | 6/9 |
+| F-002 Shell global: sampul, header, slice transition, menu, cursor, footer | verification | complete | 9/9 |

@@ -5,6 +5,7 @@ import { Cursor } from "@/components/motion/cursor";
 import { Sampul } from "@/components/motion/sampul";
 import { SliceTransition } from "@/components/motion/slice-transition";
 import { SmoothScroll } from "@/components/motion/smooth-scroll";
+import { Footer } from "@/components/site/footer";
 import { Header } from "@/components/site/header";
 import { InlineScript } from "@/components/site/inline-script";
 import { SkipLink } from "@/components/site/skip-link";
@@ -61,9 +62,13 @@ export default function RootLayout({ children }: LayoutProps<"/">) {
         <SkipLink />
         <Header />
         {/* tabIndex -1 lets the skip link and in-page jumps move focus here, not only the scroll position. */}
-        <main id="konten" tabIndex={-1} className="focus:outline-none">
-          {children}
-        </main>
+        {/* The page layer sits above the sticky footer, so scrolling past the last chapter reveals it (F-002 FR-006). */}
+        <div className="relative z-10 bg-paper">
+          <main id="konten" tabIndex={-1} className="focus:outline-none">
+            {children}
+          </main>
+        </div>
+        <Footer />
       </body>
     </html>
   );

@@ -10,6 +10,13 @@ export const shell = {
     homeLabel: "ke awal halaman",
     cta: "Unduh",
   },
+  footer: {
+    download: "Unduh di Google Play",
+    madeBy: "Dibuat oleh",
+    // From the app's About page ("© 2026 Mangcoding").
+    copyrightYear: "2026",
+    backToTop: "Kembali ke awal",
+  },
   menu: {
     open: "Menu",
     close: "Tutup",

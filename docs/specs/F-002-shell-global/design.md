@@ -2,7 +2,7 @@
 id: F-002
 title: "Shell global: sampul, header, slice transition, menu, cursor, footer"
 type: design
-status: implementing
+status: verification
 tier: full
 owner: "M Sechan Alfarisi"
 created: 2026-10-18
