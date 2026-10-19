@@ -1,10 +1,10 @@
 <!-- GENERATED FILE — DO NOT EDIT. Rendered by `npm run context:render`.
 Source: sdd.config.json, docs/steering/, docs/specs/F-*/, docs/context/ASSUMPTIONS.md, docs/handoff/current.md.
-source_hash: d90ca4bb984f795bb59fae692e8bcc0b4a5f6548624eec03fafdfbf9ba734881 -->
+source_hash: 5dd051bd53eb2bfa28b97e6333a1c6707dea246c197955194a2175a780e836ec -->
 
 # Project State
 
-- Generated at: 2026-10-19T05:02:52.169Z
+- Generated at: 2026-10-19T05:03:45.574Z
 - Project: BookMate Web (tier `lite`)
 - Active: F-011 / T-003
 - Open assumptions: 7
@@ -31,14 +31,14 @@ source_hash: d90ca4bb984f795bb59fae692e8bcc0b4a5f6548624eec03fafdfbf9ba734881 --
 ## Git
 
 - Branch: `feat/F-012-marginalia`
-- HEAD: `f173155`
-- Worktree: dirty
+- HEAD: `aa712cf`
+- Worktree: clean
 
 Recent commits:
 
+- `aa712cf docs(F-012): Marginalia art direction and redesign spec`
 - `f173155 docs(F-011): spec, evidence, and handoff for screenshots and motion fixes`
 - `523ae22 feat(F-011): real screens in device mockups and motion bug fixes`
 - `aacabcd Merge BookMate Web M1 to M4 (F-001 to F-010)`
 - `7251fc1 docs(M4): record evidence hash and final handoff`
-- `acd87e4 feat(M4): F-008 metadata, OG image, robots, JSON-LD; F-010 security headers and audit`
 <!-- GENERATED:GIT_FACTS:END -->
