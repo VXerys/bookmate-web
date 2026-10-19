@@ -61,7 +61,7 @@ Hasil: `completeIntro()` pindah ke `sampul.tsx` dan `intro-gate.tsx` dihapus. Je
 Hasil: `main` diberi `tabIndex={-1}` agar skip link memindahkan fokus, bukan hanya posisi scroll; section diberi `scroll-margin-top` agar tidak tertutup header. Header memakai bar `bg-paper/90` (kontras teks terjamin di atas bab gelap), indikator berjalan juga di reduced motion, dan header muncul kembali saat ada fokus di dalamnya. Temuan saat verifikasi yang ikut diperbaiki: scope `useGSAP` membuat selector section kosong (indikator diam); `not-sr-only` Tailwind me-reset padding skip link; target nav di bawah 44 px. AC-008 menunggu cek reduced motion pemilik.
 
 ### T-005 — Slice transition, fokus, dan hash
-- status: review
+- status: done
 - requirements: [FR-003]
 - depends_on: [T-001, T-002]
 - evidence: [EV-008]
@@ -71,10 +71,10 @@ Hasil: `main` diberi `tabIndex={-1}` agar skip link memindahkan fokus, bukan han
 Hasil: aturan klik mana yang dicegat ada di `src/lib/motion/in-page-link.ts` + test (modifier, tombol tengah, `data-slice="off"`, `#` kosong, halaman lain tetap native). `navigateTo(id, { onCovered })` disiapkan untuk menu T-006. Pengaman `setTimeout` 3 detik mendaratkan pengunjung bila ticker macet. Catatan verifikasi: Lenis 1.3 sudah menghormati `scroll-margin-top`, jadi offset manual yang sempat ditambahkan ke `jumpToTarget` dicabut lagi karena membuat jarak ganda (144 px).
 
 ### T-006 — Menu mobile
-- status: planned
+- status: review
 - requirements: [FR-004]
 - depends_on: [T-004, T-005]
-- evidence: []
+- evidence: [EV-009]
 
 `menu.tsx`: curtain wipe, focus trap, Esc, tutup saat lebar ≥ 768 px. Acceptance: AC-012, AC-013, EC-005.
 

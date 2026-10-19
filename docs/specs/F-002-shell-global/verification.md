@@ -138,8 +138,25 @@ Evidence that acceptance criteria hold at a named commit. A claim without a comm
   skip link: click not prevented by the slice handler, overlay opacity 0, no lock
   ```
 - date: 2026-10-19
-- commit: uncommitted on feat/F-002-shell-global (base 004b251)
+- commit: 5093b04
 - covers: [AC-009, AC-010, AC-011]
+
+### EV-009 — Menu mobile (T-006)
+- command: `npm test && npm run lint && npm run typecheck && npm run build` (exit codes checked); Browser pane on next dev at 360 px: menu opened with button.click(), real Tab, Shift+Tab, Escape; gsap.ticker driven by hand
+- output:
+  ```text
+  tests 41 pass; lint, typecheck, build exit 0; panel portalled to <body>; focus stays on <body> after load
+  open: aria-expanded true, lock owners [menu], focus on first link "04 Fitur"
+  Tab x4 -> "09 FAQ" (last); Tab -> "Tutup" (wraps inside the dialog); Shift+Tab -> "09 FAQ"
+  Escape: aria-expanded false, panel hidden, owners [], overflow (empty), focus back on BUTTON "Menu"
+  menu link #diskusi: owners menu+slice (menu open) -> slice (menu closed behind the strips) -> none;
+  focus on "Ruang diskusi", hash #diskusi, section 72 px below the top
+  EC-005: at 1024 px a resize event closes the menu and releases the lock (the pane's emulated resize alone fires no
+  event while rendering is paused, so the event was dispatched by hand)
+  ```
+- date: 2026-10-19
+- commit: uncommitted on feat/F-002-shell-global (base 5093b04)
+- covers: [AC-012, AC-013, AC-020]
 
 ## Coverage
 
@@ -149,12 +166,13 @@ Evidence that acceptance criteria hold at a named commit. A claim without a comm
 | AC-002 | EV-004, EV-005 | pass (jendela 2,0 sampai 4,5 s dites di unit; di dev halaman sudah lewat jendela sehingga sampul langsung terbuka) |
 | AC-003 | EV-004, EV-006 | pass |
 | AC-004 | EV-004 | pass untuk tanpa JS lewat aturan CSS; reduced motion menunggu cek pemilik |
-| AC-020 | EV-001, EV-002, EV-005 | pass di registry, penerapan, dan sampul; alur menu lalu slice dicek di T-006 |
+| AC-020 | EV-001, EV-002, EV-005, EV-009 | pass, termasuk alur menu lalu slice end-to-end |
 | AC-021 | EV-003 | pass |
 | AC-005, AC-006, AC-007 | EV-007 | pass |
 | AC-008 | none | not_run (reduced motion, cek pemilik; secara kode logika sembunyi hanya ada di cabang `MOTION_OK`) |
 | AC-009, AC-010, AC-011 | EV-008 | pass (AC-010 jalur reduced motion lewat kode: lompat langsung lalu fokus; cek pemilik) |
-| AC-012 to AC-019 | none | not_run (T-006 sampai T-009) |
+| AC-012, AC-013 | EV-009 | pass |
+| AC-014 to AC-019 | none | not_run (T-007 sampai T-009) |
 
 ## Not run
 

@@ -10,4 +10,9 @@ export const shell = {
     homeLabel: "ke awal halaman",
     cta: "Unduh",
   },
+  menu: {
+    open: "Menu",
+    close: "Tutup",
+    label: "Menu navigasi",
+  },
 } as const;

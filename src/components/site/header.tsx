@@ -3,6 +3,7 @@
 import { useRef, useState } from "react";
 
 import { chapterNumber, chapters, navChapters } from "@/content/navigation";
+import { Menu } from "@/components/site/menu";
 import { shell } from "@/content/shell";
 import { site } from "@/content/site";
 import { EASE_OUT, gsap, MOTION_OK, ScrollTrigger, useGSAP } from "@/lib/motion/gsap";
@@ -108,6 +109,7 @@ export function Header() {
         >
           {shell.header.cta}
         </a>
+        <Menu />
       </div>
     </header>
   );
