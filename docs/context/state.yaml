@@ -395,62 +395,68 @@ features:
           - EV-001
   - id: F-012
     title: "Redesign Marginalia: satu hari pembaca"
-    status: approved
-    phase: not_started
+    status: verification
+    phase: complete
     spec_path: docs/specs/F-012-marginalia
     tasks:
       - id: T-001
         title: Fondasi visual dan pustaka doodle
-        status: planned
+        status: done
         requirements:
           - FR-001
         depends_on: []
-        evidence: []
+        evidence:
+          - EV-001
       - id: T-002
         title: Sampul, prolog, manifesto, buka
-        status: planned
+        status: done
         requirements:
           - FR-002
         depends_on:
           - T-001
-        evidence: []
+        evidence:
+          - EV-001
       - id: T-003
         title: Satu hari pembaca
-        status: planned
+        status: done
         requirements:
           - FR-003
         depends_on:
           - T-001
-        evidence: []
+        evidence:
+          - EV-001
       - id: T-004
         title: Rak, papan, mulai, indeks, epilog, cursor
-        status: planned
+        status: done
         requirements:
           - FR-004
         depends_on:
           - T-001
-        evidence: []
+        evidence:
+          - EV-001
       - id: T-005
         title: Navigasi, audit visual, checks
-        status: planned
+        status: done
         requirements:
           - FR-005
         depends_on:
           - T-002
           - T-003
           - T-004
-        evidence: []
+        evidence:
+          - EV-001
       - id: T-006
         title: Energi Aardvark
-        status: planned
+        status: done
         requirements:
           - FR-006
         depends_on:
           - T-001
-        evidence: []
+        evidence:
+          - EV-001
 active:
-  feature_id: F-011
-  task_id: T-003
+  feature_id: F-012
+  task_id: T-005
 assumptions_open:
   - id: A-001
     feature: null
@@ -486,5 +492,5 @@ blockers:
   - feature_id: F-010
     task_id: T-003
     title: Deploy produksi
-generated_at: 2026-10-19T05:27:14.890Z
-source_hash: 203279bebaef1b8ca804e8547fecc1602f60418b9ac6132f35feca5bf494ec84
+generated_at: 2026-10-19T05:41:58.095Z
+source_hash: f5a92e14f4c8f83bdb023d4ba5c1edd3083a06a9252a07683f9bfe55aa0f008f

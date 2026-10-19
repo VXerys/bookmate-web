@@ -2,7 +2,7 @@
 id: F-012
 title: "Redesign Marginalia: satu hari pembaca"
 type: design
-status: approved
+status: verification
 tier: lite
 owner: "M Sechan Alfarisi"
 created: 2026-10-19

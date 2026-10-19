@@ -25,3 +25,10 @@ Must be replaced before production (A-002 stays open):
   rule is that commercial covers are never used; this is a temporary, owner-approved exception.
 - Personal data is visible: the owner's name and photo, member avatars, and a chat partner's name.
 - Bab 02 shows the home screen, not the streak calendar, because no streak screenshot exists yet.
+
+## Illustrations and doodles (F-012)
+
+Every illustration on the page is SVG or CSS drawn in this repository, with no third-party asset: doodles
+(`src/components/art/doodles.tsx`), abstract covers and spines (`books.tsx`), CSS 3D hardcovers (`book3d.tsx`), hour
+scenes (`scenes.tsx`), and the loader brush stroke. Layout energy was inspired by Aardvark Book Club (Awwwards SOTD);
+none of its assets, fonts (Champ, Degular), or copy are used.

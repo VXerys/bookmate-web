@@ -2,11 +2,11 @@
 status: active
 owner: M Sechan Alfarisi
 session_date: 2026-10-19
-branch: feat/F-011-aset-motion-polish
-base_commit: aacabcd
-current_commit: 523ae22
-feature_id: F-011
-task_id: T-003
+branch: feat/F-012-marginalia
+base_commit: f173155
+current_commit: bc841eb
+feature_id: F-012
+task_id: T-005
 expires_after: 2026-11-18
 ---
 
@@ -16,25 +16,25 @@ Current coding session delta. It does not replace product docs, architecture, AD
 
 ## Session objective
 
-Pakai screenshot sementara dari pemilik di mockup ponsel, audit animasi di Browser pane, dan perbaiki bug yang ditemukan (instruksi pemilik 2026-10-19).
+Redesign menyeluruh: UI lama dinilai pemilik terlalu kosong. Arah Marginalia (buku yang dibaca bareng teman, satu hari pembaca), lalu didorong ke energi Aardvark Book Club atas permintaan pemilik.
 
 ## Context used
 
-- `docs/product/art-direction.md`, spec F-001 sampai F-007, skill cinematic-gsap-lenis-motion-system
-- Folder aset pemilik `Downloads/listing-bookmate` (23 screenshot app, 15 desain listing Play Store)
+- Riset Awwwards 2026-10-19 (Aardvark Book Club, Grail, MY STELLA, Modular Comic) dan inspeksi gaya situs Aardvark (font, warna, urutan section, stack GSAP + Lenis).
+- `docs/product/art-direction.md` (ditulis ulang + revisi Aardvark), spec `docs/specs/F-012-marginalia/`.
 
 ## Completed
 
-- F-011 T-001 sampai T-003 di `523ae22`; evidence EV-001 di `docs/specs/F-011-aset-motion-polish/verification.md`.
-- Bug yang diperbaiki: trigger indikator header tanpa pin spacer, limit Lenis basi (menu tidak sampai section bawah), deal kartu menggeser layout, statement Buka tertutup ponsel, magnetik elastic, cursor basi saat scroll, marquee tidak melambat lagi.
+- F-012 T-001 sampai T-006 done (EV-001). Commit: `aa712cf`, `44bda39` (docs), fondasi, `b562e97` (section Marginalia), `bc841eb` (revamp Aardvark).
+- Section baru: hari, rak, papan (menggantikan bab-track, streak, kartu, diskusi). Aset SVG/CSS buatan sendiri di `src/components/art/`.
 
 ## Requirement coverage
 
-- AC-001 sampai AC-007 F-011: pass lewat EV-001. Rasa gerak langsung dan reduced motion: cek pemilik di browser yang terlihat.
+- AC-001 sampai AC-012 pass lewat EV-001, kecuali AC-002 sebagian: reduced motion tidak bisa diemulasikan di Browser pane.
 
 ## Changed files
 
-Lihat `git show --stat 523ae22` dan folder spec F-011.
+Lihat `git diff --stat f173155..HEAD`.
 
 ## Commands executed
 
@@ -45,21 +45,21 @@ npm run lint && npm run typecheck && npm test && npm run build && npm run contex
 Result:
 
 ```text
-lint clean; typecheck 0 errors; tests 50 pass; build ok; refresh drift 0 dari 32 trigger; :3101 0 error console
+lint clean; typecheck 0 errors; tests 51 pass; build ok; :3101 0 error console, tanpa overflow horizontal
 ```
 
 ## Current implementation state
 
-Semua bingkai ponsel berisi screenshot sementara. Skill awwwards-landing-page tidak dipakai karena meng-clone template Locomotive dan Framer Motion yang bertentangan dengan ADR-0001.
+Branch `feat/F-012-marginalia` bertumpuk di atas `feat/F-011-aset-motion-polish`; keduanya belum di-push. Gerak langsung belum dirasakan di browser yang terlihat (pane tersembunyi menahan rAF).
 
 ## Uncommitted work
 
-- Tidak ada setelah commit dokumen F-011.
+- Tidak ada setelah commit dokumen ini.
 
 ## Blockers
 
-- A-002 tetap open: screenshot sementara memuat sampul komersial dan data pribadi; ganti sebelum rilis. A-001, A-003 sampai A-007 tetap open; deploy (F-010) tetap diblokir.
+- A-002 (screenshot sementara berisi sampul komersial dan data pribadi), A-001, A-003 sampai A-007 tetap open; rilis diblokir.
 
 ## Next step
 
-Pemilik mengecek rasa gerak di `npm run dev` pada browser yang terlihat, lalu memutuskan push branch `feat/F-011-aset-motion-polish` dan PR ke `main`.
+Pemilik mengecek `npm run dev` di browser yang terlihat (loader, balik halaman, buku 3D, reduced motion), lalu memutuskan push kedua branch dan satu PR gabungan ke `main`.

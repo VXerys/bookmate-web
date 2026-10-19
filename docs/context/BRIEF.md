@@ -1,6 +1,6 @@
 <!-- GENERATED FILE — DO NOT EDIT. Rendered by `npm run context:render`.
 Source: sdd.config.json, docs/steering/, docs/specs/F-*/, docs/context/ASSUMPTIONS.md, docs/handoff/current.md.
-source_hash: 203279bebaef1b8ca804e8547fecc1602f60418b9ac6132f35feca5bf494ec84 -->
+source_hash: f5a92e14f4c8f83bdb023d4ba5c1edd3083a06a9252a07683f9bfe55aa0f008f -->
 
 # Brief
 
@@ -9,14 +9,14 @@ BookMate Web adalah situs pemasaran untuk aplikasi BookMate yang mengajak pembac
 Project `BookMate Web`, tier `lite`. Rendered from sdd.config.json, docs/steering/, docs/specs/F-*/, docs/context/ASSUMPTIONS.md, docs/handoff/current.md.
 
 ## Active
-Feature F-011 — Screenshot sementara dan perbaikan bug animasi (`verification`, docs/specs/F-011-aset-motion-polish/)
-Task T-003 — Kualitas gerak (`done`); requirements: FR-003; depends on: none
+Feature F-012 — Redesign Marginalia: satu hari pembaca (`verification`, docs/specs/F-012-marginalia/)
+Task T-005 — Navigasi, audit visual, checks (`done`); requirements: FR-005; depends on: T-002, T-003, T-004
 
-`buka.tsx`, `bab-track.tsx`, `mulai.tsx`, `magnetic.tsx`, `cursor.tsx`, `diskusi.tsx`. Acceptance: AC-006, AC-007.
+Acceptance: AC-009, AC-010.
 
 Acceptance criteria:
-- AC-006: Given Buka, when pin dimulai, then kalimat terbaca utuh di atas dan bawah ponsel; when berakhir, then ponsel mengisi sekitar 90% tinggi viewport.
-- AC-007: Given tombol magnetik, cursor, dan marquee, then magnetik memakai power3, cursor membaca ulang target saat scroll, dan kecepatan marquee kembali ke 1 setelah scroll berhenti.
+- AC-009: Given chapters baru, when tautan menu diklik, then section tujuan tiba di bawah header dan indikator menampilkan bab itu.
+- AC-010: Given 1440 dan 375 px, then tidak ada overflow horizontal, tidak ada error console, dan lint, typecheck, test, build lulus.
 
 ## Rules
 Stop conditions:
@@ -62,4 +62,4 @@ None.
 | F-009 WebGL hover distortion (opsional) | draft | complete | 0/1 |
 | F-010 QA dan rilis | implementing | blocked | 2/3 |
 | F-011 Screenshot sementara dan perbaikan bug animasi | verification | complete | 3/3 |
-| F-012 Redesign Marginalia: satu hari pembaca | approved | not_started | 0/6 |
+| F-012 Redesign Marginalia: satu hari pembaca | verification | complete | 6/6 |
