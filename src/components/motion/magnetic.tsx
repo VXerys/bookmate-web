@@ -20,8 +20,9 @@ export function Magnetic({ children, className, strength = 0.3 }: MagneticProps)
       mm.add(POINTER_MOTION, () => {
         const el = ref.current;
         if (!el) return;
-        const xTo = gsap.quickTo(el, "x", { duration: 0.6, ease: "elastic.out(1, 0.35)" });
-        const yTo = gsap.quickTo(el, "y", { duration: 0.6, ease: "elastic.out(1, 0.35)" });
+        // power3, not elastic: quickTo restarts on every pointermove, and an elastic ease wobbled the button in place.
+        const xTo = gsap.quickTo(el, "x", { duration: 0.45, ease: "power3.out" });
+        const yTo = gsap.quickTo(el, "y", { duration: 0.45, ease: "power3.out" });
         const onMove = (event: PointerEvent) => {
           if (event.pointerType !== "mouse") return;
           // Measured without the current offset, so the pull is relative to where the element really sits.
@@ -31,9 +32,9 @@ export function Magnetic({ children, className, strength = 0.3 }: MagneticProps)
           xTo((event.clientX - (box.left - x + box.width / 2)) * strength);
           yTo((event.clientY - (box.top - y + box.height / 2)) * strength);
         };
+        // The release eases home a little slower than the pull, so letting go reads as a settle, not a snap.
         const onLeave = () => {
-          xTo(0);
-          yTo(0);
+          gsap.to(el, { x: 0, y: 0, duration: 0.7, ease: "power3.out", overwrite: true });
         };
         el.addEventListener("pointermove", onMove);
         el.addEventListener("pointerleave", onLeave);

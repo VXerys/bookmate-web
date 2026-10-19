@@ -21,7 +21,7 @@ export function Diskusi() {
           gsap.to(card, {
             scale: 0.92,
             ease: "none",
-            scrollTrigger: { trigger: cards[index + 1], start: "top bottom", end: "top 30%", scrub: true },
+            scrollTrigger: { trigger: cards[index + 1], start: "top bottom", end: "top 30%", scrub: 0.6 },
           });
         });
         if (!row) return;
@@ -32,9 +32,13 @@ export function Diskusi() {
           start: "top bottom",
           end: "bottom top",
           onToggle: (self) => (self.isActive ? loop.play() : loop.pause()),
+          // Speeds up with scroll velocity, then eases back to its resting pace once scrolling stops.
           onUpdate: (self) => {
-            const boost = Math.min(Math.abs(self.getVelocity()) / 300, 5);
-            gsap.to(loop, { timeScale: 1 + boost, duration: 0.3, overwrite: true });
+            const boost = Math.min(Math.abs(self.getVelocity()) / 300, 4);
+            gsap
+              .timeline()
+              .to(loop, { timeScale: 1 + boost, duration: 0.25, ease: "power2.out", overwrite: true })
+              .to(loop, { timeScale: 1, duration: 1.2, ease: "power2.inOut" });
           },
         });
         return () => {

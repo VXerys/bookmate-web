@@ -47,13 +47,7 @@ export function Cursor() {
         gsap.to(r, { autoAlpha: next === "label" ? 0 : 1, duration: 0.2, overwrite: "auto" });
       };
 
-      const onMove = (event: PointerEvent) => {
-        if (event.pointerType !== "mouse") return;
-        dotX(event.clientX);
-        dotY(event.clientY);
-        ringX(event.clientX);
-        ringY(event.clientY);
-        const target = event.target instanceof Element ? event.target : null;
+      const readTarget = (target: Element | null) => {
         if (target?.closest('[data-cursor="hide"]')) {
           show(false);
           return;
@@ -63,13 +57,30 @@ export function Cursor() {
         if (labelled) setState("label", labelled.dataset.cursorLabel);
         else setState(target?.closest("a, button") ? "link" : "idle");
       };
+
+      let last: { x: number; y: number } | null = null;
+      const onMove = (event: PointerEvent) => {
+        if (event.pointerType !== "mouse") return;
+        last = { x: event.clientX, y: event.clientY };
+        dotX(event.clientX);
+        dotY(event.clientY);
+        ringX(event.clientX);
+        ringY(event.clientY);
+        readTarget(event.target instanceof Element ? event.target : null);
+      };
+      // Scrolling moves the page under a still pointer; without this the ring kept a link or label state over plain text.
+      const onScroll = () => {
+        if (last && visible) readTarget(document.elementFromPoint(last.x, last.y));
+      };
       const onLeave = () => show(false);
 
       document.addEventListener("pointermove", onMove);
+      window.addEventListener("scroll", onScroll, { passive: true });
       document.documentElement.addEventListener("pointerleave", onLeave);
       window.addEventListener("blur", onLeave);
       return () => {
         document.removeEventListener("pointermove", onMove);
+        window.removeEventListener("scroll", onScroll);
         document.documentElement.removeEventListener("pointerleave", onLeave);
         window.removeEventListener("blur", onLeave);
       };

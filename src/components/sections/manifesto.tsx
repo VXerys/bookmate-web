@@ -26,7 +26,7 @@ export function Manifesto() {
             opacity: 1,
             ease: "none",
             stagger: 0.1,
-            scrollTrigger: { trigger: section, start: "top top", end: "+=120%", scrub: true, pin: true },
+            scrollTrigger: { trigger: section, start: "top top", end: "+=120%", scrub: 0.8, pin: true, anticipatePin: 1 },
           },
         );
         return () => {

@@ -1,4 +1,5 @@
 import type { PaletteToken } from "./palette.ts";
+import type { ScreenId } from "./screens.ts";
 
 // Story copy for / (F-003 to F-005). Product facts come from the BookMate app repo (AGENTS.md, prd.md, lib/features);
 // nothing here is a metric or a user claim.
@@ -9,6 +10,7 @@ export const prolog = {
   headlineEmphasis: "bareng teman.",
   body: "Catat progres bacaan, jaga streak harian, bedah buku bareng komunitas, dan pinjam buku fisik dari sesama pembaca.",
   secondary: "Lihat cara kerjanya",
+  screen: "onboarding" satisfies ScreenId,
   // Fragments of the app's UI floating around the phone; the values are illustrative, not user data.
   chips: {
     streak: "Streak harian",
@@ -24,12 +26,11 @@ export const manifesto = {
 
 export const buka = {
   kicker: "Buka aplikasinya",
-  statement: "Semua bacaanmu, satu rak.",
-  screen: "Beranda",
+  // Split around the phone: the lead sits above it and the tail below, so the sentence reads across the device.
+  statementLead: "Semua bacaanmu,",
+  statementTail: "satu rak.",
+  screen: "bukuSaya" satisfies ScreenId,
 } as const;
-
-// Shown inside phone frames until real screenshots from the production build arrive (docs/context/ASSUMPTIONS.md A-002).
-export const screenPending = "Tangkapan layar menyusul";
 
 export const babHeading = "Lima bab BookMate";
 
@@ -39,7 +40,7 @@ export type Bab = {
   number: string;
   title: string;
   body: string;
-  screen: string;
+  screen: ScreenId;
   tone: BabTone;
 };
 
@@ -48,35 +49,35 @@ export const babs: readonly Bab[] = [
     number: "01",
     title: "Catat Bacaan",
     body: "Catat per halaman, bab, persen, atau catatan bebas. Buku baru dihitung selesai saat kamu sendiri menekan Selesai.",
-    screen: "Catat Bacaan",
+    screen: "catatBacaan",
     tone: "plum",
   },
   {
     number: "02",
     title: "Streak Harian",
     body: "Check-in setiap hari dan lihat kalender bacaanmu terisi. Api streak menjaga kebiasaan tetap menyala.",
-    screen: "Streak",
+    screen: "beranda",
     tone: "ember",
   },
   {
     number: "03",
     title: "Bedah Buku",
     body: "Tulis refleksi mendalam dengan rating beberapa aspek, kutipan favorit, dan video bedah buku langsung di aplikasi.",
-    screen: "Bedah Buku",
+    screen: "bedahBuku",
     tone: "forest",
   },
   {
     number: "04",
     title: "Komunitas",
     body: "Gabung komunitas baca di sekitarmu, buka thread diskusi, buat polling, dan beri reaksi.",
-    screen: "Komunitas",
+    screen: "komunitas",
     tone: "blue",
   },
   {
     number: "05",
     title: "Pinjam Buku",
     body: "Pinjam buku fisik dari sesama anggota. Ruang obrolan terbuka begitu permintaanmu diterima.",
-    screen: "Pinjam dan Chat",
+    screen: "chatPinjam",
     tone: "peach",
   },
 ];
@@ -119,6 +120,7 @@ export const diskusi = {
 
 export const mulai = {
   kicker: "Cara mulai",
+  screen: "onboardingPinjam" satisfies ScreenId,
   steps: [
     { title: "Unduh BookMate", body: "Pasang dari Google Play di ponsel Android kamu." },
     { title: "Masuk", body: "Daftar dengan email atau akun Google." },

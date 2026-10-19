@@ -3,7 +3,7 @@
 import { useRef } from "react";
 
 import { PhoneFrame } from "@/components/site/phone-frame";
-import { buka, prolog } from "@/content/story";
+import { prolog } from "@/content/story";
 import { EASE_OUT, gsap, MOTION_OK, POINTER_MOTION, useGSAP } from "@/lib/motion/gsap";
 import { whenIntroDone } from "@/lib/motion/intro-state";
 
@@ -76,7 +76,7 @@ export function PrologLayers() {
       {/* Centred with flex, not translate utilities: GSAP owns this element's transform (yPercent). */}
       <div data-depth="0.3" className="absolute inset-0 flex items-center justify-center">
         <div className="w-[min(62vw,270px)]">
-          <PhoneFrame screen={buka.screen} />
+          <PhoneFrame screen={prolog.screen} eager decorative sizes="(min-width: 768px) 270px, 62vw" />
         </div>
       </div>
       <div data-depth="0.8" className="absolute top-[12%] left-0">

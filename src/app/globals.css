@@ -122,21 +122,7 @@ html.lenis body {
   border-color: var(--color-ember);
 }
 
-/* Badge deck (F-006): stacked only while JS with motion waits to deal it; flipping is a 3D turn, instant under
-   reduced motion through the global transition override. */
-.deck.deck-stacked {
-  display: block;
-  min-height: 20rem;
-}
-
-.deck.deck-stacked [data-card] {
-  position: absolute;
-  inset: 0 auto auto 50%;
-  width: min(80vw, 22rem);
-  /* margin, not translate: Flip measures transforms, and a leftover translate would shift the dealt grid. */
-  margin-left: calc(min(80vw, 22rem) / -2);
-}
-
+/* Badge deck (F-006): flipping is a 3D turn, instant under reduced motion through the global transition override. */
 .card-inner {
   transform-style: preserve-3d;
   transition: transform 0.7s var(--ease-expo);

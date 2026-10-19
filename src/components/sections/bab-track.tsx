@@ -40,7 +40,8 @@ export function BabTrack() {
             start: "top top",
             end: () => `+=${distance()}`,
             pin: true,
-            scrub: 0.6,
+            scrub: 0.8,
+            anticipatePin: 1,
             invalidateOnRefresh: true,
           },
         });
@@ -49,13 +50,24 @@ export function BabTrack() {
           if (frame) {
             gsap.fromTo(
               frame,
-              { xPercent: -8 },
+              { xPercent: -8, rotation: 3 },
               {
                 xPercent: 8,
+                rotation: -3,
                 ease: "none",
                 scrollTrigger: { trigger: panel, containerAnimation: slide, start: "left right", end: "right left", scrub: true },
               },
             );
+          }
+          // Panels after the first slide in from the right, so their copy arrives a beat behind the panel colour.
+          if (index > 0) {
+            gsap.from(panel.querySelectorAll("[data-bab-copy] > *"), {
+              x: 120,
+              autoAlpha: 0,
+              ease: "none",
+              stagger: 0.12,
+              scrollTrigger: { trigger: panel, containerAnimation: slide, start: "left 80%", end: "left 25%", scrub: 0.6 },
+            });
           }
           ScrollTrigger.create({
             trigger: panel,
@@ -91,15 +103,15 @@ export function BabTrack() {
           <article
             key={bab.number}
             data-bab-panel
-            className={`bab-panel grid min-h-svh items-center gap-10 px-4 pt-36 pb-16 md:px-10 lg:grid-cols-[1fr_auto] ${TONE[bab.tone]}`}
+            className={`bab-panel grid min-h-svh items-center gap-10 px-4 pt-36 pb-16 md:px-10 lg:grid-cols-2 lg:px-[6vw] ${TONE[bab.tone]}`}
           >
-            <div className="flex max-w-xl flex-col gap-6">
+            <div data-bab-copy className="flex max-w-xl flex-col gap-6">
               <p className="label">Bab {bab.number}</p>
               <h3 className="display text-[clamp(2.75rem,6vw,6.5rem)]">{bab.title}</h3>
               <p className="text-lg">{bab.body}</p>
             </div>
-            <div data-bab-frame className="w-[min(62vw,280px)] justify-self-center">
-              <PhoneFrame screen={bab.screen} />
+            <div data-bab-frame className="w-[min(62vw,290px)] justify-self-center">
+              <PhoneFrame screen={bab.screen} sizes="(min-width: 1024px) 290px, 62vw" />
             </div>
           </article>
         ))}

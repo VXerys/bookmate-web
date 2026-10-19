@@ -19,7 +19,7 @@ export function Epilog() {
         gsap.fromTo(
           "[data-epilog-line]",
           { scale: 1.25, opacity: 0.4 },
-          { scale: 1, opacity: 1, ease: "none", scrollTrigger: { trigger: root.current, start: "top bottom", end: "center center", scrub: true } },
+          { scale: 1, opacity: 1, ease: "none", scrollTrigger: { trigger: root.current, start: "top bottom", end: "center center", scrub: 0.8 } },
         );
       });
       return () => mm.revert();

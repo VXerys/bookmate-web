@@ -4,7 +4,7 @@ import { useRef, useState } from "react";
 
 import { badges } from "@/content/badges";
 import { kartu } from "@/content/story";
-import { Flip, gsap, MOTION_OK, POINTER_MOTION, ScrollTrigger, useGSAP } from "@/lib/motion/gsap";
+import { EASE_OUT, gsap, MOTION_OK, POINTER_MOTION, ScrollTrigger, useGSAP } from "@/lib/motion/gsap";
 
 // One tier I badge per category opens the deck; names and criteria come straight from the app (badges.ts).
 const deck = [...new Set(badges.map((badge) => badge.group))].map(
@@ -25,22 +25,35 @@ export function Kartu() {
       const cards = gsap.utils.toArray<HTMLElement>("[data-card]", section);
       const mm = gsap.matchMedia();
 
-      // Dealt once from a stack into the grid as the section arrives (AC-005).
+      // Dealt once from a stack into the grid as the section arrives (AC-005). The stack is made with transforms only:
+      // the grid keeps its final height the whole time, so nothing below it jumps and no later trigger goes stale
+      // (F-011; the earlier Flip version collapsed the grid to 20rem until the deal).
       mm.add(MOTION_OK, () => {
-        grid.classList.add("deck-stacked");
+        let dealt = false;
+        // offsetLeft/offsetTop ignore transforms, so the stack can be re-measured after a resize before the deal.
+        const stack = () =>
+          gsap.set(cards, {
+            x: (index, card: HTMLElement) => grid.clientWidth / 2 - (card.offsetLeft + card.offsetWidth / 2),
+            y: (index, card: HTMLElement) => -card.offsetTop + index * 6,
+            rotation: (index) => (index % 2 ? 1 : -1) * (2 + index),
+            scale: 0.94,
+          });
+        stack();
         const deal = ScrollTrigger.create({
           trigger: grid,
           start: "top 75%",
           once: true,
+          onRefresh: () => {
+            if (!dealt) stack();
+          },
           onEnter: () => {
-            const state = Flip.getState(cards);
-            grid.classList.remove("deck-stacked");
-            Flip.from(state, { duration: 1.1, ease: "expo.out", stagger: 0.06, absolute: true });
+            dealt = true;
+            gsap.to(cards, { x: 0, y: 0, rotation: 0, scale: 1, duration: 1.1, ease: EASE_OUT, stagger: 0.07 });
           },
         });
         return () => {
           deal.kill();
-          grid.classList.remove("deck-stacked");
+          gsap.set(cards, { clearProps: "x,y,rotation,scale" });
         };
       });
 

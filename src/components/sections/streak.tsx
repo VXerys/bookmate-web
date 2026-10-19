@@ -30,9 +30,9 @@ export function Streak() {
           value: DAYS,
           ease: "none",
           onUpdate: render,
-          scrollTrigger: { trigger: section, start: "top top", end: "+=120%", scrub: true, pin: true },
+          scrollTrigger: { trigger: section, start: "top top", end: "+=120%", scrub: 0.6, pin: true, anticipatePin: 1 },
         });
-        gsap.fromTo("[data-flame]", { scale: 0.6 }, { scale: 1.15, ease: "none", scrollTrigger: { trigger: section, start: "top top", end: "+=120%", scrub: true } });
+        gsap.fromTo("[data-flame]", { scale: 0.6 }, { scale: 1.15, ease: "none", scrollTrigger: { trigger: section, start: "top top", end: "+=120%", scrub: 0.6 } });
         return () => days.forEach((day) => day.setAttribute("data-on", ""));
       });
       return () => mm.revert();

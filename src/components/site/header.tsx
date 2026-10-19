@@ -7,7 +7,7 @@ import { Magnetic } from "@/components/motion/magnetic";
 import { Menu } from "@/components/site/menu";
 import { shell } from "@/content/shell";
 import { site } from "@/content/site";
-import { EASE_OUT, gsap, MOTION_OK, ScrollTrigger, useGSAP } from "@/lib/motion/gsap";
+import { EASE_OUT, gsap, MOTION_OK, useGSAP } from "@/lib/motion/gsap";
 
 // Past this scroll depth the header may slide away on downward scroll (AC-006).
 const HIDE_AFTER_PX = 120;
@@ -24,17 +24,20 @@ export function Header() {
 
       // The indicator is information, not motion, so it updates under reduced motion too (AC-007, AC-008).
       // Queried on document: the useGSAP scope limits selector strings to the header, and sections live in <main>.
+      // The chapter under the viewport's centre line is read from live layout on scroll, so pinned sections count
+      // while pinned; ScrollTriggers made here mounted before the pins and were measured without their spacers (F-011).
       const sections = [...document.querySelectorAll<HTMLElement>("main [data-chapter]")];
-      const indicators = sections.map((section) =>
-        ScrollTrigger.create({
-          trigger: section,
-          start: "top center",
-          end: "bottom center",
-          onToggle: (self) => {
-            if (self.isActive && section.dataset.chapter) setActive(section.dataset.chapter);
-          },
-        }),
-      );
+      const readChapter = () => {
+        const centre = window.innerHeight / 2;
+        const current = sections.find((section) => {
+          const box = section.getBoundingClientRect();
+          return box.top <= centre && box.bottom > centre;
+        });
+        if (current?.dataset.chapter) setActive(current.dataset.chapter);
+      };
+      readChapter();
+      window.addEventListener("scroll", readChapter, { passive: true });
+      window.addEventListener("resize", readChapter);
 
       const mm = gsap.matchMedia();
       mm.add(MOTION_OK, () => {
@@ -46,11 +49,14 @@ export function Header() {
           hidden = next;
           gsap.to(header, { yPercent: next ? -110 : 0, duration: 0.6, ease: EASE_OUT, overwrite: true });
         };
-        const trigger = ScrollTrigger.create({
-          start: 0,
-          end: "max",
-          onUpdate: (self) => slide(self.scroll() > HIDE_AFTER_PX && self.direction === 1),
-        });
+        // A plain scroll listener: Lenis drives native scroll, and no trigger range can go stale as pins resize the page.
+        let lastY = window.scrollY;
+        const onScroll = () => {
+          const y = window.scrollY;
+          if (y !== lastY) slide(y > HIDE_AFTER_PX && y > lastY);
+          lastY = y;
+        };
+        window.addEventListener("scroll", onScroll, { passive: true });
         // A keyboard user tabbing into a hidden header must see where focus is (AC-006).
         const onFocusIn = () => {
           focused = true;
@@ -62,7 +68,7 @@ export function Header() {
         header.addEventListener("focusin", onFocusIn);
         header.addEventListener("focusout", onFocusOut);
         return () => {
-          trigger.kill();
+          window.removeEventListener("scroll", onScroll);
           header.removeEventListener("focusin", onFocusIn);
           header.removeEventListener("focusout", onFocusOut);
           gsap.set(header, { yPercent: 0 });
@@ -70,7 +76,8 @@ export function Header() {
       });
 
       return () => {
-        indicators.forEach((indicator) => indicator.kill());
+        window.removeEventListener("scroll", readChapter);
+        window.removeEventListener("resize", readChapter);
         mm.revert();
       };
     },
