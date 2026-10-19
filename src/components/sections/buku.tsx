@@ -117,7 +117,7 @@ export function Buku() {
         data-shelf-track
         tabIndex={0}
         aria-label={buku.title}
-        className="no-scrollbar mt-12 flex snap-x snap-mandatory gap-6 overflow-x-auto lg:gap-12 scroll-px-6 px-6 pt-10 pb-10 lg:mt-4 lg:pt-8 lg:pb-5 lg:scroll-px-10 lg:px-10"
+        className="will-change-transform no-scrollbar mt-12 flex snap-x snap-mandatory gap-6 overflow-x-auto lg:gap-12 scroll-px-6 px-6 pt-10 pb-10 lg:mt-4 lg:pt-8 lg:pb-5 lg:scroll-px-10 lg:px-10"
       >
         {BOOKS.map((book, index) => {
           const available = book.status === "AVAILABLE";
@@ -126,7 +126,7 @@ export function Buku() {
             <li
               key={book.id}
               data-shelf-card
-              className="group/card relative isolate w-[min(82vw,20rem)] shrink-0 snap-start [rotate:var(--tilt)] transition-[rotate,translate] duration-500 ease-(--ease-expo) hover:-translate-y-3 hover:[rotate:0deg] focus-within:[rotate:0deg] lg:w-[clamp(12rem,calc((100svh-36.5rem)/1.2),21rem)]"
+              className="group/card relative isolate will-change-transform w-[min(82vw,20rem)] shrink-0 snap-start [rotate:var(--tilt)] transition-[rotate,translate] duration-500 ease-(--ease-expo) hover:-translate-y-3 hover:[rotate:0deg] focus-within:[rotate:0deg] lg:w-[clamp(12rem,calc((100svh-36.5rem)/1.2),21rem)]"
               style={{ "--tilt": `${index % 2 ? 2 : -2}deg` } as CSSProperties}
             >
               {/* Hover: the card straightens and lifts, a bookmark ribbon in the card's own colour slides up from behind its

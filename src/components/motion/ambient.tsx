@@ -12,7 +12,7 @@ import { whenIntroDone } from "@/lib/motion/intro-state";
 //   data-curve="0%|-40%"  a textPath slides along its curve as the page scrolls past
 //   data-pop / ="intro"   springs in from nothing when it enters the viewport, or once the intro is done
 //   data-float            bobs gently
-//   data-speed="0.3"      parallax: drifts against the scroll by that fraction
+//   data-speed="0.3"      parallax for HTML layers only: drifts against the scroll by that fraction
 // Spins and marquees speed up with the scroll velocity and settle back, like the reference's ticker. Every loop pauses
 // while its element is off screen. Under reduced motion nothing runs and everything rests in its final, readable state.
 export function Ambient() {
@@ -24,17 +24,32 @@ export function Ambient() {
       // Loops wait for the opening to finish: running the hero's morphing swells under the cover only stole frames from
       // the opening's sweep. Once the intro is done, every loop already on screen starts.
       let live = false;
-      const watchers: { trigger: ScrollTrigger; animation: gsap.core.Animation }[] = [];
-      const onScreen = (el: Element, animation: gsap.core.Animation) => {
+      // Wave morphs repaint their whole layer, so they also hold still while the page is scrolling (calm flag).
+      let scrolling = false;
+      const watchers: { trigger: ScrollTrigger; animation: gsap.core.Animation; calm: boolean }[] = [];
+      const allowed = (w: { trigger: ScrollTrigger; calm: boolean }) => live && w.trigger.isActive && !(w.calm && scrolling);
+      const sync = () => watchers.forEach((w) => (allowed(w) ? w.animation.play() : w.animation.pause()));
+      const onScreen = (el: Element, animation: gsap.core.Animation, calm = false) => {
         loops.push(animation);
-        const trigger = ScrollTrigger.create({
+        const watcher = { trigger: undefined as unknown as ScrollTrigger, animation, calm };
+        watcher.trigger = ScrollTrigger.create({
           trigger: el,
           start: "top bottom",
           end: "bottom top",
-          onToggle: (self) => (live && self.isActive ? animation.play() : animation.pause()),
+          onToggle: () => (allowed(watcher) ? animation.play() : animation.pause()),
         });
-        watchers.push({ trigger, animation });
+        watchers.push(watcher);
       };
+      const onScrollStart = () => {
+        scrolling = true;
+        sync();
+      };
+      const onScrollEnd = () => {
+        scrolling = false;
+        sync();
+      };
+      ScrollTrigger.addEventListener("scrollStart", onScrollStart);
+      ScrollTrigger.addEventListener("scrollEnd", onScrollEnd);
 
       gsap.utils.toArray<SVGElement | HTMLElement>("[data-spin]").forEach((el) => {
         const seconds = Number(el.dataset.spin) || 20;
@@ -55,7 +70,7 @@ export function Ambient() {
         const seconds = Number(el.getAttribute("data-morph-time")) || 3.2 + (index % 3) * 0.6;
         const roll = gsap.timeline({ repeat: -1, paused: true, defaults: { duration: seconds, ease: "sine.inOut" } });
         [...shapes, original].forEach((shape) => roll.to(el, { morphSVG: shape }));
-        onScreen(el, roll);
+        onScreen(el, roll, true);
       });
 
       // Rings ripple outward from the centre one after another, like a phone's signal.
@@ -82,25 +97,6 @@ export function Ambient() {
       pick<HTMLElement>("[data-speed]").forEach((el) => {
         const speed = Number(el.dataset.speed) || 0;
         gsap.fromTo(el, { y: () => speed * 160 }, { y: () => speed * -160, ease: "none", scrollTrigger: { trigger: el, start: "top bottom", end: "bottom top", scrub: 0.4, invalidateOnRefresh: true } });
-      });
-
-      // Shaped sections open up as they arrive: they start narrower with rounder corners and settle into their CSS shape
-      // (shape-inset, shape-capsule), so each seam between chapters reads as one block easing into place. Both ends use
-      // the same inset() form so GSAP can blend them; the end values repeat the CSS ones, so nothing jumps afterwards.
-      const shapeVars = () => {
-        const style = getComputedStyle(document.documentElement);
-        const rem = parseFloat(style.fontSize);
-        return { i: parseFloat(style.getPropertyValue("--shape-i")) * rem, r: parseFloat(style.getPropertyValue("--shape-r")) * rem };
-      };
-      gsap.utils.toArray<HTMLElement>(".shape-inset, .shape-capsule").forEach((el) => {
-        const inset = el.classList.contains("shape-inset");
-        const clip = (open: boolean) => () => {
-          const { i, r } = shapeVars();
-          const edge = inset ? i : 0;
-          const side = open ? edge : Math.max(edge, window.innerWidth * 0.06);
-          return `inset(${edge}px ${side}px ${edge}px ${side}px round ${open ? r : r * 1.35}px)`;
-        };
-        gsap.fromTo(el, { clipPath: clip(false) }, { clipPath: clip(true), ease: "none", scrollTrigger: { trigger: el, start: "top bottom", end: "top 30%", scrub: 0.5, invalidateOnRefresh: true } });
       });
 
       // Reading order inside a chapter: kicker, lead, and supporting items rise out of a light blur once, in sequence
@@ -139,7 +135,7 @@ export function Ambient() {
       let intro: gsap.core.Tween | undefined;
       const startLoops = whenIntroDone(() => {
         live = true;
-        watchers.forEach(({ trigger, animation }) => trigger.isActive && animation.play());
+        sync();
       });
       const stop = whenIntroDone(() => {
         intro = gsap.to(introPops, { scale: 1, rotation: 0, duration: 1.2, ease: LAND, stagger: 0.12, delay: 0.7 });
@@ -171,6 +167,8 @@ export function Ambient() {
       return () => {
         stop();
         startLoops();
+        ScrollTrigger.removeEventListener("scrollStart", onScrollStart);
+        ScrollTrigger.removeEventListener("scrollEnd", onScrollEnd);
         intro?.kill();
         velocity.kill();
         straighten.kill();

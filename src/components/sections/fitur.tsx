@@ -98,7 +98,7 @@ export function Fitur() {
                 // A black phone in 3D, turned toward the list: a body of stacked edge plates, side buttons, a dynamic
                 // island, and a glass glare. data-side-card is the pop and scroll-lean target.
                 <div key={side} className="[transform-style:preserve-3d]" style={{ transform: side ? "rotateY(-24deg) rotateZ(6deg)" : "rotateY(24deg) rotateZ(-6deg)" }}>
-                  <div data-side-card className="phone-black relative aspect-[9/19.5] w-[clamp(9.5rem,12.5vw,14rem)] [transform-style:preserve-3d]">
+                  <div data-side-card className="phone-black relative will-change-transform aspect-[9/19.5] w-[clamp(9.5rem,12.5vw,14rem)] [transform-style:preserve-3d]">
                     {Array.from({ length: 14 }, (_, i) => (
                       <span key={i} className="phone-black-slab" style={{ transform: `translateZ(${-(i + 1) * 1.3}px)` }} />
                     ))}

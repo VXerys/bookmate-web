@@ -38,23 +38,19 @@ export function Lencana() {
       if (!section) return;
       const mm = gsap.matchMedia();
       mm.add(MOTION_OK, () => {
-        const grid = section.querySelector<HTMLElement>("[data-deck]");
+        // Each card rises into its own place from below with a small turn, column by column, once it nears the
+        // viewport (owner: the deal from one deck piled cards over each other mid-scroll). Slow, smooth, never crossing.
         const cards = gsap.utils.toArray<HTMLElement>("[data-deal]", section);
-        if (!grid) return;
-        // Offsets ignore transforms, so a refresh mid-deal still measures each card's place in the grid.
-        const toDeck = (card: HTMLElement) => ({
-          x: grid.clientWidth / 2 - (card.offsetLeft + card.offsetWidth / 2),
-          y: grid.clientHeight / 2 - (card.offsetTop + card.offsetHeight / 2),
-        });
-        gsap.from(cards, {
-          x: (i: number) => toDeck(cards[i]).x,
-          y: (i: number) => toDeck(cards[i]).y,
-          rotation: (i: number) => (i % 2 ? 14 : -14),
-          scale: 0.8,
-          ease: "power1.inOut",
-          stagger: 0.3,
-          // A long scroll range and a heavy scrub, so the cards glide out of the deck one by one (owner: too fast before).
-          scrollTrigger: { trigger: grid, start: "top 90%", end: "bottom 60%", scrub: 1.6, invalidateOnRefresh: true },
+        cards.forEach((card, i) => {
+          gsap.from(card, {
+            y: 140,
+            rotation: i % 2 ? 6 : -6,
+            autoAlpha: 0,
+            duration: 1.3,
+            delay: (i % 3) * 0.16,
+            ease: "power3.out",
+            scrollTrigger: { trigger: card, start: "top 92%", once: true },
+          });
         });
       });
       // A card held under a fine pointer tilts toward it (under 7 degrees), like turning a real card to the light.

@@ -8,7 +8,7 @@ import { LogoMark } from "@/components/site/logo";
 import { Menu } from "@/components/site/menu";
 import { shell } from "@/content/shell";
 import { site } from "@/content/site";
-import { ENERGY, gsap, MOTION_OK, useGSAP } from "@/lib/motion/gsap";
+import { ENERGY, gsap, MOTION_OK, ScrollTrigger, useGSAP } from "@/lib/motion/gsap";
 import { whenIntroDone } from "@/lib/motion/intro-state";
 
 export function Header() {
@@ -23,20 +23,19 @@ export function Header() {
 
       // The indicator is information, not motion, so it updates under reduced motion too (AC-007, AC-008).
       // Queried on document: the useGSAP scope limits selector strings to the header, and sections live in <main>.
-      // The chapter under the viewport's centre line is read from live layout on scroll, so pinned sections count
-      // while pinned; ScrollTriggers made here mounted before the pins and were measured without their spacers (F-011).
+      // One ScrollTrigger per chapter marks the chapter under the viewport's centre line. Reading every section's box
+      // on each scroll event forced a layout per event (F-014 performance pass). refreshPriority -1 measures these after
+      // the pinned scenes, so their spacers are counted (the F-011 reason for the old approach).
       const sections = [...document.querySelectorAll<HTMLElement>("main [data-chapter]")];
-      const readChapter = () => {
-        const centre = window.innerHeight / 2;
-        const current = sections.find((section) => {
-          const box = section.getBoundingClientRect();
-          return box.top <= centre && box.bottom > centre;
-        });
-        if (current?.dataset.chapter) setActive(current.dataset.chapter);
-      };
-      readChapter();
-      window.addEventListener("scroll", readChapter, { passive: true });
-      window.addEventListener("resize", readChapter);
+      const markers = sections.map((section) =>
+        ScrollTrigger.create({
+          trigger: section,
+          start: "top center",
+          end: "bottom center",
+          refreshPriority: -1,
+          onToggle: (self) => self.isActive && section.dataset.chapter && setActive(section.dataset.chapter),
+        }),
+      );
 
       // The header stays put while scrolling, like the reference (validated with REA); it only drops in with the intro.
       // The intro callback can fire outside this context, so its tween is killed by hand.
@@ -54,8 +53,7 @@ export function Header() {
       });
 
       return () => {
-        window.removeEventListener("scroll", readChapter);
-        window.removeEventListener("resize", readChapter);
+        markers.forEach((marker) => marker.kill());
         mm.revert();
       };
     },

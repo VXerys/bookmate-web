@@ -111,7 +111,7 @@ export function Prolog() {
       </div>
 
       <div className="mx-auto grid min-h-[inherit] max-w-[84rem] items-center gap-12 px-6 pt-28 pb-32 lg:grid-cols-[1.05fr_0.95fr] lg:px-10">
-        <div data-hero-copy className="flex flex-col items-start gap-6">
+        <div data-hero-copy className="flex flex-col items-start gap-6 will-change-transform">
           <p data-hero-fade className="label inline-flex items-center gap-2 rounded-full bg-white py-2 pr-4 pl-2 text-navy">
             <span className="grid size-6 place-items-center rounded-full bg-highlight">
               <span className="size-2 rounded-full bg-navy" />
@@ -149,13 +149,13 @@ export function Prolog() {
 
         <div data-hero-visual className="relative mx-auto h-[min(66svh,34rem)] w-full max-w-[30rem]" aria-hidden="true">
           <div data-hero-depth="0.4" className="absolute inset-0 flex items-center justify-center">
-            <div data-hero-phone className="w-[min(50vw,13.5rem)] rotate-[5deg]">
+            <div data-hero-phone className="w-[min(50vw,13.5rem)] rotate-[5deg] will-change-transform">
               <PhoneFrame screen="onboarding" eager decorative sizes="(min-width: 992px) 240px, 52vw" />
             </div>
           </div>
           {HERO_BOOKS.map(({ book, spot, size, pose, depth }) => (
             <div key={book.key} data-hero-depth={depth} className={`absolute ${spot} ${size}`}>
-              <div data-hero-book>
+              <div data-hero-book className="will-change-transform">
                 <Book3D cover={book.cover} color={book.color} pose={pose} eager />
               </div>
             </div>

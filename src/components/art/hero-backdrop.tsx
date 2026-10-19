@@ -3,9 +3,9 @@ import { Waves } from "@/components/art/waves";
 
 // Crests climb toward the right, behind the phone, so the copy on the left sits on calm blue.
 const HERO_SWELLS: readonly Swell[] = [
-  { id: "far", base: 730, rise: 380, amplitude: 38, humps: 3, top: mix(BLUE, 72, "var(--color-white)"), bottom: BLUE, crest: "var(--color-white)", crestOpacity: 0.35, speed: 0.06 },
-  { id: "mid", base: 845, rise: 320, amplitude: 32, humps: 4, top: mix(BLUE, 90, "var(--color-navy)"), bottom: mix(BLUE, 80, "var(--color-navy)"), crest: "var(--color-highlight)", crestOpacity: 0.95, crestWidth: 4, speed: 0.14 },
-  { id: "near", base: 925, rise: 190, amplitude: 26, humps: 5, top: mix(BLUE, 70, "var(--color-navy)"), bottom: mix(BLUE, 55, "var(--color-navy)"), crest: "var(--color-white)", crestOpacity: 0.2, speed: 0.24 },
+  { id: "far", base: 730, rise: 380, amplitude: 38, humps: 3, top: mix(BLUE, 72, "var(--color-white)"), bottom: BLUE, crest: "var(--color-white)", crestOpacity: 0.35 },
+  { id: "mid", base: 845, rise: 320, amplitude: 32, humps: 4, top: mix(BLUE, 90, "var(--color-navy)"), bottom: mix(BLUE, 80, "var(--color-navy)"), crest: "var(--color-highlight)", crestOpacity: 0.95, crestWidth: 4 },
+  { id: "near", base: 925, rise: 190, amplitude: 26, humps: 5, top: mix(BLUE, 70, "var(--color-navy)"), bottom: mix(BLUE, 55, "var(--color-navy)"), crest: "var(--color-white)", crestOpacity: 0.2 },
 ];
 
 // The hero's backdrop (F-014 hero revamp): brand blue, a soft light behind the phone that breathes, three gradient

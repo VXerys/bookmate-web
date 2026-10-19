@@ -74,7 +74,6 @@ export default function RootLayout({ children }: LayoutProps<"/">) {
         <Sampul />
         <SliceTransition />
         <Cursor />
-        <div className="grain" aria-hidden="true" />
         <SkipLink />
         <Header />
         {/* tabIndex -1 lets the skip link and in-page jumps move focus here, not only the scroll position. */}

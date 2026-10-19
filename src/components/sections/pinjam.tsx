@@ -163,7 +163,7 @@ export function Pinjam() {
               <li key={step.title} className="sticky lg:static" style={{ top: `${5.5 + index * 1.25}rem` }}>
                 <article
                   data-step-card
-                  className="flex min-h-[21rem] flex-col gap-3 rounded-[1.5rem] p-5 shadow-[0_24px_50px_-30px_rgb(3_4_10/0.5)]"
+                  className="will-change-transform flex min-h-[21rem] flex-col gap-3 rounded-[1.5rem] p-5 shadow-[0_24px_50px_-30px_rgb(3_4_10/0.5)]"
                   style={{ background: `var(--color-${step.tone})`, rotate: `${TILT[index]}deg` }}
                 >
                   <div className="flex items-center justify-between">

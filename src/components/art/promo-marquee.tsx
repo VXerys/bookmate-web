@@ -21,8 +21,8 @@ const BANDS: readonly Band[] = [
 // Two broad, soft shapes per band, one hanging from the top and one rising from the bottom, so the band reads as two
 // tones of the same colour that keep rolling into each other.
 const pattern = (wave: string): readonly Swell[] => [
-  { id: "up", base: 560, rise: 0, amplitude: 320, humps: 1.5, top: wave, bottom: wave, crest: wave, crestOpacity: 0, speed: 0 },
-  { id: "down", from: "top", base: 420, rise: 0, amplitude: 280, humps: 1.25, top: wave, bottom: wave, crest: wave, crestOpacity: 0, speed: 0 },
+  { id: "up", base: 560, rise: 0, amplitude: 320, humps: 1.5, top: wave, bottom: wave, crest: wave, crestOpacity: 0 },
+  { id: "down", from: "top", base: 420, rise: 0, amplitude: 280, humps: 1.25, top: wave, bottom: wave, crest: wave, crestOpacity: 0 },
 ];
 
 // The promo interlude (F-014, after the reference's sale banners): two overlapping bands, one level and one tilted,

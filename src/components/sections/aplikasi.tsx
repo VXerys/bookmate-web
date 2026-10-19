@@ -105,7 +105,7 @@ export function Aplikasi() {
           </svg>
         </div>
         {ORBIT.map(({ book, spot, tilt }) => (
-          <div key={book.key} data-orbit className={`pointer-events-none absolute hidden w-[clamp(6rem,8.5vw,8.5rem)] lg:block ${spot}`} style={{ rotate: `${tilt}deg` }} aria-hidden="true">
+          <div key={book.key} data-orbit className={`pointer-events-none absolute will-change-transform hidden w-[clamp(6rem,8.5vw,8.5rem)] lg:block ${spot}`} style={{ rotate: `${tilt}deg` }} aria-hidden="true">
             <Image src={book.cover} alt="" sizes="136px" className="aspect-[2/3] w-full rounded-[0.6rem] object-cover shadow-[0_24px_40px_-18px_rgb(3_4_10/0.55)]" />
           </div>
         ))}
@@ -122,7 +122,7 @@ export function Aplikasi() {
 
         <div className="aplikasi-stage relative z-10 flex w-full max-w-[72rem] flex-col items-center gap-12">
           <div className="[perspective:1700px]">
-            <div data-app-stage className="relative [transform-style:preserve-3d]">
+            <div data-app-stage className="relative will-change-transform [transform-style:preserve-3d]">
             <div data-app-phone className="relative aspect-[9/19.5] h-(--app-phone) [transform-style:preserve-3d]">
               <PhoneFrame
                 screen={aplikasi.screens[0]}

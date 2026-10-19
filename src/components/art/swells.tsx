@@ -19,8 +19,6 @@ export type Swell = {
   crest: string;
   crestOpacity: number;
   crestWidth?: number;
-  // Parallax fraction for ambient motion (data-speed).
-  speed: number;
 };
 
 // A smooth wave through evenly spaced points (Catmull-Rom turned into cubic Béziers). A negative rise mirrors the climb
@@ -47,8 +45,9 @@ function crestLine({ base, rise, amplitude, humps }: Swell, phase: number, rippl
 const fill = (swell: Swell, phase: number, ripple?: number) => `${crestLine(swell, phase, ripple)} ${swell.from === "top" ? "L1560 -40 L-120 -40" : "L1560 1000 L-120 1000"} Z`;
 
 // Layered swells (F-014, the owner's "keep the waves, make them better"): each is a vertical gradient with a sheen
-// along its crest; every fill and its crest line share one morph duration (data-morph-time) so they roll together, and
-// each layer drifts at its own depth. The first shape is the resting state for reduced motion and no JS.
+// along its crest; every fill and its crest line share one morph duration (data-morph-time) so they roll together. The
+// first shape is the resting state for reduced motion and no JS. No scroll parallax: transforms on SVG children repaint
+// the whole layer every frame (F-014 performance pass).
 export function Swells({ id, swells, className, stretch = false }: { id: string; swells: readonly Swell[]; className?: string; stretch?: boolean }) {
   // Stretch fills any section shape (tall chapters) instead of cropping; lines then keep their width on screen.
   return (
@@ -66,7 +65,7 @@ export function Swells({ id, swells, className, stretch = false }: { id: string;
         // Stretched section backdrops turn the small ripple into lumps, so they keep one clean harmonic.
         const ripple = stretch ? 0 : 0.35;
         return (
-          <g key={swell.id} data-speed={swell.speed}>
+          <g key={swell.id}>
             {swell.top !== "none" && (
               <path d={fill(swell, index, ripple)} data-morph={[fill(swell, index + 1.6, ripple), fill(swell, index + 3.1, ripple)].join("|")} data-morph-time={time} fill={`url(#${id}-${swell.id})`} />
             )}

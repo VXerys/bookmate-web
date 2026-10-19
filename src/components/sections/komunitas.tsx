@@ -87,7 +87,7 @@ export function Komunitas() {
                 const spot = fanSpot(index, demoCommunities.length);
                 const vars = { "--fx": `calc(50% - 7.5rem + ${spot.x}rem)`, "--fy": `${spot.y + 2}rem`, "--fr": `${spot.r}deg` } as CSSProperties;
                 return (
-                  <li key={club.id} data-club className="w-[15rem] shrink-0 snap-start lg:absolute lg:top-(--fy) lg:left-(--fx) lg:rotate-(--fr)" style={{ ...vars, zIndex: index === 2 ? 5 : 5 - Math.abs(index - 2) }}>
+                  <li key={club.id} data-club className="w-[15rem] shrink-0 will-change-transform snap-start lg:absolute lg:top-(--fy) lg:left-(--fx) lg:rotate-(--fr)" style={{ ...vars, zIndex: index === 2 ? 5 : 5 - Math.abs(index - 2) }}>
                     <article className="flex flex-col gap-3 rounded-[1.5rem] bg-white p-3 pb-4 shadow-[0_24px_50px_-28px_rgb(3_4_10/0.5)]">
                       <Image src={communityImages[club.key]} alt={`Sampul komunitas ${club.name}`} sizes="232px" className="aspect-[4/5] w-full rounded-[1rem] object-cover" />
                       <h3 className="statement px-1 text-[1.35rem]">{club.name}</h3>
