@@ -26,10 +26,10 @@ const ORBIT = [
 ] as const;
 
 
-// Chapter 3, read (F-014): the one pinned scene. The phone turns from a tilted three-quarter view to face the reader
-// between the two halves of the sentence while four books burst out from behind it and the blob behind breathes; the
-// phone then flips through its screens, steps left, and the three steps to start appear. Narrow screens and reduced
-// motion read the same content stacked.
+// Chapter 3, read (F-014): the one pinned scene. A thick 3D phone turns toward the reader with its screen off, powers
+// on to the BookMate splash while four books burst out around it, then steps left as the three start steps light up
+// one by one, the screen following each step: splash for "Unduh", onboarding for "Masuk", Catat Bacaan for the first
+// page. Narrow screens and reduced motion read the same content stacked, with the screen already on.
 export function Aplikasi() {
   const root = useRef<HTMLElement>(null);
 
@@ -47,24 +47,38 @@ export function Aplikasi() {
         });
         const covers = gsap.utils.toArray<HTMLElement>("[data-orbit]", section);
         const extras = gsap.utils.toArray<HTMLElement>("[data-phone-extra]", section);
+        const steps = gsap.utils.toArray<HTMLElement>("[data-app-step-item]", section);
+        gsap.set("[data-app-stage]", { rotationY: -32, rotationX: 14, rotationZ: -6, scale: 0.9 });
+        gsap.set(steps, { autoAlpha: 0.35 });
         const tl = gsap.timeline({
           defaults: { ease: "none" },
-          scrollTrigger: { trigger: section, start: "top top", end: "+=220%", scrub: 1, pin: true, anticipatePin: 1, invalidateOnRefresh: true },
+          scrollTrigger: { trigger: section, start: "top top", end: "+=260%", scrub: 1, pin: true, anticipatePin: 1, invalidateOnRefresh: true },
         });
-        tl.fromTo("[data-app-phone]", { rotationY: -34, rotationX: 14, rotationZ: -8, scale: 0.86 }, { rotationY: 0, rotationX: 0, rotationZ: 0, scale: 1.06, duration: 1 }, 0)
-          .from(covers, { x: (i: number) => toCentre(covers[i]).x * 0.55, y: (i: number) => toCentre(covers[i]).y * 0.55, scale: 0.6, duration: 0.7, stagger: 0.05 }, 0)
-          .to("[data-app-lead]", { yPercent: -60, autoAlpha: 0, duration: 0.6 }, 0.75)
-          .to("[data-app-tail]", { yPercent: 60, autoAlpha: 0, duration: 0.6 }, 0.75)
-          .to(extras[0] ?? {}, { autoAlpha: 1, duration: 0.25 }, 1.05)
-          .to("[data-app-phone]", { x: () => -window.innerWidth * 0.2, scale: 1, rotationY: 12, duration: 0.8 }, 1.25)
-          .to("[data-app-rings]", { x: () => -window.innerWidth * 0.2, duration: 0.8 }, 1.25)
-          .to(covers, { scale: 0.85, duration: 0.6 }, 1.25)
-          .from("[data-app-card]", { x: 140, autoAlpha: 0, rotation: 4, duration: 0.5 }, 1.35)
-          .from("[data-app-step]", { x: 40, autoAlpha: 0, stagger: 0.12, duration: 0.4 }, 1.55)
-          .to(extras[1] ?? {}, { autoAlpha: 1, duration: 0.25 }, 1.75)
-          .from("[data-app-cta]", { y: 40, autoAlpha: 0, duration: 0.4 }, 2)
+        // Turn toward the reader with the screen off, then power on: the black glass clears and the splash logo pops.
+        tl.to("[data-app-stage]", { rotationY: 0, rotationX: 0, rotationZ: 0, scale: 1.04, duration: 0.6, ease: "power1.inOut" }, 0)
+          .from(covers, { x: (i: number) => toCentre(covers[i]).x * 0.55, y: (i: number) => toCentre(covers[i]).y * 0.55, scale: 0.6, duration: 0.6, stagger: 0.05 }, 0.1)
+          .to("[data-phone-off]", { autoAlpha: 0, duration: 0.08 }, 0.55)
+          .from("[data-phone-splash] > *", { scale: 0.4, autoAlpha: 0, duration: 0.25, ease: "back.out(2)" }, 0.6)
+          // The sentence clears, the phone steps left, and the steps card arrives with every step dimmed.
+          .to("[data-app-lead]", { yPercent: -60, autoAlpha: 0, duration: 0.4 }, 0.85)
+          .to("[data-app-tail]", { yPercent: 60, autoAlpha: 0, duration: 0.4 }, 0.85)
+          .to("[data-app-stage]", { x: () => -window.innerWidth * 0.17, scale: 1, rotationY: 10, duration: 0.6 }, 1)
+          .to("[data-app-rings]", { x: () => -window.innerWidth * 0.17, duration: 0.6 }, 1)
+          .to(covers, { scale: 0.85, duration: 0.5 }, 1)
+          .from("[data-app-card]", { x: 120, autoAlpha: 0, rotation: 4, duration: 0.45 }, 1.1)
+          // Step 1 lights on the splash, step 2 swaps to onboarding, step 3 to Catat Bacaan; swaps are instant.
+          .to(steps[0] ?? {}, { autoAlpha: 1, duration: 0.15 }, 1.45)
+          .to(steps[1] ?? {}, { autoAlpha: 1, duration: 0.15 }, 1.85)
+          .to("[data-phone-splash]", { autoAlpha: 0, duration: 0.01 }, 1.85)
+          .to(steps[2] ?? {}, { autoAlpha: 1, duration: 0.15 }, 2.25)
+          .to(extras[0] ?? {}, { autoAlpha: 1, duration: 0.01 }, 2.25)
+          .from("[data-app-cta]", { y: 30, autoAlpha: 0, duration: 0.3 }, 2.45)
           .to({}, { duration: 0.3 });
-        return () => delete section.dataset.pinned;
+        return () => {
+          delete section.dataset.pinned;
+          gsap.set("[data-app-stage]", { clearProps: "transform" });
+          gsap.set("[data-app-step-item]", { clearProps: "opacity,visibility" });
+        };
       });
       return () => mm.revert();
     },
@@ -107,9 +121,23 @@ export function Aplikasi() {
         </p>
 
         <div className="aplikasi-stage relative z-10 flex w-full max-w-[72rem] flex-col items-center gap-12">
-          <div className="[perspective:1600px]">
+          <div className="[perspective:1700px]">
+            <div data-app-stage className="relative [transform-style:preserve-3d]">
             <div data-app-phone className="relative aspect-[9/19.5] h-(--app-phone) [transform-style:preserve-3d]">
-              <PhoneFrame screen={aplikasi.screens[0]} more={aplikasi.screens.slice(1)} sizes="(min-width: 1024px) 300px, 70vw" />
+              <PhoneFrame
+                screen={aplikasi.screens[0]}
+                more={aplikasi.screens.slice(1)}
+                sizes="(min-width: 1024px) 300px, 70vw"
+                thick
+                splash={
+                  <span className="flex flex-col items-center gap-3 text-white">
+                    <span className="grid size-[4.5rem] place-items-center rounded-[1.4rem] bg-white">
+                      <LogoMark className="w-10 text-blue" />
+                    </span>
+                    <span className="font-display text-2xl font-extrabold tracking-tight">{site.name}</span>
+                  </span>
+                }
+              />
               <div className="absolute -bottom-6 -left-12 w-[clamp(5.5rem,7vw,7rem)]">
                 <div data-pop>
                   <CircleText id="app-stamp" text={aplikasi.stamp} tone="blue" ink="white" className="aspect-square w-full">
@@ -118,23 +146,24 @@ export function Aplikasi() {
                 </div>
               </div>
             </div>
+            </div>
           </div>
-          <div data-app-card className="aplikasi-steps flex w-full max-w-[27rem] flex-col gap-5 rounded-[2rem] bg-white p-7 shadow-[0_30px_60px_-30px_rgb(3_4_10/0.55)] lg:p-8">
+          <div data-app-card className="aplikasi-steps flex w-full max-w-[22rem] flex-col gap-4 rounded-[1.75rem] bg-white p-6 shadow-[0_30px_60px_-30px_rgb(3_4_10/0.55)]">
             <p data-app-step className="label">
               {aplikasi.kicker}
             </p>
             <h2 data-app-step className="statement">
               {aplikasi.stepsTitle}
             </h2>
-            <ol className="flex flex-col gap-5">
+            <ol className="flex flex-col gap-3.5">
               {aplikasi.steps.map((step, index) => (
-                <li key={step.title} data-app-step className="flex gap-4">
-                  <span className="grid size-11 shrink-0 place-items-center rounded-full bg-highlight font-display text-xl font-extrabold text-navy">
+                <li key={step.title} data-app-step data-app-step-item className="flex gap-3">
+                  <span className="grid size-9 shrink-0 place-items-center rounded-full bg-highlight font-display text-lg font-extrabold text-navy">
                     {index + 1}
                   </span>
                   <span className="flex flex-col gap-1">
-                    <span className="font-display text-xl font-bold">{step.title}</span>
-                    <span className="font-semibold">{step.body}</span>
+                    <span className="font-display text-lg leading-tight font-bold">{step.title}</span>
+                    <span className="text-sm font-semibold">{step.body}</span>
                   </span>
                 </li>
               ))}
@@ -143,9 +172,9 @@ export function Aplikasi() {
               <a
                 href={site.app.playStoreUrl}
                 data-cursor-label={shell.header.cta}
-                className="inline-flex h-14 items-center gap-3 rounded-full bg-navy px-6 font-bold text-white transition-transform hover:-translate-y-0.5"
+                className="inline-flex h-12 items-center gap-2.5 rounded-full bg-navy px-5 text-sm font-bold text-white transition-transform hover:-translate-y-0.5"
               >
-                <svg viewBox="0 0 24 24" className="size-6" aria-hidden="true">
+                <svg viewBox="0 0 24 24" className="size-5" aria-hidden="true">
                   <path d="M5 3.5v17l14.5-8.5L5 3.5Z" fill="var(--color-highlight)" />
                 </svg>
                 {shell.footer.download}

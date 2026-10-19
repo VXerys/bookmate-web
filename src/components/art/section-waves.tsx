@@ -18,8 +18,8 @@ const VARIANTS: Record<Variant, { ground: string; swells: readonly Swell[] }> = 
     ground: `linear-gradient(180deg, ${PALE} 0%, ${mix(PEACH, 35, PALE)} 100%)`,
     swells: [
       { id: "veil", from: "top", base: 220, rise: -80, amplitude: 70, humps: 2, top: mix(WHITE, 75, "transparent"), bottom: mix(WHITE, 40, "transparent"), crest: WHITE, crestOpacity: 0, speed: 0.05 },
-      { id: "dune", base: 600, rise: -140, amplitude: 80, humps: 2, top: mix(PEACH, 55, PALE), bottom: mix(PEACH, 25, PALE), crest: WHITE, crestOpacity: 0, speed: 0.1 },
-      { id: "sun", base: 800, rise: 120, amplitude: 46, humps: 3, top: mix(YELLOW, 30, PALE), bottom: mix(YELLOW, 14, PALE), crest: YELLOW, crestOpacity: 0.55, crestWidth: 2, speed: 0.16 },
+      { id: "dune", base: 620, rise: -120, amplitude: 70, humps: 1.25, top: mix(PEACH, 55, PALE), bottom: mix(PEACH, 25, PALE), crest: WHITE, crestOpacity: 0, speed: 0.1 },
+      { id: "sun", base: 810, rise: 110, amplitude: 40, humps: 1.5, top: mix(YELLOW, 30, PALE), bottom: mix(YELLOW, 14, PALE), crest: YELLOW, crestOpacity: 0.55, crestWidth: 2, speed: 0.16 },
     ],
   },
   // Cool and airy: a white veil above, three blue gradient swells climbing toward the phone.

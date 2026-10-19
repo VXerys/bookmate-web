@@ -1,7 +1,7 @@
 "use client";
 
 import Image from "next/image";
-import { useRef } from "react";
+import { useRef, type CSSProperties } from "react";
 
 import { Starburst } from "@/components/art/starburst";
 import { HandNote } from "@/components/motion/hand-note";
@@ -82,14 +82,14 @@ export function Buku() {
   };
 
   return (
-    <section ref={root} id="buku" data-chapter="buku" className="shelf relative overflow-hidden bg-white py-16 lg:flex lg:h-svh lg:min-h-[40rem] lg:flex-col lg:justify-start lg:pt-20 lg:pb-6">
+    <section ref={root} id="buku" data-chapter="buku" className="shelf relative overflow-x-clip bg-white py-16 lg:flex lg:h-svh lg:min-h-[40rem] lg:flex-col lg:justify-start lg:pt-20 lg:pb-6">
       <div className="mx-auto flex w-full max-w-[90rem] flex-wrap items-end justify-between gap-8 px-6 lg:px-10">
         <div className="flex max-w-2xl flex-col gap-4 lg:gap-3">
           <p data-rise className="label">{buku.kicker}</p>
           <PopTitle className="heading">{buku.title}</PopTitle>
-          <p data-rise="0.15" className="lead lg:max-w-xl">{buku.lead}</p>
         </div>
-        <div className="flex items-center gap-4">
+        <div className="flex flex-wrap items-center gap-4 lg:max-w-[30rem] lg:flex-col lg:items-start">
+          <p data-rise="0.15" className="lead">{buku.lead}</p>
           <HandNote decorative className="-rotate-3">
             {buku.note}
           </HandNote>
@@ -117,33 +117,64 @@ export function Buku() {
         data-shelf-track
         tabIndex={0}
         aria-label={buku.title}
-        className="no-scrollbar mt-12 flex snap-x snap-mandatory gap-5 overflow-x-auto scroll-px-6 px-6 pt-10 pb-10 lg:mt-4 lg:pt-8 lg:pb-5 lg:scroll-px-10 lg:px-10"
+        className="no-scrollbar mt-12 flex snap-x snap-mandatory gap-6 overflow-x-auto lg:gap-12 scroll-px-6 px-6 pt-10 pb-10 lg:mt-4 lg:pt-8 lg:pb-5 lg:scroll-px-10 lg:px-10"
       >
         {BOOKS.map((book, index) => {
           const available = book.status === "AVAILABLE";
           const ink = book.text === "ink" ? "var(--color-ink)" : "var(--color-white)";
           return (
-            <li key={book.id} data-shelf-card className="w-[min(76vw,17rem)] shrink-0 snap-start lg:w-[clamp(10.5rem,calc((100svh-26rem)/1.5),15rem)]" style={{ rotate: `${index % 2 ? 1.5 : -1.5}deg` }}>
-              <article className="relative flex h-full flex-col gap-3 rounded-[1.5rem] p-3 pb-5" style={{ background: book.color, color: ink }}>
+            <li
+              key={book.id}
+              data-shelf-card
+              className="group/card relative isolate w-[min(82vw,20rem)] shrink-0 snap-start [rotate:var(--tilt)] transition-[rotate,translate] duration-500 ease-(--ease-expo) hover:-translate-y-3 hover:[rotate:0deg] focus-within:[rotate:0deg] lg:w-[clamp(12rem,calc((100svh-36.5rem)/1.2),21rem)]"
+              style={{ "--tilt": `${index % 2 ? 2 : -2}deg` } as CSSProperties}
+            >
+              {/* Hover: the card straightens and lifts, a bookmark ribbon in the card's own colour slides up from behind its
+                  top edge, two small stars bloom beside it, the cover eases in, and the sticker turns (CSS only, so it is
+                  instant under reduced motion through the global transition override). */}
+              <svg
+                viewBox="0 0 40 90"
+                className="absolute top-0 left-[14%] -z-10 w-[15%] translate-y-[20%] transition-transform duration-500 ease-(--ease-expo) group-hover/card:-translate-y-[62%] group-focus-within/card:-translate-y-[62%]"
+                aria-hidden="true"
+              >
+                <path d="M4 6 Q4 0 10 0 H30 Q36 0 36 6 V88 L20 72 L4 88 Z" style={{ fill: `color-mix(in srgb, ${book.color} 70%, var(--color-navy))` }} />
+                <path d="M12 14 H28" stroke="var(--color-white)" strokeOpacity="0.6" strokeWidth="3" strokeLinecap="round" />
+              </svg>
+              {[
+                { spot: "left-[34%] -top-[2.2rem] w-7", delay: "delay-100" },
+                { spot: "left-[4%] -top-[1.2rem] w-5", delay: "delay-200" },
+              ].map((spark) => (
+                <svg
+                  key={spark.spot}
+                  viewBox="0 0 20 20"
+                  className={`absolute -z-10 scale-0 rotate-45 transition-transform duration-500 ease-(--ease-expo) group-hover/card:scale-100 group-hover/card:rotate-0 ${spark.spot} ${spark.delay}`}
+                  aria-hidden="true"
+                >
+                  <path d="M10 0 12.6 7.4 20 10 12.6 12.6 10 20 7.4 12.6 0 10 7.4 7.4Z" fill="var(--color-highlight)" stroke="var(--color-navy)" strokeWidth="1.2" />
+                </svg>
+              ))}
+              <article className="relative flex h-full flex-col gap-3 rounded-[1.75rem] p-3.5 pb-5 shadow-[0_12px_24px_-18px_rgb(3_4_10/0.4)] transition-shadow duration-500 group-hover/card:shadow-[0_34px_50px_-24px_rgb(3_4_10/0.55)]" style={{ background: book.color, color: ink }}>
                 <div className="relative">
+                  <div className="overflow-hidden rounded-[1.1rem] shadow-[0_18px_30px_-14px_rgb(3_4_10/0.55)]">
                   <Image
                     src={book.cover}
                     data-shelf-cover={book.key}
                     alt={`Sampul ${book.title}`}
-                    sizes="(min-width: 1024px) 248px, 70vw"
-                    className="aspect-[2/3] w-full rounded-[1rem] object-cover shadow-[0_18px_30px_-14px_rgb(3_4_10/0.55)]"
+                    sizes="(min-width: 1024px) 304px, 80vw"
+                    className="aspect-[5/6] w-full object-cover transition-transform duration-700 ease-(--ease-expo) group-hover/card:scale-[1.06]"
                   />
-                  <div className="absolute -top-5 -right-4 w-[5.25rem]">
+                  </div>
+                  <div className="absolute -top-5 -right-4 w-[5.25rem] transition-transform duration-700 ease-(--ease-expo) group-hover/card:scale-110 group-hover/card:rotate-[30deg]">
                     <Starburst tone={available ? "green" : "white"} points={12} spin={index % 2 ? -14 : 14} className="aspect-square w-full rotate-12 text-[0.8rem]">
                       {available ? buku.status.AVAILABLE : buku.status.BORROWED}
                     </Starburst>
                   </div>
                 </div>
-                <div className="flex gap-1.5 overflow-hidden px-1">
-                  <span className="truncate rounded-full bg-white px-2.5 py-1 text-xs font-bold text-navy">{book.genre[0]}</span>
+                <div className="flex flex-wrap gap-1.5 px-1">
+                  <span className="rounded-full bg-white px-2.5 py-1 text-xs font-bold text-navy">{book.genre[0]}</span>
                   <span className="shrink-0 rounded-full bg-navy px-2.5 py-1 text-xs font-bold text-white">{buku.condition[book.condition]}</span>
                 </div>
-                <h3 className="statement line-clamp-2 px-1 text-[1.5rem] lg:text-[1.2rem]">{book.title}</h3>
+                <h3 className="statement line-clamp-2 px-1 text-[1.5rem] lg:text-[1.35rem]">{book.title}</h3>
                 <p className="px-1 text-sm font-bold">{book.author}</p>
               </article>
             </li>

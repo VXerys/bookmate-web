@@ -2,7 +2,7 @@
 id: F-014
 title: "Cerita BookMate dengan aset asli"
 type: design
-status: approved
+status: implementing
 tier: lite
 owner: "M Sechan Alfarisi"
 created: 2026-10-19

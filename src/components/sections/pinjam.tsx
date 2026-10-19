@@ -51,7 +51,8 @@ export function Pinjam() {
           })
           .fromTo("[data-road-line]", { drawSVG: "0%" }, { drawSVG: "100%", duration: 1 }, 0)
           .to("[data-road-book]", { motionPath: { path: "[data-road-guide]", align: "[data-road-guide]", alignOrigin: [0.5, 0.5], autoRotate: false }, rotation: 360, transformOrigin: "50% 50%", duration: 1 }, 0);
-        return () => gsap.set(cards, { clearProps: "all" });
+        // Only the transform: "all" would also wipe each card's inline background and tilt, leaving it see-through.
+        return () => gsap.set(cards, { clearProps: "transform" });
       });
       // Each step icon acts out its step on a loop, only while it is on screen.
       mm.add(MOTION_OK, () => {
@@ -146,12 +147,14 @@ export function Pinjam() {
             <path d="M-20 300 C 140 80 300 80 380 220 S 600 380 720 200 S 980 40 1220 160" fill="none" stroke="var(--color-sky)" strokeWidth="26" strokeLinecap="round" />
             <path data-road-line d="M-20 300 C 140 80 300 80 380 220 S 600 380 720 200 S 980 40 1220 160" fill="none" stroke="var(--color-blue)" strokeWidth="8" strokeLinecap="round" />
           </svg>
-          {/* The travelling cover rides above the cards on an invisible copy of the road in the same box. */}
-          <svg viewBox="0 0 1200 420" className="pointer-events-none absolute inset-x-0 top-1/2 z-10 hidden w-full -translate-y-1/2 overflow-visible lg:block" aria-hidden="true">
+          {/* The travelling cover rides the road behind the cards (an invisible copy of it in the same box), showing in the
+              gaps between them and never covering their copy. */}
+          <svg viewBox="0 0 1200 420" className="pointer-events-none absolute inset-x-0 top-1/2 hidden w-full -translate-y-1/2 overflow-visible lg:block" aria-hidden="true">
             <path data-road-guide d="M-20 300 C 140 80 300 80 380 220 S 600 380 720 200 S 980 40 1220 160" fill="none" />
             <g data-road-book>
-              <rect x="-32" y="-46" width="64" height="94" rx="8" fill="var(--color-ink)" opacity="0.25" transform="translate(6 8)" />
-              <image href={TRAVELLER.cover.src} x="-32" y="-46" width="64" height="94" preserveAspectRatio="xMidYMid slice" />
+              <rect x="-32" y="-46" width="64" height="94" rx="8" fill="var(--color-navy)" fillOpacity="0.3" transform="translate(6 9)" />
+              <rect x="-35" y="-49" width="70" height="100" rx="9" fill="var(--color-white)" />
+              <image href={TRAVELLER.cover.src} x="-32" y="-46" width="64" height="94" preserveAspectRatio="xMidYMid slice" opacity="1" />
             </g>
           </svg>
 

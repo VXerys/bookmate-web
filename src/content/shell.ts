@@ -16,6 +16,8 @@ export const shell = {
     // From the app's About page ("© 2026 Mangcoding").
     copyrightYear: "2026",
     backToTop: "Kembali ke awal",
+    explore: "Jelajahi",
+    app: "Aplikasi",
   },
   menu: {
     open: "Menu",

@@ -2,7 +2,7 @@
 id: F-014
 title: "Cerita BookMate dengan aset asli"
 type: tasks
-status: approved
+status: implementing
 tier: lite
 owner: "M Sechan Alfarisi"
 created: 2026-10-19
@@ -21,34 +21,34 @@ Disetujui pemilik 2026-10-19: kerjakan sesuai rekomendasi, setiap section cinema
 ## Tasks
 
 ### T-001 — Pipeline aset app dan data buku
-- status: planned
+- status: done
 - requirements: [FR-001]
 - depends_on: []
-- evidence: []
+- evidence: [EV-001]
 
 Skrip impor, books.ts dengan warna, CREDITS. Acceptance: AC-001, AC-002.
 
 ### T-002 — Komponen SVG grafis beranimasi
-- status: planned
+- status: done
 - requirements: [FR-003]
 - depends_on: [T-001]
-- evidence: []
+- evidence: [EV-001]
 
 Acceptance: AC-004, AC-005.
 
 ### T-003 — Section cerita
-- status: planned
+- status: done
 - requirements: [FR-002]
 - depends_on: [T-002]
-- evidence: []
+- evidence: [EV-001]
 
 Acceptance: AC-003.
 
 ### T-004 — Audit dan checks
-- status: planned
+- status: done
 - requirements: [FR-004]
 - depends_on: [T-003]
-- evidence: []
+- evidence: [EV-001]
 
 Acceptance: AC-006.
 

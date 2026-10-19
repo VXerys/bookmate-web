@@ -79,8 +79,8 @@ export const aplikasi = {
   // Split around the phone: the lead sits above it and the tail below, so the sentence reads across the device.
   statementLead: "Semua bacaanmu,",
   statementTail: "satu saku.",
-  // Screens the phone flips through while the scene is pinned.
-  screens: ["bukuSaya", "catatBacaan", "bedahBuku"] satisfies ScreenId[],
+  // The phone powers on to a splash, then shows one screen per start step: sign-in onboarding, then Catat Bacaan.
+  screens: ["onboarding", "catatBacaan"] satisfies ScreenId[],
   stamp: "CATAT · STREAK · BEDAH BUKU · ",
   stepsTitle: "Mulai dalam tiga langkah",
   steps: [

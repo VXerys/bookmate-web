@@ -245,6 +245,31 @@ html.lenis body {
   translate: 0 -50%;
 }
 
+/* Screen off (F-014 power-on scene): a black glass with a faint reflection; shown only while the scene is pinned, so
+   stacked layouts and reduced motion see the lit screen. */
+.phone-off {
+  display: none;
+  background: linear-gradient(125deg, #1a1f2e 0%, #05070d 45%, #0b0f1a 100%);
+}
+
+.aplikasi[data-pinned] .phone-off {
+  display: block;
+}
+
+/* The splash belongs to the power-on scene too; stacked layouts show the real screenshot instead. */
+.aplikasi:not([data-pinned]) [data-phone-splash] {
+  display: none;
+}
+
+/* Phone thickness: 16 edge plates stacked about 22px behind the front, lit brighter in the middle like a polished
+   titanium band, so a tilted phone shows a solid rounded side instead of a flat card. */
+.phone-slab {
+  position: absolute;
+  inset: 0;
+  border-radius: 16% / 7.4%;
+  background: linear-gradient(135deg, color-mix(in srgb, var(--color-navy) 45%, var(--color-white)), var(--color-navy) 45%, color-mix(in srgb, var(--color-navy) 70%, var(--color-blue)));
+}
+
 /* Buku (F-014): once the shelf pins, GSAP moves the track, so native scrolling, snapping, and the step buttons step aside. */
 .shelf[data-shelf-pinned] [data-shelf-track] {
   overflow: visible;

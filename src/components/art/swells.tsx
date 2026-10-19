@@ -25,13 +25,13 @@ export type Swell = {
 
 // A smooth wave through evenly spaced points (Catmull-Rom turned into cubic Béziers). A negative rise mirrors the climb
 // to the left. Changing only the phase keeps the point count, so MorphSVG blends one shape into the next cleanly.
-function crestLine({ base, rise, amplitude, humps }: Swell, phase: number) {
+function crestLine({ base, rise, amplitude, humps }: Swell, phase: number, ripple = 0.35) {
   const steps = humps * 4;
   const points = Array.from({ length: steps + 3 }, (_, i) => {
     const x = -120 + (1680 / steps) * (i - 1);
     const t = Math.max(0, Math.min(1, x / 1440));
     const climb = rise >= 0 ? rise * t * t : -rise * (1 - t) * (1 - t);
-    const y = base - climb + amplitude * Math.sin((x / 1440) * humps * Math.PI * 2 + phase) + amplitude * 0.35 * Math.sin((x / 1440) * humps * 5 + phase * 1.7);
+    const y = base - climb + amplitude * Math.sin((x / 1440) * humps * Math.PI * 2 + phase) + amplitude * ripple * Math.sin((x / 1440) * humps * 5 + phase * 1.7);
     return [x, y] as const;
   });
   let d = `M${r2(points[1][0])} ${r2(points[1][1])}`;
@@ -44,7 +44,7 @@ function crestLine({ base, rise, amplitude, humps }: Swell, phase: number) {
   return d;
 }
 
-const fill = (swell: Swell, phase: number) => `${crestLine(swell, phase)} ${swell.from === "top" ? "L1560 -40 L-120 -40" : "L1560 1000 L-120 1000"} Z`;
+const fill = (swell: Swell, phase: number, ripple?: number) => `${crestLine(swell, phase, ripple)} ${swell.from === "top" ? "L1560 -40 L-120 -40" : "L1560 1000 L-120 1000"} Z`;
 
 // Layered swells (F-014, the owner's "keep the waves, make them better"): each is a vertical gradient with a sheen
 // along its crest; every fill and its crest line share one morph duration (data-morph-time) so they roll together, and
@@ -63,15 +63,17 @@ export function Swells({ id, swells, className, stretch = false }: { id: string;
       </defs>
       {swells.map((swell, index) => {
         const time = 5 + index * 1.3;
+        // Stretched section backdrops turn the small ripple into lumps, so they keep one clean harmonic.
+        const ripple = stretch ? 0 : 0.35;
         return (
           <g key={swell.id} data-speed={swell.speed}>
             {swell.top !== "none" && (
-              <path d={fill(swell, index)} data-morph={[fill(swell, index + 1.6), fill(swell, index + 3.1)].join("|")} data-morph-time={time} fill={`url(#${id}-${swell.id})`} />
+              <path d={fill(swell, index, ripple)} data-morph={[fill(swell, index + 1.6, ripple), fill(swell, index + 3.1, ripple)].join("|")} data-morph-time={time} fill={`url(#${id}-${swell.id})`} />
             )}
             {swell.crestOpacity > 0 && (
             <path
-              d={crestLine(swell, index)}
-              data-morph={[crestLine(swell, index + 1.6), crestLine(swell, index + 3.1)].join("|")}
+              d={crestLine(swell, index, ripple)}
+              data-morph={[crestLine(swell, index + 1.6, ripple), crestLine(swell, index + 3.1, ripple)].join("|")}
               data-morph-time={time}
               fill="none"
               stroke={swell.crest}

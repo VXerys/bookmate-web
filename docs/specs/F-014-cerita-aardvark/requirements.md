@@ -2,7 +2,7 @@
 id: F-014
 title: "Cerita BookMate dengan aset asli"
 type: requirements
-status: approved
+status: implementing
 tier: lite
 owner: "M Sechan Alfarisi"
 created: 2026-10-19
@@ -33,8 +33,8 @@ Halaman / bercerita dalam satu alur (temukan, pinjam, baca, diskusi, rayakan, mu
 
 Situs harus memakai sampul buku, lencana tarot, memoji, sampul komunitas, dan ilustrasi dari repo app bookmeet, dioptimasi untuk web, dengan asal setiap file di public/CREDITS.md.
 
-- AC-001: Given rak buku, then 18 buku mock yang punya sampul lokal tampil dengan sampul aslinya, warna kartu dari warna dominan sampul, dan teks kartu lolos kontras AA.
-- AC-002: Given section cara pinjam, lencana, dan komunitas, then ilustrasinya berasal dari aset app, bukan path SVG buatan situs.
+- AC-001: Given rak buku, then 10 dari 18 buku mock yang punya sampul lokal tampil dengan sampul aslinya, warna kartu dari warna dominan sampul, dan teks kartu lolos kontras AA. (Diubah pemilik 2026-10-19: 18 kartu terlalu lama di-scroll.)
+- AC-002: Given section lencana dan komunitas, then gambarnya berasal dari aset app (tarot tier IV dan V, memoji, sampul komunitas); given section cara pinjam, then setiap langkah memakai ikon antarmuka SVG beranimasi, bukan ilustrasi orang. (Diubah pemilik 2026-10-19: minta ikon SVG animasi untuk empat kartu, dan hanya lencana tier IV/V.)
 
 ### FR-002 — Alur cerita
 

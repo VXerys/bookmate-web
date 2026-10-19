@@ -22,9 +22,9 @@ import { whenIntroDone } from "@/lib/motion/intro-state";
 
 // Three real covers from the demo shelf around the phone; each trails the page its own way as the hero scrolls off.
 const HERO_BOOKS = [
-  { book: shelfBook("aCourtOfThornsAndRoses"), spot: "top-[2%] left-[0%]", size: "text-[clamp(8px,0.95vw,13px)]", pose: "rotateX(14deg) rotateY(-32deg) rotateZ(-14deg)", depth: 1.3, drift: { x: -0.07, y: 0.5, r: -8, yaw: 14 } },
-  { book: shelfBook("remarkablyBrightCreatures"), spot: "right-[-4%] bottom-[6%]", size: "text-[clamp(8px,1vw,14px)]", pose: "rotateX(-10deg) rotateY(30deg) rotateZ(16deg)", depth: 0.9, drift: { x: 0.06, y: 0.56, r: 9, yaw: -16 } },
-  { book: shelfBook("thePumpkinSpiceCafe"), spot: "bottom-[0%] left-[6%]", size: "text-[clamp(6px,0.7vw,10px)]", pose: "rotateX(8deg) rotateY(-24deg) rotateZ(-22deg)", depth: 1.6, drift: { x: -0.13, y: 0.64, r: -12, yaw: 18 } },
+  { book: shelfBook("aCourtOfThornsAndRoses"), spot: "top-[2%] left-[0%]", size: "text-[clamp(8px,0.95vw,13px)]", pose: "rotateX(14deg) rotateY(-32deg) rotateZ(-14deg)", depth: 1.3, drift: { x: -0.06, y: 1.1, r: -14, yaw: 16 } },
+  { book: shelfBook("remarkablyBrightCreatures"), spot: "right-[-4%] bottom-[6%]", size: "text-[clamp(8px,1vw,14px)]", pose: "rotateX(-10deg) rotateY(30deg) rotateZ(16deg)", depth: 0.9, drift: { x: 0.08, y: 1.5, r: 12, yaw: -18 } },
+  { book: shelfBook("thePumpkinSpiceCafe"), spot: "bottom-[0%] left-[6%]", size: "text-[clamp(6px,0.7vw,10px)]", pose: "rotateX(8deg) rotateY(-24deg) rotateZ(-22deg)", depth: 1.6, drift: { x: -0.1, y: 1.7, r: -18, yaw: 20 } },
 ] as const;
 
 const FACES = [
@@ -64,17 +64,14 @@ export function Prolog() {
           if (visual) intro.to(visual, { autoAlpha: 1, y: 0, rotate: 0, duration: 1.2, ease: LAND }, 0.3);
         });
 
-        // Scroll hand-off: the books trail the page. Each one moves down a little slower than the hero scrolls away, so it
-        // floats across the seam into the top of the shelf, drifting apart from the others (never crossing them), swaying
-        // a few degrees in 3D, and fading out at the end. Linear and scrubbed with a lag, after the cinematic motion
-        // guidance: depth and calm instead of a throw.
-        const exit = gsap.timeline({ defaults: { ease: "none" }, scrollTrigger: { trigger: section, start: "top top", end: "bottom top", scrub: 1.2, invalidateOnRefresh: true } });
+        // Scroll hand-off: the books rise faster than the page (foreground parallax), so each one leaves through the top
+        // edge of the screen while the hero is still in view; nothing fades, the reader never watches a book vanish.
+        const exit = gsap.timeline({ defaults: { ease: "none" }, scrollTrigger: { trigger: section, start: "top top", end: "bottom top", scrub: 0.8, invalidateOnRefresh: true } });
         gsap.utils.toArray<HTMLElement>("[data-hero-book]", section).forEach((book, i) => {
           const drift = HERO_BOOKS[i].drift;
           const box = book.querySelector<HTMLElement>(".book3d-box");
-          exit.to(book, { x: () => section.offsetWidth * drift.x, y: () => section.offsetHeight * drift.y, rotation: drift.r, scale: 0.92 }, 0);
-          if (box) exit.to(box, { rotationY: `+=${drift.yaw}`, rotationX: "+=6" }, 0);
-          exit.to(book, { autoAlpha: 0, duration: 0.3 }, 0.7);
+          exit.to(book, { x: () => section.offsetWidth * drift.x, y: () => -window.innerHeight * drift.y, rotation: drift.r }, 0);
+          if (box) exit.to(box, { rotationY: `+=${drift.yaw}`, rotationX: "+=8" }, 0);
         });
         exit.to("[data-hero-phone]", { yPercent: 12, rotation: 8, scale: 0.94 }, 0).to("[data-hero-copy]", { yPercent: -18, autoAlpha: 0.2 }, 0);
 
@@ -111,7 +108,7 @@ export function Prolog() {
   );
 
   return (
-    <section ref={root} id="prolog" data-chapter="prolog" className="relative isolate z-10 min-h-[min(100svh,64rem)] overflow-x-clip">
+    <section ref={root} id="prolog" data-chapter="prolog" className="relative isolate z-10 min-h-[min(100svh,64rem)] overflow-hidden">
       <div data-hero-bg className="absolute inset-0 -z-10">
         <HeroBackdrop />
       </div>
