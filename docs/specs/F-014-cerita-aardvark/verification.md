@@ -24,14 +24,15 @@ supersedes: F-013
   lint clean; typecheck 0 errors; tests 58 pass 0 fail; build ok (/ static)
   impor: books 18, communities 5, tarot 30, memoji 13; kontras kartu buku >= 4.5:1 untuk semua 18 (app-data.test.ts)
   urutan: prolog, buku, pinjam, aplikasi, fitur, kenapa, komunitas, (pita), lencana, indeks, epilog (story.test.ts)
-  rak: 10 buku, tiga buku hero di depan; pin horizontal 1920 dan 1440 menampilkan kartu utuh
+  rak: 10 buku, tiga buku hero di depan; kartu utuh saat pin di 1920x945, 1920x870, 1366x657; hover pita dan bintang
+  aplikasi: ponsel 3D layar mati, menyala ke splash, layar berganti per langkah 1-3; footer naik penuh di akhir halaman
   overflowX: -15 (scrollbar) di 1920 dan 1440, 0 di 375; tidak ada scroll horizontal
   klik navbar: tirai kuning-biru dengan label bab, mendarat di section yang benar; refresh di #komunitas mendarat di komunitas
   reduced motion (CDP setEmulatedMedia): semua section statis dan lengkap, stiker dan kartu terlihat, tanpa pin
   page errors: 0 di semua rekaman
   ```
 - date: 2026-10-19
-- commit: 9a0fd26
+- commit: 7ba76d1
 - covers: [AC-001, AC-002, AC-003, AC-004, AC-005, AC-006]
 
 ## Coverage

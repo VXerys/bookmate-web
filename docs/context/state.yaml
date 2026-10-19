@@ -489,44 +489,48 @@ features:
           - EV-001
   - id: F-014
     title: Cerita BookMate dengan aset asli
-    status: approved
-    phase: not_started
+    status: implementing
+    phase: complete
     spec_path: docs/specs/F-014-cerita-aardvark
     tasks:
       - id: T-001
         title: Pipeline aset app dan data buku
-        status: planned
+        status: done
         requirements:
           - FR-001
         depends_on: []
-        evidence: []
+        evidence:
+          - EV-001
       - id: T-002
         title: Komponen SVG grafis beranimasi
-        status: planned
+        status: done
         requirements:
           - FR-003
         depends_on:
           - T-001
-        evidence: []
+        evidence:
+          - EV-001
       - id: T-003
         title: Section cerita
-        status: planned
+        status: done
         requirements:
           - FR-002
         depends_on:
           - T-002
-        evidence: []
+        evidence:
+          - EV-001
       - id: T-004
         title: Audit dan checks
-        status: planned
+        status: done
         requirements:
           - FR-004
         depends_on:
           - T-003
-        evidence: []
+        evidence:
+          - EV-001
 active:
-  feature_id: F-013
-  task_id: T-003
+  feature_id: F-014
+  task_id: T-004
 assumptions_open:
   - id: A-001
     feature: null
@@ -562,5 +566,5 @@ blockers:
   - feature_id: F-010
     task_id: T-003
     title: Deploy produksi
-generated_at: 2026-10-19T07:01:37.632Z
-source_hash: 0c2781432622c2b648c5b6739b9d395b8f576b4d7eb909636c0b2855355e05d4
+generated_at: 2026-10-19T09:29:39.438Z
+source_hash: 056e6aa7993334c7e412041fa9fc4c8e65f00f36cacb9ee953c5d0fe529571f6

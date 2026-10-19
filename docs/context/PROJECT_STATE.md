@@ -1,12 +1,12 @@
 <!-- GENERATED FILE — DO NOT EDIT. Rendered by `npm run context:render`.
 Source: sdd.config.json, docs/steering/, docs/specs/F-*/, docs/context/ASSUMPTIONS.md, docs/handoff/current.md.
-source_hash: 0c2781432622c2b648c5b6739b9d395b8f576b4d7eb909636c0b2855355e05d4 -->
+source_hash: 056e6aa7993334c7e412041fa9fc4c8e65f00f36cacb9ee953c5d0fe529571f6 -->
 
 # Project State
 
-- Generated at: 2026-10-19T07:01:37.632Z
+- Generated at: 2026-10-19T09:29:39.438Z
 - Project: BookMate Web (tier `lite`)
-- Active: F-013 / T-003
+- Active: F-014 / T-004
 - Open assumptions: 7
 - Blocked tasks: T-002, T-003, T-004, T-003
 
@@ -27,20 +27,20 @@ source_hash: 0c2781432622c2b648c5b6739b9d395b8f576b4d7eb909636c0b2855355e05d4 --
 | F-011 Screenshot sementara dan perbaikan bug animasi | verification | complete | 0 | 0 | 0 | 0 | 3 | 0 |
 | F-012 Redesign Marginalia: satu hari pembaca | superseded | complete | 0 | 0 | 0 | 0 | 6 | 0 |
 | F-013 Revamp gaya Aardvark | verification | complete | 0 | 0 | 0 | 0 | 3 | 0 |
-| F-014 Cerita BookMate dengan aset asli | approved | not_started | 4 | 0 | 0 | 0 | 0 | 0 |
+| F-014 Cerita BookMate dengan aset asli | implementing | complete | 0 | 0 | 0 | 0 | 4 | 0 |
 
 <!-- GENERATED:GIT_FACTS:START -->
 ## Git
 
 - Branch: `feat/F-014-cerita-aardvark`
-- HEAD: `dbbf9a7`
+- HEAD: `7ba76d1`
 - Worktree: dirty
 
 Recent commits:
 
+- `7ba76d1 feat(F-014): owner review pass 2: power-on phone scene, roomier shelf, footer sign-off`
+- `9a0fd26 feat(F-014): owner review pass: waves per chapter, new devices, Bricolage headings, refresh fixes`
+- `02d41f0 feat(F-014): story-led revamp with the app's own art, blue palette, curtain nav transition`
 - `dbbf9a7 Merge pull request #6 from VXerys/feat/F-013-gaya-aardvark`
 - `07f3323 docs(F-013): REA-validated reference, books-shelf requirement, evidence, superseded specs, handoff`
-- `76167f3 feat(F-013): Aardvark-style revamp with BookMate story, mock-data book shelf, REA-validated motion`
-- `e89e489 docs(F-013): Aardvark-style art direction and spec`
-- `5235ec7 docs: reverse-engineered reference of aardvarkbookclub.com sections, tokens, and motion`
 <!-- GENERATED:GIT_FACTS:END -->

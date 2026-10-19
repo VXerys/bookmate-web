@@ -1,6 +1,6 @@
 <!-- GENERATED FILE — DO NOT EDIT. Rendered by `npm run context:render`.
 Source: sdd.config.json, docs/steering/, docs/specs/F-*/, docs/context/ASSUMPTIONS.md, docs/handoff/current.md.
-source_hash: 0c2781432622c2b648c5b6739b9d395b8f576b4d7eb909636c0b2855355e05d4 -->
+source_hash: 056e6aa7993334c7e412041fa9fc4c8e65f00f36cacb9ee953c5d0fe529571f6 -->
 
 # Project Progress
 
@@ -113,11 +113,11 @@ source_hash: 0c2781432622c2b648c5b6739b9d395b8f576b4d7eb909636c0b2855355e05d4 --
 | T-002 Section BookMate | done | FR-003 | T-001 | EV-001 |
 | T-003 Rak buku dari data demo dan validasi REA | done | FR-004 | T-001 | EV-001 |
 
-## F-014 — Cerita BookMate dengan aset asli (`approved`, not_started)
+## F-014 — Cerita BookMate dengan aset asli (`implementing`, complete)
 
 | Task | Status | Requirements | Depends on | Evidence |
 |---|---|---|---|---|
-| T-001 Pipeline aset app dan data buku | planned | FR-001 |  |  |
-| T-002 Komponen SVG grafis beranimasi | planned | FR-003 | T-001 |  |
-| T-003 Section cerita | planned | FR-002 | T-002 |  |
-| T-004 Audit dan checks | planned | FR-004 | T-003 |  |
+| T-001 Pipeline aset app dan data buku | done | FR-001 |  | EV-001 |
+| T-002 Komponen SVG grafis beranimasi | done | FR-003 | T-001 | EV-001 |
+| T-003 Section cerita | done | FR-002 | T-002 | EV-001 |
+| T-004 Audit dan checks | done | FR-004 | T-003 | EV-001 |
