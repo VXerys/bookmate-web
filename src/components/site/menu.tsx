@@ -106,7 +106,7 @@ export function Menu() {
         aria-expanded={open}
         aria-controls="menu-panel"
         onClick={() => setOpen(true)}
-        className="inline-flex h-11 min-w-11 items-center justify-center rounded-3xl bg-peach-pale px-4 text-sm font-bold md:hidden"
+        className="inline-flex h-11 min-w-11 items-center justify-center rounded-full bg-white px-4 text-sm font-bold shadow-[0_6px_20px_-12px_rgb(3_4_10/0.5)] md:hidden"
       >
         {shell.menu.open}
       </button>
@@ -120,13 +120,13 @@ export function Menu() {
               aria-label={shell.menu.label}
               hidden={!open}
               onKeyDown={onKeyDown}
-              className="fixed inset-0 z-[70] flex flex-col bg-blue px-4 pt-3 pb-10 text-ink"
+              className="fixed inset-0 z-[70] flex flex-col bg-blue px-5 pt-3 pb-10 text-white"
             >
               <div className="flex justify-end">
                 <button
                   type="button"
                   onClick={() => close()}
-                  className="inline-flex h-11 min-w-11 items-center justify-center rounded-3xl bg-white px-4 text-sm font-bold"
+                  className="inline-flex h-11 min-w-11 items-center justify-center rounded-full bg-white px-4 text-sm font-bold text-navy"
                 >
                   {shell.menu.close}
                 </button>
@@ -139,10 +139,18 @@ export function Menu() {
                         data-menu-item
                         href={`#${chapter.id}`}
                         onClick={(event) => onLink(event, chapter.id)}
-                        className="flex min-h-11 items-baseline gap-4 py-1"
+                        className="group flex min-h-11 items-baseline gap-4 py-1.5 outline-none"
                       >
-                        <span className="label">{chapterNumber(chapter.id)}</span>
-                        <span className="font-display text-[clamp(3rem,14vw,5rem)] leading-[0.9] font-extrabold">{chapter.navLabel}</span>
+                        <span className="label transition-colors duration-300 group-hover:text-highlight group-focus-visible:text-highlight group-active:text-highlight">
+                          {chapterNumber(chapter.id)}
+                        </span>
+                        <span className="relative font-display text-[clamp(2.5rem,11vw,4.5rem)] leading-[0.95] font-extrabold whitespace-nowrap transition-transform duration-500 ease-(--ease-expo) group-hover:translate-x-3 group-focus-visible:translate-x-3 group-active:translate-x-3">
+                          {chapter.navLabel}
+                          <span
+                            className="absolute inset-x-0 -bottom-1 h-[0.1em] origin-left scale-x-0 rounded-full bg-highlight transition-transform duration-500 ease-(--ease-expo) group-hover:scale-x-100 group-focus-visible:scale-x-100 group-active:scale-x-100"
+                            aria-hidden="true"
+                          />
+                        </span>
                       </a>
                     </li>
                   ))}

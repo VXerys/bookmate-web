@@ -2,11 +2,11 @@
 status: active
 owner: M Sechan Alfarisi
 session_date: 2026-10-19
-branch: feat/F-013-gaya-aardvark
-base_commit: d13bb04
-current_commit: 76167f3
-feature_id: F-013
-task_id: T-003
+branch: feat/F-014-cerita-aardvark
+base_commit: dbbf9a7
+current_commit: 7ba76d1
+feature_id: F-014
+task_id: T-004
 expires_after: 2026-11-18
 ---
 
@@ -16,50 +16,39 @@ Current coding session delta. It does not replace product docs, architecture, AD
 
 ## Session objective
 
-Revamp seluruh halaman ke gaya aardvarkbookclub.com (bulat, blok warna, gerak berpegas) dengan cerita BookMate, rak buku dari data demo app, dan validasi reverse engineering memakai REA.
+Bangun ulang halaman / sebagai satu cerita (temukan, pinjam, baca, diskusi, rayakan, mulai) dengan aset asli app BookMate, SVG beranimasi, dan revisi beruntun dari pemilik.
 
 ## Context used
 
-- `docs/product/reference-aardvark.md` (reverse engineering, divalidasi REA), `docs/product/art-direction.md` (keputusan grilling Q1 sampai Q10)
-- Repo app `bookmeet`: `app_colors.dart`, `logo-bookmate.svg`, `lib/core/mock/mock_data_constants.dart` (20 buku demo)
+- `docs/specs/F-014-cerita-aardvark/`, `docs/product/reference-aardvark.md`
+- Repo app `bookmeet`: `mock_data_constants.dart`, `reading_achievement_resolver.dart`, aset sampul, tarot, memoji, komunitas
 
 ## Completed
 
-- F-013 T-001 sampai T-003 done (EV-001, commit `76167f3`). F-003 sampai F-007 dan F-012 ditandai superseded.
-- REA: CLI `analyze-javascript-application` dijalankan agent pada bundle publik; parameter gerak diverifikasi dari kode dan koreksinya diterapkan.
+- F-014 T-001 sampai T-004 done (EV-001). Commit `02d41f0`, `9a0fd26`, `7ba76d1`.
+- Revisi pemilik yang mengubah requirement: rak 10 buku (AC-001), ikon SVG animasi untuk langkah pinjam dan hanya lencana tier IV/V (AC-002). Keduanya dicatat di requirements.md.
 
 ## Requirement coverage
 
-- AC-001 sampai AC-009 F-013 pass, kecuali AC-004 (reduced motion) yang belum bisa diemulasikan di Browser pane.
+- AC-001 sampai AC-006 pass (EV-001). Rasa gerak di layar pemilik belum diukur (headless).
 
 ## Changed files
 
-Lihat `git diff --stat d13bb04..HEAD`.
+Lihat `git diff --stat dbbf9a7..HEAD`.
 
 ## Commands executed
 
-```bash
-npm run lint && npm run typecheck && npm test && npm run build && npm run context:validate -- --strict
-```
-
-Result:
-
-```text
-lint clean; typecheck 0 errors; tests 49 pass; build ok; :3101 0 error console, tanpa overflow di 1440/997/375
-```
-
-## Current implementation state
-
-Branch `feat/F-013-gaya-aardvark` bertumpuk di atas F-012 dan F-011; ketiganya belum di-push. REA juga terdaftar sebagai MCP server global (`~/.claude.json`, `rea-agents@6.7.0`) dan skill `reverse-engineer-anything` terpasang sejak 13:30; bukan dari perintah agent sesi ini, aktif setelah restart.
+- `npm run lint`, `npm run typecheck`, `npm test` (58 pass), `npm run build`: semua exit 0.
+- Rekaman REA dan screenshot CDP headless di 1920x945, 1920x870, 1440x900, 1366x657, 375x812, termasuk reduced motion.
 
 ## Uncommitted work
 
-- Tidak ada setelah commit dokumen ini.
+Tidak ada.
 
 ## Blockers
 
-- A-002 tetap open (screenshot sementara); sampul buku penerbit dari mock app sengaja tidak dipakai. A-001, A-003 sampai A-007 tetap open; rilis diblokir.
+- Rilis diblokir: sampul penerbit dan screenshot sementara (A-002), hak tarot dan memoji (A-003). Push dan merge menunggu keputusan pemilik.
 
-## Next step
+## Exact next step
 
-Pemilik mengecek `npm run dev` di browser yang terlihat (loader, intro hero, kartu, pin buka, reduced motion), lalu memutuskan push branch dan satu PR gabungan ke `main`.
+Pemilik menilai halaman di `npm run dev` (port 3100) atau build prod (port 3101); bila setuju, push `feat/F-014-cerita-aardvark` dan buka PR ke main.

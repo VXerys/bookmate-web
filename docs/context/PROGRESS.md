@@ -1,6 +1,6 @@
 <!-- GENERATED FILE — DO NOT EDIT. Rendered by `npm run context:render`.
 Source: sdd.config.json, docs/steering/, docs/specs/F-*/, docs/context/ASSUMPTIONS.md, docs/handoff/current.md.
-source_hash: ef1078541274b0b562d4b9003035c43b1f62e91b04bbb4c75467ada6aaaf8aaf -->
+source_hash: 8feffddf97fa08b00dbb0ae0df71e1032679f7c554201db5beb985674bd35ec9 -->
 
 # Project Progress
 
@@ -112,3 +112,12 @@ source_hash: ef1078541274b0b562d4b9003035c43b1f62e91b04bbb4c75467ada6aaaf8aaf --
 | T-001 Sistem visual dan gerak | done | FR-001, FR-002 |  | EV-001 |
 | T-002 Section BookMate | done | FR-003 | T-001 | EV-001 |
 | T-003 Rak buku dari data demo dan validasi REA | done | FR-004 | T-001 | EV-001 |
+
+## F-014 — Cerita BookMate dengan aset asli (`implementing`, complete)
+
+| Task | Status | Requirements | Depends on | Evidence |
+|---|---|---|---|---|
+| T-001 Pipeline aset app dan data buku | done | FR-001 |  | EV-001 |
+| T-002 Komponen SVG grafis beranimasi | done | FR-003 | T-001 | EV-001 |
+| T-003 Section cerita | done | FR-002 | T-002 | EV-001 |
+| T-004 Audit dan checks | done | FR-004 | T-003 | EV-001 |

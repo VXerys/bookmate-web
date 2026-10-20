@@ -20,12 +20,13 @@
   --color-coral: #ff4d4d;
   --color-soft-red: #ffd8d8;
   --color-gold: #ffb300;
+  --color-navy: #0b1638;
   --color-plum: #52405a;
   --color-forest: #19382b;
   --color-slate: #64748b;
 
   --font-sans: var(--font-jakarta), ui-sans-serif, system-ui, sans-serif;
-  --font-display: var(--font-rubik), ui-sans-serif, system-ui, sans-serif;
+  --font-display: var(--font-bricolage), ui-sans-serif, system-ui, sans-serif;
   --font-hand: var(--font-caveat), "Comic Sans MS", cursive;
 
   --ease-expo: cubic-bezier(0.16, 1, 0.3, 1);
@@ -46,7 +47,7 @@
 
   html {
     background: var(--color-white);
-    color: var(--color-ink);
+    color: var(--color-navy);
     color-scheme: light;
     /* Reserves the scrollbar lane, so locking scroll during the sampul does not reflow the page and stale every trigger. */
     scrollbar-gutter: stable;
@@ -54,8 +55,11 @@
 
   body {
     background: var(--color-white);
+    /* Clip, not hidden: animated titles start shifted sideways and decorative art bleeds past the edge, but clip makes
+       no scroll container, so sticky cards and pinned scenes keep working and no horizontal scrollbar appears. */
+    overflow-x: clip;
     font-family: var(--font-sans);
-    font-size: 1.0625rem;
+    font-size: 1rem;
     font-weight: 500;
     line-height: 1.45;
     -webkit-font-smoothing: antialiased;
@@ -208,37 +212,86 @@ html.lenis body {
   clip-path: inset(var(--shape-i) round var(--shape-r));
 }
 
-/* Buka (F-013): stacked by default; once the section pins (wide screens, motion allowed) the sentence wraps around
+/* Aplikasi (F-014): stacked by default; once the section pins (wide screens, motion allowed) the sentence wraps around
    the phone and the start steps wait to the right of centre. */
-.buka .buka-gap {
+.aplikasi .aplikasi-gap {
   display: none;
 }
 
-.buka[data-pinned] .buka-statement {
+.aplikasi[data-pinned] .aplikasi-statement {
   position: absolute;
   inset-inline: 1.5rem;
   top: 50%;
   translate: 0 -50%;
 }
 
-.buka[data-pinned] .buka-gap {
+.aplikasi[data-pinned] .aplikasi-gap {
   display: block;
-  height: var(--buka-phone);
+  height: var(--app-phone);
   margin-block: 2svh;
 }
 
-.buka[data-pinned] .buka-stage {
+.aplikasi[data-pinned] .aplikasi-stage {
   position: absolute;
   inset: 0;
   max-width: none;
   justify-content: center;
 }
 
-.buka[data-pinned] .buka-steps {
+.aplikasi[data-pinned] .aplikasi-steps {
   position: absolute;
-  left: 50%;
+  left: 46%;
   top: 50%;
   translate: 0 -50%;
+}
+
+/* Screen off (F-014 power-on scene): a black glass with a faint reflection; shown only while the scene is pinned, so
+   stacked layouts and reduced motion see the lit screen. */
+.phone-off {
+  display: none;
+  background: linear-gradient(125deg, #1a1f2e 0%, #05070d 45%, #0b0f1a 100%);
+}
+
+.aplikasi[data-pinned] .phone-off {
+  display: block;
+}
+
+/* The splash belongs to the power-on scene too; stacked layouts show the real screenshot instead. */
+.aplikasi:not([data-pinned]) [data-phone-splash] {
+  display: none;
+}
+
+/* Black 3D phone (feature list): a graphite body whose edge catches light, and the plates that give it depth. */
+.phone-black {
+  border-radius: 16% / 7.4%;
+  background: linear-gradient(140deg, #4a4e57 0%, #0c0d10 18%, #050608 70%, #2b2e36 100%);
+  box-shadow: inset 0 0 0 1px rgb(255 255 255 / 0.12), 0 40px 70px -30px rgb(3 4 10 / 0.75);
+}
+
+.phone-black-slab {
+  position: absolute;
+  inset: 0;
+  border-radius: 16% / 7.4%;
+  background: linear-gradient(140deg, #5b606b, #121318 40%, #2b2e36);
+}
+
+/* Phone thickness: 16 edge plates stacked about 22px behind the front, lit brighter in the middle like a polished
+   titanium band, so a tilted phone shows a solid rounded side instead of a flat card. */
+.phone-slab {
+  position: absolute;
+  inset: 0;
+  border-radius: 16% / 7.4%;
+  background: linear-gradient(135deg, color-mix(in srgb, var(--color-navy) 45%, var(--color-white)), var(--color-navy) 45%, color-mix(in srgb, var(--color-navy) 70%, var(--color-blue)));
+}
+
+/* Buku (F-014): once the shelf pins, GSAP moves the track, so native scrolling, snapping, and the step buttons step aside. */
+.shelf[data-shelf-pinned] [data-shelf-track] {
+  overflow: visible;
+  scroll-snap-type: none;
+}
+
+.shelf[data-shelf-pinned] .shelf-steps {
+  display: none;
 }
 
 /* Horizontal shelves scroll natively; the bar is hidden because the round buttons and the cut-off card already show
@@ -278,23 +331,24 @@ html.lenis body {
   transform: scale(1.6);
 }
 
-/* The sampul paints only when JS runs, this tab has not seen it (boot script sets data-sampul), and motion is allowed;
-   a reload in the same tab, reduced motion, or no JS never paints it, so it cannot flash (F-002 AC-003, AC-004). */
+/* The sampul paints only when JS runs, the boot script chose "play" or "replay" (data-sampul), and motion is allowed;
+   reduced motion or no JS never paints it, so it cannot flash (F-002 AC-004; F-014 replays it on reload). */
 .sampul {
   display: none;
 }
 
 @media (prefers-reduced-motion: no-preference) {
-  html.js[data-sampul="play"] .sampul {
+  html.js[data-sampul="play"] .sampul,
+  html.js[data-sampul="replay"] .sampul {
     display: block;
   }
 }
 
-/* Pure CSS so the title is rising before hydration; the GSAP timeline only takes over for the exit. */
+/* Pure CSS so the opening mark is rising before hydration; the GSAP timeline only takes over its wrapper for the exit. */
 @keyframes sampul-rise {
   from {
     opacity: 0;
-    transform: translateY(35%);
+    transform: translateY(40%);
   }
   to {
     opacity: 1;
@@ -314,6 +368,15 @@ html.lenis body {
   }
 }
 
+/* Stickers and supporting copy (F-014 ambient motion) wait hidden only while JS runs with motion allowed, until their
+   starting state is set, so a refresh never flashes them at full size before they spring or rise in. */
+@media (prefers-reduced-motion: no-preference) {
+  html.js [data-pop]:not([data-motion-ready]),
+  html.js [data-rise]:not([data-motion-ready]) {
+    visibility: hidden;
+  }
+}
+
 /* Doodles (F-012) wait hidden only while JS runs with motion allowed, until their component has set the undrawn state;
    without JS, with the boot fallback, or with reduced motion they show fully drawn. */
 @media (prefers-reduced-motion: no-preference) {
@@ -324,31 +387,31 @@ html.lenis body {
 }
 
 @layer components {
-  /* Rubik at its heaviest with a leading under 1, like the reference's 120/96 and 78/62 headings. */
+  /* Bricolage Grotesque at its heaviest, tightly tracked with a leading under 1, like the reference's 120/96 and 78/62 headings. */
   .display {
     font-family: var(--font-display);
     font-weight: 800;
-    font-size: clamp(3rem, 6.4vw, 6.75rem);
-    line-height: 0.82;
-    letter-spacing: -0.02em;
+    font-size: clamp(2.75rem, 5.4vw, 5.75rem);
+    line-height: 0.84;
+    letter-spacing: -0.03em;
     text-wrap: balance;
   }
 
   .heading {
     font-family: var(--font-display);
     font-weight: 800;
-    font-size: clamp(2.6rem, 5.4vw, 4.875rem);
-    line-height: 0.84;
-    letter-spacing: -0.015em;
+    font-size: clamp(2.2rem, 4.1vw, 4.25rem);
+    line-height: 0.88;
+    letter-spacing: -0.028em;
     text-wrap: balance;
   }
 
   .statement {
     font-family: var(--font-display);
     font-weight: 700;
-    font-size: clamp(1.6rem, 2.4vw, 2rem);
+    font-size: clamp(1.35rem, 1.9vw, 1.75rem);
     line-height: 0.92;
-    letter-spacing: -0.01em;
+    letter-spacing: -0.03em;
   }
 
   .display em,
@@ -359,8 +422,8 @@ html.lenis body {
 
   .lead {
     font-weight: 600;
-    font-size: clamp(1.125rem, 1.6vw, 1.5rem);
-    line-height: 1.2;
+    font-size: clamp(1.05rem, 1.25vw, 1.3rem);
+    line-height: 1.25;
     letter-spacing: -0.02em;
   }
 
@@ -376,19 +439,9 @@ html.lenis body {
   .hand {
     font-family: var(--font-hand);
     font-weight: 600;
-    font-size: clamp(1.4rem, 1.8vw, 1.6rem);
+    font-size: clamp(1.3rem, 1.6vw, 1.5rem);
     line-height: 1;
     color: var(--color-blue);
   }
 
-  /* Static paper texture; multiply keeps it visible on light blocks without greying dark ones. */
-  .grain {
-    pointer-events: none;
-    position: fixed;
-    inset: 0;
-    z-index: 60;
-    opacity: 0.05;
-    mix-blend-mode: multiply;
-    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='160' height='160'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='2' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
-  }
 }

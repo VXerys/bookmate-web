@@ -48,6 +48,8 @@ Situs butuh screenshot asli dari build produksi v1.1.0 (Home, Catat Bacaan, Stre
 
 2026-10-19 (F-011): atas instruksi pemilik, bingkai ponsel sementara memakai screenshot dari perangkat pemilik (`public/CREDITS.md`). Screenshot itu memuat sampul buku komersial, nama dan foto pemilik, avatar anggota, dan nama lawan chat, dan belum ada layar kalender streak, jadi assumption ini tetap open dan rilis tetap diblokir sampai screenshot bersih tersedia.
 
+2026-10-19 (F-014): atas instruksi pemilik, rak buku memakai 18 sampul dari data mock app (`public/CREDITS.md`). Sampul itu karya penerbit, jadi ini pengecualian sementara atas aturan sampul komersial dan juga memblokir rilis sampai pemilik punya izin atau menggantinya.
+
 ### A-003 — Lencana tarot boleh dipakai di web, dan daftar nama serta syaratnya tersedia
 - status: open
 - feature:

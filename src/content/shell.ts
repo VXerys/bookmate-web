@@ -1,9 +1,5 @@
 // UI copy for the global shell (F-002 BR-001); chapter labels live in navigation.ts, brand facts in site.ts.
 export const shell = {
-  sampul: {
-    kicker: "Klub baca di saku kamu",
-    counterUnit: "halaman",
-  },
   skipLink: "Lewati ke konten",
   header: {
     navLabel: "Navigasi utama",
@@ -16,6 +12,8 @@ export const shell = {
     // From the app's About page ("© 2026 Mangcoding").
     copyrightYear: "2026",
     backToTop: "Kembali ke awal",
+    explore: "Jelajahi",
+    app: "Aplikasi",
   },
   menu: {
     open: "Menu",

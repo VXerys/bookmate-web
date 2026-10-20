@@ -1,6 +1,6 @@
 <!-- GENERATED FILE — DO NOT EDIT. Rendered by `npm run context:render`.
 Source: sdd.config.json, docs/steering/, docs/specs/F-*/, docs/context/ASSUMPTIONS.md, docs/handoff/current.md.
-source_hash: ef1078541274b0b562d4b9003035c43b1f62e91b04bbb4c75467ada6aaaf8aaf -->
+source_hash: 8feffddf97fa08b00dbb0ae0df71e1032679f7c554201db5beb985674bd35ec9 -->
 
 # Brief
 
@@ -9,14 +9,13 @@ BookMate Web adalah situs pemasaran untuk aplikasi BookMate yang mengajak pembac
 Project `BookMate Web`, tier `lite`. Rendered from sdd.config.json, docs/steering/, docs/specs/F-*/, docs/context/ASSUMPTIONS.md, docs/handoff/current.md.
 
 ## Active
-Feature F-013 — Revamp gaya Aardvark (`verification`, docs/specs/F-013-gaya-aardvark/)
-Task T-003 — Rak buku dari data demo dan validasi REA (`done`); requirements: FR-004; depends on: T-001
+Feature F-014 — Cerita BookMate dengan aset asli (`implementing`, docs/specs/F-014-cerita-aardvark/)
+Task T-004 — Audit dan checks (`done`); requirements: FR-004; depends on: T-003
 
-`src/content/books.ts` (dari mock app), `typo-cover.tsx`, `card-shelf.tsx`, `buku.tsx`, koreksi REA. Acceptance: AC-008, AC-009.
+Acceptance: AC-006.
 
 Acceptance criteria:
-- AC-008: Given section buku, then 20 kartu tampil dengan data persis dari mock app, tanpa gambar sampul penerbit, masing-masing berlabel data demo.
-- AC-009: Given validasi REA atas aardvarkbookclub.com, then parameter gerak di reference-aardvark.md cocok dengan kode situs atau ditandai belum terverifikasi, dan koreksinya diterapkan (callout 1.075, header tidak bersembunyi, durasi default 0.6, Lenis lerp 0.2).
+- AC-006: Given build produksi, then rekaman REA di 1440 dan 375 px tidak menunjukkan overflow, elemen tumpang yang tidak disengaja, atau error console.
 
 ## Rules
 Stop conditions:
@@ -43,7 +42,9 @@ Frozen: none
 None.
 
 ## Handoff
-Active handoff without an "Exact next step" section.
+Next step:
+
+Pemilik menilai halaman di `npm run dev` (port 3100) atau build prod (port 3101); bila setuju, push `feat/F-014-cerita-aardvark` dan buka PR ke main.
 
 ## Other open tasks
 None.
@@ -64,3 +65,4 @@ None.
 | F-011 Screenshot sementara dan perbaikan bug animasi | verification | complete | 3/3 |
 | F-012 Redesign Marginalia: satu hari pembaca | superseded | complete | 6/6 |
 | F-013 Revamp gaya Aardvark | verification | complete | 3/3 |
+| F-014 Cerita BookMate dengan aset asli | implementing | complete | 4/4 |

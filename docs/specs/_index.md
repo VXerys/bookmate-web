@@ -27,6 +27,7 @@ Task status belongs in each feature's `tasks.md`; `docs/context/state.yaml` and 
 | `F-011` | Screenshot sementara dan perbaikan bug animasi | `docs/specs/F-011-aset-motion-polish/` | P1 | verification | M4 |
 | `F-012` | Redesign Marginalia: satu hari pembaca | `docs/specs/F-012-marginalia/` | P0 | superseded | M5 |
 | `F-013` | Revamp gaya Aardvark | `docs/specs/F-013-gaya-aardvark/` | P0 | verification | M5 |
+| `F-014` | Cerita BookMate dengan aset asli | `docs/specs/F-014-cerita-aardvark/` | P0 | approved | M5 |
 
 Ruang lingkup tiap fitur yang belum dibuat ada di `docs/product/roadmap.md`. Folder spec dibuat saat fitur dimulai, bukan sekaligus.
 

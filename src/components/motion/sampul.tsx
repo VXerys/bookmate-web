@@ -4,18 +4,46 @@ import { useRef } from "react";
 
 import { jumpToTarget, lockScroll, unlockScroll } from "@/components/motion/smooth-scroll";
 import { LogoMark } from "@/components/site/logo";
-import { shell } from "@/content/shell";
 import { site } from "@/content/site";
 import { SAMPUL_SESSION_KEY } from "@/lib/motion/boot-script";
 import { gsap, ScrollTrigger, useGSAP } from "@/lib/motion/gsap";
 import { finishIntro, isIntroDone } from "@/lib/motion/intro-state";
-import { SAMPUL_INTRO_AFTER_OPEN_MS, SAMPUL_LEAD_MS, SAMPUL_OPEN_MAX_MS, SAMPUL_SAFETY_MS, settleWaits } from "@/lib/motion/sampul-timing";
+import { SAMPUL_SAFETY_MS, settleWaits } from "@/lib/motion/sampul-timing";
+
+// The cover is a wave curtain (after the "Shape Overlays" transition pattern, Codrops): three stacked layers, blue on
+// top, a lighter blue and the yellow behind it. Each layer is a solid block moved with a transform (composited, cheap)
+// that drags a short strip below it: the strip's top is flat against the block and its lower edge is a wave whose swell
+// peaks mid-move and settles while its phase keeps flowing sideways. Only those strips are repainted per frame. The
+// layers follow one another on the same wave train, so the edges read as one current that lands on the hero's swells.
+const LAYERS = [
+  { key: "sun", fill: "var(--color-highlight)", delay: 0.28 },
+  { key: "sky", fill: "color-mix(in srgb, var(--color-blue) 55%, var(--color-white))", delay: 0.14 },
+  { key: "sea", fill: "var(--color-blue)", delay: 0 },
+] as const;
+const r2 = (value: number) => Math.round(value * 100) / 100;
+
+// The strip for progress t in a 100x40 box: flat top, wavy bottom. Nine samples joined with Catmull-Rom curves.
+function edge(t: number) {
+  const amp = 14 * Math.sin(Math.PI * t);
+  const phase = t * Math.PI * 1.8;
+  const pts = Array.from({ length: 11 }, (_, i) => {
+    const x = (i - 1) * 12.5;
+    return [x, 18 + amp * Math.sin((x / 100) * Math.PI * 2.4 + phase)] as const;
+  });
+  let d = `M0 0H100V${r2(pts[9][1])}`;
+  for (let i = 9; i > 1; i -= 1) {
+    const [p0, p1, p2, p3] = [pts[i + 1], pts[i], pts[i - 1], pts[i - 2]];
+    d += ` C${r2(p1[0] + (p2[0] - p0[0]) / 6)} ${r2(p1[1] + (p2[1] - p0[1]) / 6)} ${r2(p2[0] - (p3[0] - p1[0]) / 6)} ${r2(p2[1] - (p3[1] - p1[1]) / 6)} ${r2(p2[0])} ${r2(p2[1])}`;
+  }
+  return `${d}Z`;
+}
+const FLAT = "M0 0H100V18H0Z";
 
 const wait = (ms: number) => new Promise<void>((resolve) => window.setTimeout(resolve, ms));
 
 // Resolves once fonts and the load event are in and the opening window has started, or when the window closes.
-function pageSettled() {
-  const { min, max } = settleWaits(performance.now());
+function pageSettled(replay: boolean) {
+  const { min, max } = settleWaits(performance.now(), replay);
   const fonts = document.fonts?.ready.then(() => undefined) ?? Promise.resolve();
   const loaded =
     document.readyState === "complete"
@@ -38,6 +66,8 @@ function jumpToHash() {
   const id = decodeURIComponent(window.location.hash.slice(1));
   const target = id ? document.getElementById(id) : null;
   if (target) jumpToTarget(target);
+  // Honoured once, then cleared, so a later refresh opens at the top (owner, F-014).
+  if (window.location.hash) window.history.replaceState(null, "", window.location.pathname + window.location.search);
 }
 
 function rememberSampul() {
@@ -50,7 +80,6 @@ function rememberSampul() {
 
 export function Sampul() {
   const root = useRef<HTMLDivElement>(null);
-  const counter = useRef<HTMLSpanElement>(null);
 
   useGSAP(() => {
     const el = root.current;
@@ -68,10 +97,9 @@ export function Sampul() {
       };
     }
 
+    const replay = document.documentElement.dataset.sampul === "replay";
     window.scrollTo(0, 0);
     lockScroll("sampul");
-    // Slows the timeline through long frames instead of skipping ahead; Lenis turns lag smoothing off after the intro.
-    gsap.ticker.lagSmoothing(500, 33);
 
     let ended = false;
     let cancelled = false;
@@ -90,66 +118,62 @@ export function Sampul() {
     const safety = window.setTimeout(end, SAMPUL_SAFETY_MS);
 
     const q = gsap.utils.selector(el);
-    const progress = { value: 1 };
-    const renderCount = () => {
-      if (counter.current) counter.current.textContent = String(Math.round(progress.value)).padStart(3, "0");
-    };
-    const pop = gsap.fromTo(q("[data-sampul-logo]"), { scale: 0, rotate: -64 }, { scale: 1, rotate: 0, duration: 0.65, delay: 0.1, ease: "elastic.out(1, 0.72)" });
-    const counting = gsap.to(progress, { value: 90, duration: SAMPUL_OPEN_MAX_MS / 1000, ease: "power2.out", onUpdate: renderCount });
+    const layers = gsap.utils.toArray<HTMLElement>("[data-sampul-layer]", el);
+    const edges = layers.map((layer) => layer.querySelector<SVGPathElement>("path"));
+    const states = layers.map(() => ({ t: 0 }));
+    // Each layer travels its own height plus its strip, so the wave clears the top of the screen.
+    const travel = () => -(window.innerHeight * 1.25);
+    const draw = () =>
+      layers.forEach((layer, i) => {
+        const t = states[i].t;
+        layer.style.transform = `translate3d(0, ${r2(travel() * t)}px, 0)`;
+        edges[i]?.setAttribute("d", t <= 0 || t >= 1 ? FLAT : edge(t));
+      });
 
-    pageSettled().then(() => {
+    pageSettled(replay).then(() => {
       if (cancelled) return;
-      counting.kill();
-      const lead = SAMPUL_LEAD_MS / 1000;
-      gsap
-        .timeline({ defaults: { ease: "expo.inOut" }, onComplete: end })
-        .to(progress, { value: 100, duration: lead * 0.6, ease: "power2.out", onUpdate: renderCount }, 0)
-        .to(q("[data-sampul-mark]"), { scale: 0.9, autoAlpha: 0, duration: lead * 0.5, ease: "power2.in" }, lead * 0.5)
-        .addLabel("open", lead)
-        // The reference's page transition: one enormous scribble covers the screen, the blue goes, and the scribble
-        // erases itself from its start to reveal the page (F-013 AC-011).
-        .fromTo(q("[data-sampul-brush]"), { drawSVG: "0% 0%" }, { drawSVG: "0% 100%", duration: 0.9, ease: "power2.inOut" }, "open")
-        .set(q("[data-sampul-cover]"), { autoAlpha: 0 }, "open+=0.95")
-        .to(q("[data-sampul-brush]"), { drawSVG: "100% 100%", duration: 1, ease: "osmo" }, "open+=1")
-        .set(el, { autoAlpha: 0 }, "open+=2")
-        .call(completeIntro, [], `open+=${SAMPUL_INTRO_AFTER_OPEN_MS / 1000 + 0.75}`);
+      // The exit starts on a fresh frame after loading: the mark drifts up and fades, the layers lift one after another
+      // on the same flowing wave (1.7 s each, unhurried but not dragging), and the hero lands as the last one clears.
+      window.requestAnimationFrame(() => {
+        if (cancelled) return;
+        const tl = gsap.timeline({ onComplete: end, onUpdate: draw });
+        tl.to(q("[data-sampul-mark]"), { yPercent: -45, autoAlpha: 0, duration: 0.7, ease: "power2.in" }, 0);
+        // DOM order is sun, sky, sea (sea paints on top); the sea leaves first.
+        LAYERS.forEach((layer, i) => tl.to(states[i], { t: 1, duration: 1.7, ease: "power2.inOut" }, 0.25 + layer.delay));
+        tl.call(completeIntro, [], 1.35).set(el, { autoAlpha: 0 }, 2.3);
+      });
     });
 
     // Releases only what this run holds, so a remount (React Strict Mode in development) replays the sampul cleanly.
     return () => {
       cancelled = true;
-      pop.kill();
       window.clearTimeout(safety);
       unlockScroll("sampul");
     };
   });
 
   return (
-    <div ref={root} className="sampul fixed inset-0 z-[90] overflow-hidden text-paper" aria-hidden="true">
-      <div data-sampul-cover className="absolute inset-0 bg-blue" />
-      <div data-sampul-mark className="absolute inset-0 flex flex-col items-center justify-center gap-6">
-        <span data-sampul-logo className="grid size-28 place-items-center rounded-full bg-paper">
-          <LogoMark className="w-14 text-blue" />
+    <div ref={root} className="sampul fixed inset-0 z-[90] overflow-hidden" aria-hidden="true">
+      {/* Every layer starts as a full cover, so before hydration the screen is already blue. */}
+      {LAYERS.map((layer) => (
+        <div key={layer.key} data-sampul-layer className="absolute inset-0 will-change-transform" style={{ background: layer.fill }}>
+          <svg viewBox="0 0 100 40" preserveAspectRatio="none" className="absolute inset-x-0 top-full -mt-px h-[25vh] w-full">
+            <path d={FLAT} style={{ fill: layer.fill }} />
+          </svg>
+        </div>
+      ))}
+      <div data-sampul-mark className="absolute inset-0 flex flex-col items-center justify-center gap-4">
+        <span className="sampul-rise block">
+          <LogoMark className="w-[clamp(4.5rem,7vw,6rem)] text-white" />
         </span>
-        <p className="display sampul-rise text-[clamp(3rem,9vw,6.5rem)]" style={{ animationDelay: "0.12s" }}>
-          {site.name}
-        </p>
-        <p className="label sampul-rise" style={{ animationDelay: "0.24s" }}>
-          <span ref={counter}>001</span> / 100 {shell.sampul.counterUnit}
+        <p className="display flex overflow-hidden pb-[0.08em] text-[clamp(2.75rem,6vw,5rem)] text-white">
+          {[...site.name].map((letter, index) => (
+            <span key={`${letter}-${index}`} className="sampul-rise inline-block" style={{ animationDelay: `${0.15 + index * 0.045}s` }}>
+              {letter}
+            </span>
+          ))}
         </p>
       </div>
-      <svg viewBox="0 0 1080 1080" preserveAspectRatio="xMidYMid slice" className="absolute inset-0 h-full w-full">
-        <path
-          data-sampul-brush
-          d="M-80 170C230-30 470 250 330 430S760 90 930 350 230 660 390 840 960 760 1160 1010"
-          fill="none"
-          stroke="var(--color-highlight)"
-          strokeWidth="70%"
-          strokeLinecap="round"
-          strokeLinejoin="round"
-          style={{ strokeDasharray: "0 99999" }}
-        />
-      </svg>
     </div>
   );
 }
