@@ -13,8 +13,17 @@ export function Footer() {
     <footer className="sticky bottom-0 z-0 overflow-hidden bg-blue text-white">
       <div data-footer-inner className="flex min-h-[70svh] flex-col justify-between gap-12 px-6 pt-32 pb-8 lg:px-10">
         <div className="grid gap-10 lg:grid-cols-[1.4fr_1fr]">
-          <p data-footer-rise className="heading max-w-3xl text-[clamp(1.9rem,3.6vw,3.5rem)] [overflow-wrap:anywhere]">
-            {site.tagline}
+          <p className="heading max-w-3xl text-[clamp(1.9rem,3.6vw,3.5rem)] [overflow-wrap:anywhere]">
+            {site.tagline.split(" ").map((word, index) => (
+              <span key={`${word}-${index}`}>
+                {index > 0 && " "}
+                <span className="inline-block overflow-hidden pb-[0.08em] align-bottom">
+                  <span data-footer-word className="inline-block">
+                    {word}
+                  </span>
+                </span>
+              </span>
+            ))}
           </p>
           <div className="grid grid-cols-2 gap-8 font-bold">
             <div data-footer-rise className="flex flex-col gap-3">

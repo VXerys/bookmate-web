@@ -50,16 +50,19 @@ export function Epilog() {
       });
       // The footer is 70svh tall, so at the very end of the page the epilog's bottom sits about 30% from the top: the
       // scrub ends before that, or the last letters would never finish rising.
-      // Footer in and out, scrubbed both ways: copy and link columns rise out of a light blur, then the wordmark's
-      // letters climb up one by one as the page lifts away; scrolling back up plays it in reverse.
+      // Footer in and out, scrubbed both ways: the tagline's words rise from their line, the link columns come out of a
+      // light blur, then the wordmark's letters climb up one by one; scrolling back up plays it in reverse.
       mm.add("(prefers-reduced-motion: no-preference)", () => {
         const footer = document.querySelector("footer");
         if (!footer) return;
         const rises = footer.querySelectorAll("[data-footer-rise]");
         const letters = footer.querySelectorAll("[data-footer-letter]");
+        const words = footer.querySelectorAll("[data-footer-word]");
         gsap
           .timeline({ defaults: { ease: "none" }, scrollTrigger: { trigger: section, start: "bottom 95%", end: "bottom 40%", scrub: 0.6 } })
-          .fromTo(rises, { y: 60, autoAlpha: 0, filter: "blur(6px)" }, { y: 0, autoAlpha: 1, filter: "blur(0px)", stagger: 0.12, duration: 0.5 }, 0)
+          // The tagline's words rise out of their clipping boxes one by one, the same move as the wordmark letters.
+          .fromTo(words, { yPercent: 110, rotation: 6 }, { yPercent: 0, rotation: 0, stagger: 0.035, duration: 0.45 }, 0)
+          .fromTo(rises, { y: 60, autoAlpha: 0, filter: "blur(6px)" }, { y: 0, autoAlpha: 1, filter: "blur(0px)", stagger: 0.12, duration: 0.5 }, 0.1)
           .fromTo(letters, { yPercent: 110, rotation: 8 }, { yPercent: 0, rotation: 0, stagger: 0.06, duration: 0.5 }, 0.25);
       });
       return () => mm.revert();
