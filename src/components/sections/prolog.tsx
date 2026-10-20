@@ -112,7 +112,7 @@ export function Prolog() {
 
       <div className="mx-auto grid min-h-[inherit] max-w-[84rem] items-center gap-12 px-6 pt-28 pb-32 lg:grid-cols-[1.05fr_0.95fr] lg:px-10">
         <div data-hero-copy className="flex flex-col items-start gap-6 will-change-transform">
-          <p data-hero-fade className="label inline-flex items-center gap-2 rounded-full bg-white py-2 pr-4 pl-2 text-navy">
+          <p data-hero-fade className="label inline-flex items-center gap-2 rounded-full bg-white py-2 pr-4 pl-2 whitespace-nowrap text-navy">
             <span className="grid size-6 place-items-center rounded-full bg-highlight">
               <span className="size-2 rounded-full bg-navy" />
             </span>

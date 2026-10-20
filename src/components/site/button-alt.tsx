@@ -42,7 +42,9 @@ export function ButtonAlt({ href, children, tone = "highlight", size = "md", cur
       const mm = gsap.matchMedia();
       mm.add(HOVER_MOTION, () => {
         // aria "auto" keeps the label readable as one word to screen readers once split into letters.
-        const split = SplitText.create(text, { type: "chars", aria: "auto" });
+        // Words first, then letters: a letters-only split lost the spaces between words ("Undu hd iGoogl ePlay").
+        const split = SplitText.create(text, { type: "words,chars", aria: "auto" });
+        gsap.set(split.words, { display: "inline-block" });
         gsap.set(split.chars, { display: "inline-block", transformOrigin: "50% 50%" });
         const bounce = gsap.timeline({ paused: true }).to(split.chars, {
           keyframes: {

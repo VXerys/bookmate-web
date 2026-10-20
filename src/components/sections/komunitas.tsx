@@ -63,7 +63,7 @@ export function Komunitas() {
             <p data-rise="0.15" className="lead max-w-lg">{komunitas.lead}</p>
             <div data-faces className="flex items-center pl-3" aria-hidden="true">
               {memojiIds.slice(0, 8).map((id, index) => (
-                <div key={id} data-face className={`-ml-3 size-14 overflow-hidden rounded-full ring-4 ring-sky ${FACE_TONES[index % FACE_TONES.length]} lg:size-16`}>
+                <div key={id} data-face className={`-ml-3 size-12 overflow-hidden rounded-full ring-4 ring-sky ${FACE_TONES[index % FACE_TONES.length]} sm:size-14 lg:size-16`}>
                   <Image src={memojiImages[id]} alt="" sizes="64px" className="h-full w-full object-cover" />
                 </div>
               ))}

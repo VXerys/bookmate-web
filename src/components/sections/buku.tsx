@@ -13,9 +13,9 @@ import { gsap, LAND, MOTION_OK, useGSAP } from "@/lib/motion/gsap";
 const PINNED = "(min-width: 1024px) and (prefers-reduced-motion: no-preference)";
 const BOOKS = buku.featured.map((key) => shelfBook(key));
 
-// Chapter 1, find (F-014 FR-001): the 18 demo books as cards in their cover's own colour. On wide screens with motion
-// the section pins and the shelf slides sideways with the scroll while a squiggle draws underneath; cards lean with the
-// scroll speed. Narrow screens and reduced motion get a native, snapping, keyboard-scrollable shelf with step buttons.
+// Chapter 1, find (F-014 FR-001): ten demo books as cards in their cover's own colour. On wide screens with motion
+// the section pins and the shelf slides sideways with the scroll while a squiggle draws underneath; the cards stay
+// upright while it moves (owner: no lean with the scroll). Narrow screens and reduced motion get a native, snapping, keyboard-scrollable shelf with step buttons.
 export function Buku() {
   const root = useRef<HTMLElement>(null);
 
@@ -43,7 +43,6 @@ export function Buku() {
       mm.add(PINNED, () => {
         section.dataset.shelfPinned = "";
         const distance = () => track.scrollWidth - track.clientWidth;
-        const lean = cards.map((card) => gsap.quickTo(card, "skewX", { duration: 0.5, ease: "power3" }));
         const tl = gsap.timeline({
           defaults: { ease: "none" },
           scrollTrigger: {
@@ -54,11 +53,6 @@ export function Buku() {
             pin: true,
             anticipatePin: 1,
             invalidateOnRefresh: true,
-            onUpdate: (self) => {
-              const skew = gsap.utils.clamp(-8, 8, self.getVelocity() / -220);
-              lean.forEach((to) => to(skew));
-            },
-            onScrubComplete: () => lean.forEach((to) => to(0)),
           },
         });
         tl.to(track, { x: () => -distance() }, 0).fromTo("[data-shelf-squiggle]", { drawSVG: "0%" }, { drawSVG: "100%" }, 0);
@@ -117,7 +111,7 @@ export function Buku() {
         data-shelf-track
         tabIndex={0}
         aria-label={buku.title}
-        className="will-change-transform no-scrollbar mt-12 flex snap-x snap-mandatory gap-6 overflow-x-auto lg:gap-12 scroll-px-6 px-6 pt-10 pb-10 lg:mt-4 lg:pt-8 lg:pb-5 lg:scroll-px-10 lg:px-10"
+        className="will-change-transform no-scrollbar mt-12 flex lg:min-h-0 lg:flex-1 snap-x snap-mandatory gap-6 overflow-x-auto lg:gap-12 scroll-px-6 px-6 pt-10 pb-10 lg:mt-4 lg:pt-8 lg:pb-5 lg:scroll-px-10 lg:px-10"
       >
         {BOOKS.map((book, index) => {
           const available = book.status === "AVAILABLE";
@@ -126,7 +120,7 @@ export function Buku() {
             <li
               key={book.id}
               data-shelf-card
-              className="group/card relative isolate will-change-transform w-[min(82vw,20rem)] shrink-0 snap-start [rotate:var(--tilt)] transition-[rotate,translate] duration-500 ease-(--ease-expo) hover:-translate-y-3 hover:[rotate:0deg] focus-within:[rotate:0deg] lg:w-[clamp(12rem,calc((100svh-36.5rem)/1.2),21rem)]"
+              className="group/card relative isolate will-change-transform w-[min(84vw,21rem)] shrink-0 snap-start [rotate:var(--tilt)] transition-[rotate,translate] duration-500 ease-(--ease-expo) hover:-translate-y-3 hover:[rotate:0deg] focus-within:[rotate:0deg] lg:w-[clamp(15rem,calc((100svh-30.5rem)/1.25),23rem)]"
               style={{ "--tilt": `${index % 2 ? 2 : -2}deg` } as CSSProperties}
             >
               {/* Hover: the card straightens and lifts, a bookmark ribbon in the card's own colour slides up from behind its
@@ -154,14 +148,14 @@ export function Buku() {
                 </svg>
               ))}
               <article className="relative flex h-full flex-col gap-3 rounded-[1.75rem] p-3.5 pb-5 shadow-[0_12px_24px_-18px_rgb(3_4_10/0.4)] transition-shadow duration-500 group-hover/card:shadow-[0_34px_50px_-24px_rgb(3_4_10/0.55)]" style={{ background: book.color, color: ink }}>
-                <div className="relative">
-                  <div className="overflow-hidden rounded-[1.1rem] shadow-[0_18px_30px_-14px_rgb(3_4_10/0.55)]">
+                <div className="relative lg:min-h-0 lg:flex-1">
+                  <div className="overflow-hidden rounded-[1.1rem] shadow-[0_18px_30px_-14px_rgb(3_4_10/0.55)] lg:h-full">
                   <Image
                     src={book.cover}
                     data-shelf-cover={book.key}
                     alt={`Sampul ${book.title}`}
                     sizes="(min-width: 1024px) 304px, 80vw"
-                    className="aspect-[5/6] w-full object-cover transition-transform duration-700 ease-(--ease-expo) group-hover/card:scale-[1.06]"
+                    className="aspect-[4/5] w-full object-cover object-top lg:aspect-auto lg:h-full transition-transform duration-700 ease-(--ease-expo) group-hover/card:scale-[1.06]"
                   />
                   </div>
                   <div className="absolute -top-5 -right-4 w-[5.25rem] transition-transform duration-700 ease-(--ease-expo) group-hover/card:scale-110 group-hover/card:rotate-[30deg]">
@@ -170,9 +164,9 @@ export function Buku() {
                     </Starburst>
                   </div>
                 </div>
-                <div className="flex flex-wrap gap-1.5 px-1">
-                  <span className="rounded-full bg-white px-2.5 py-1 text-xs font-bold text-navy">{book.genre[0]}</span>
-                  <span className="shrink-0 rounded-full bg-navy px-2.5 py-1 text-xs font-bold text-white">{buku.condition[book.condition]}</span>
+                <div className="flex gap-1.5 px-1">
+                  <span className="inline-flex h-7 items-center rounded-full bg-white px-3 text-xs font-bold whitespace-nowrap text-navy">{book.genre[0].split(" & ")[0]}</span>
+                  <span className="inline-flex h-7 items-center rounded-full bg-navy px-3 text-xs font-bold whitespace-nowrap text-white">{buku.condition[book.condition]}</span>
                 </div>
                 <h3 className="statement line-clamp-2 px-1 text-[1.5rem] lg:text-[1.35rem]">{book.title}</h3>
                 <p className="px-1 text-sm font-bold">{book.author}</p>

@@ -12,7 +12,7 @@ export type Tone = Extract<PaletteToken, "highlight" | "ember" | "green" | "cora
 export const prolog = {
   headlineLead: "Satu halaman lagi,",
   headlineEmphasis: "bareng teman.",
-  eyebrow: "Klub baca komunitas di Android",
+  eyebrow: "Klub baca di saku kamu",
   body: "Pinjam buku fisik dari rak teman, catat progres, jaga streak, dan bedah buku bareng komunitasmu.",
   secondary: "Intip rak teman",
   // Three things the app does, shown as chips under the buttons (lib/features: borrow_request, streak, reflection).

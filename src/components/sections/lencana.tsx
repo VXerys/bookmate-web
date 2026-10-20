@@ -86,7 +86,7 @@ export function Lencana() {
       <section ref={root} id="lencana" data-chapter="lencana" className="shape-capsule relative isolate overflow-hidden bg-navy px-6 py-16 lg:py-20 text-paper lg:px-10">
         <SectionWaves variant="lencana" />
         {SPARKS.map((spark) => (
-          <svg key={spark.spot} viewBox="0 0 20 20" data-spin={spark.spin} className={`pointer-events-none absolute -z-10 ${spark.spot} ${spark.size}`} aria-hidden="true">
+          <svg key={spark.spot} viewBox="0 0 20 20" data-spin={spark.spin} className={`pointer-events-none absolute -z-10 hidden sm:block ${spark.spot} ${spark.size}`} aria-hidden="true">
             <path d="M10 0 12.6 7.4 20 10 12.6 12.6 10 20 7.4 12.6 0 10 7.4 7.4Z" fill="var(--color-highlight)" />
           </svg>
         ))}
@@ -122,14 +122,15 @@ export function Lencana() {
                     data-flipped={isFlipped || undefined}
                   >
                     <span className="flip-face absolute inset-0 flex flex-col" aria-hidden={isFlipped}>
-                      <Image src={tarotImages[badge.code]} alt="" sizes="(min-width: 1024px) 360px, 45vw" className="h-full w-full object-contain drop-shadow-[0_24px_30px_rgb(0_0_0/0.45)]" />
-                      <span className="absolute inset-x-[8%] bottom-[5%] rounded-xl bg-navy/85 px-3 py-2 text-center">
+                      <Image src={tarotImages[badge.code]} alt="" sizes="(min-width: 1024px) 360px, 45vw" className="h-[72%] w-full object-contain drop-shadow-[0_24px_30px_rgb(0_0_0/0.45)] sm:h-full" />
+                      {/* Phones: the label sits under the art instead of over it; from small tablets it overlays the card foot. */}
+                      <span className="absolute inset-x-0 bottom-0 rounded-xl bg-navy/85 px-2 py-2 text-center sm:inset-x-[8%] sm:bottom-[5%] sm:px-3">
                         <span className="label block text-peach">
                           {lencana.tierLabel} {badge.tier}
                           {/* The category name only fits from small tablets up; phones show the tier alone. */}
                           <span className="hidden sm:inline"> · {groupName(badge.group)}</span>
                         </span>
-                        <span className="block font-display text-[clamp(1rem,1.8vw,1.5rem)] leading-tight font-extrabold text-paper">{badge.title}</span>
+                        <span className="block font-display text-[clamp(0.95rem,1.8vw,1.5rem)] leading-tight font-extrabold text-paper">{badge.title}</span>
                       </span>
                     </span>
                     <span
