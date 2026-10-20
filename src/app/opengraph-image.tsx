@@ -2,38 +2,33 @@ import { ImageResponse } from "next/og";
 
 import { palette } from "@/content/palette";
 import { site } from "@/content/site";
-import { prolog } from "@/content/story";
 
-export const alt = `${site.name}: ${prolog.headlineLead} ${prolog.headlineEmphasis}`;
+export const alt = site.shareTitle;
 export const size = { width: 1200, height: 630 };
 export const contentType = "image/png";
 
-// Built at build time from the same tokens and copy as the page, so the share preview never drifts from the site.
+// The BookMate mark, the same path as the site's LogoMark (src/components/site/logo.tsx).
+const MARK =
+  "M26.6568 12.3172V7.6801C26.6568 7.20117 26.3684 6.7692 25.9225 6.58326L10.742 0.199476C10.1823 -0.0352909 9.55798 -0.063463 8.97922 0.122473L1.74575 2.43634C0.70589 2.77065 0 3.7285 0 4.81218V31.3972C0 31.9531 0.343457 32.4508 0.865284 32.6537L17.7023 39.184C18.0173 39.306 18.3645 39.3079 18.6814 39.1896L25.9149 36.4888C26.3608 36.3217 26.6568 35.8991 26.6568 35.4277V33.9327C26.6568 33.5458 27.0496 33.281 27.4121 33.4218L30.3172 34.5487C30.636 34.6727 30.9908 34.6746 31.3115 34.5544L38.3818 31.9137C38.9207 31.7127 39.2794 31.2019 39.2794 30.6309V19.4447C39.2794 18.8719 38.934 18.3535 38.4008 18.13L27.4747 13.5361C26.9794 13.3277 26.6587 12.8468 26.6587 12.3135L26.6568 12.3172ZM16.0229 37.7265L1.41557 32.0602C1.01899 31.9062 0.759021 31.5287 0.759021 31.108V5.05634C0.759021 4.59432 1.22772 4.27691 1.66226 4.44594L3.9545 5.3343L16.4006 10.163C17.0229 10.4053 17.4328 10.9988 17.4328 11.6599V36.7743C17.4328 37.4955 16.7004 37.9895 16.0229 37.7265ZM28.9225 33.204L26.7688 32.3682C26.7005 32.3419 26.6568 32.278 26.6568 32.2067V21.1144C26.6568 20.9923 26.7821 20.9078 26.8978 20.9529L29.1388 21.8225C29.691 22.0366 30.0553 22.5643 30.0553 23.1522V32.4414C30.0553 33.0199 29.4671 33.4162 28.9225 33.2059V33.204Z";
+
+// Link preview card, built at build time from the site's own tokens and copy (F-014 palette): brand blue, the mark and
+// name, the share title, the share description, and the Google Play pill in the yellow accent.
 export default function OpengraphImage() {
   return new ImageResponse(
     (
-      <div
-        style={{
-          width: "100%",
-          height: "100%",
-          display: "flex",
-          flexDirection: "column",
-          justifyContent: "space-between",
-          padding: 72,
-          background: palette.paper,
-          color: palette.ink,
-        }}
-      >
-        <div style={{ display: "flex", fontSize: 34, fontStyle: "italic" }}>{site.name}</div>
-        <div style={{ display: "flex", flexDirection: "column", fontSize: 84, lineHeight: 1 }}>
-          <span>{prolog.headlineLead}</span>
-          <span style={{ fontStyle: "italic" }}>{prolog.headlineEmphasis}</span>
+      <div style={{ width: "100%", height: "100%", display: "flex", flexDirection: "column", justifyContent: "space-between", padding: 72, background: palette.blue, color: palette.white }}>
+        <div style={{ display: "flex", alignItems: "center", gap: 20 }}>
+          <svg width="64" height="64" viewBox="0 0 40 40">
+            <path d={MARK} fill={palette.white} />
+          </svg>
+          <span style={{ fontSize: 44, fontWeight: 800 }}>{site.name}</span>
         </div>
-        <div style={{ display: "flex", alignItems: "center", gap: 20, fontSize: 28 }}>
-          <span style={{ background: palette.ember, color: palette.ink, padding: "12px 28px", borderRadius: 999 }}>
-            Unduh di Google Play
-          </span>
-          <span style={{ color: palette.slate }}>{prolog.note}</span>
+        <div style={{ display: "flex", flexDirection: "column", gap: 24 }}>
+          <span style={{ fontSize: 68, fontWeight: 800, lineHeight: 1.05, maxWidth: 1000 }}>{site.shareTitle}</span>
+          <span style={{ fontSize: 30, lineHeight: 1.35, maxWidth: 980, color: palette.sky }}>{site.shareDescription}</span>
+        </div>
+        <div style={{ display: "flex" }}>
+          <span style={{ background: palette.highlight, color: palette.navy, padding: "14px 30px", borderRadius: 999, fontSize: 28, fontWeight: 700 }}>Unduh di Google Play</span>
         </div>
       </div>
     ),
