@@ -18,7 +18,7 @@ const COVER_FROM_TOP = "M0 0 V100 Q50 100 100 100 V0 Z";
 const LEAVE_MID = "M0 0 V45 Q50 95 100 45 V0 Z";
 const LEAVE_END = "M0 0 V0 Q50 0 100 0 V0 Z";
 // setTimeout, not the ticker: if the ticker stalls (hidden tab) the visitor still lands on the target.
-const SLICE_SAFETY_MS = 3000;
+const SLICE_SAFETY_MS = 4000;
 
 let overlay: HTMLDivElement | null = null;
 let busy = false;
@@ -41,6 +41,30 @@ function land(section: HTMLElement) {
   // The URL keeps no hash (owner, F-014): a refresh after a jump should start at the top, not at the last chapter.
   if (window.location.hash) window.history.replaceState(null, "", window.location.pathname + window.location.search);
   focusSection(section);
+}
+
+// Holds the cover until the page is quiet again. Measured: after a long jump the destination is rastered for the first
+// time and its lazy images load, giving a run of 100 to 350 ms frames for up to a second; those used to fall inside the
+// leaving curtain and made it stutter (F-014 smoothness pass). So the curtain watches frame times and leaves once it
+// sees QUIET_FRAMES normal frames in a row, never before SETTLE_MIN_MS and never later than SETTLE_MAX_MS: quick for a
+// near chapter, a little longer for a far one, and always moving on smooth frames.
+const SETTLE_MIN_MS = 300;
+const SETTLE_MAX_MS = 1300;
+const QUIET_FRAMES = 6;
+function settled() {
+  return new Promise<void>((resolve) => {
+    const start = performance.now();
+    let last = start;
+    let calm = 0;
+    const tick = (now: number) => {
+      calm = now - last < 24 ? calm + 1 : 0;
+      last = now;
+      const waited = now - start;
+      if ((waited >= SETTLE_MIN_MS && calm >= QUIET_FRAMES) || waited >= SETTLE_MAX_MS) resolve();
+      else requestAnimationFrame(tick);
+    };
+    requestAnimationFrame(tick);
+  });
 }
 
 function labelFor(id: string) {
@@ -93,9 +117,10 @@ export function navigateTo(id: string, options: NavigateOptions = {}): boolean {
     finish();
   }, SLICE_SAFETY_MS);
 
-  // Yellow leads in and trails out, the blue sheet in front carries the chapter name: the page's two brand colours.
+  // Yellow leads in and trails out, the blue sheet in front carries the chapter name: the page's two brand colours. The
+  // way out waits until the destination has settled under the cover.
   gsap
-    .timeline({ onComplete: finish })
+    .timeline()
     .set(overlay, { autoAlpha: 1 })
     .set([back, front], { morphSVG: RISE_START })
     .to(back, { morphSVG: RISE_MID, duration: 0.28, ease: "power2.in" }, 0)
@@ -103,13 +128,19 @@ export function navigateTo(id: string, options: NavigateOptions = {}): boolean {
     .to(front, { morphSVG: RISE_MID, duration: 0.28, ease: "power2.in" }, 0.1)
     .to(front, { morphSVG: COVER_FROM_BOTTOM, duration: 0.3, ease: "power2.out" }, 0.38)
     .fromTo(parts, { yPercent: 120, rotate: 6, autoAlpha: 0 }, { yPercent: 0, rotate: 0, autoAlpha: 1, duration: 0.6, ease: LAND, stagger: 0.06 }, 0.45)
-    .call(cover)
-    .to(parts, { yPercent: -80, autoAlpha: 0, duration: 0.25, ease: "power2.in", stagger: 0.03 }, "+=0.2")
-    .set([back, front], { morphSVG: COVER_FROM_TOP })
-    .to(front, { morphSVG: LEAVE_MID, duration: 0.28, ease: "power2.in" })
-    .to(front, { morphSVG: LEAVE_END, duration: 0.3, ease: "power2.out" })
-    .to(back, { morphSVG: LEAVE_MID, duration: 0.28, ease: "power2.in" }, "<-0.18")
-    .to(back, { morphSVG: LEAVE_END, duration: 0.3, ease: "power2.out" });
+    .call(() => {
+      cover();
+      settled().then(() => {
+        gsap
+          .timeline({ onComplete: finish })
+          .to(parts, { yPercent: -80, autoAlpha: 0, duration: 0.25, ease: "power2.in", stagger: 0.03 }, 0)
+          .set([back, front], { morphSVG: COVER_FROM_TOP }, 0.15)
+          .to(front, { morphSVG: LEAVE_MID, duration: 0.28, ease: "power2.in" }, 0.15)
+          .to(front, { morphSVG: LEAVE_END, duration: 0.3, ease: "power2.out" }, 0.43)
+          .to(back, { morphSVG: LEAVE_MID, duration: 0.28, ease: "power2.in" }, 0.25)
+          .to(back, { morphSVG: LEAVE_END, duration: 0.3, ease: "power2.out" }, 0.53);
+      });
+    }, [], 1.05);
   return true;
 }
 
@@ -144,8 +175,8 @@ export function SliceTransition() {
         <path data-curtain d={RISE_START} fill="var(--color-blue)" />
       </svg>
       <div className="pointer-events-none absolute inset-0 flex flex-col items-center justify-center gap-5 px-6 text-center">
-        <span data-slice-part className="grid size-16 place-items-center rounded-full bg-white">
-          <LogoMark className="w-8 text-blue" />
+        <span data-slice-part className="block">
+          <LogoMark className="w-14 text-white" />
         </span>
         <span data-slice-part data-slice-number className="label rounded-full bg-highlight px-4 py-1.5 text-navy" />
         <p data-slice-part data-slice-label className="display text-white" />
