@@ -1,5 +1,6 @@
 "use client";
 
+import Image from "next/image";
 import { useRef } from "react";
 
 import { BorrowIcon } from "@/components/art/borrow-icons";
@@ -50,7 +51,7 @@ export function Pinjam() {
             },
           })
           .fromTo("[data-road-line]", { drawSVG: "0%" }, { drawSVG: "100%", duration: 1 }, 0)
-          .to("[data-road-book]", { motionPath: { path: "[data-road-guide]", align: "[data-road-guide]", alignOrigin: [0.5, 0.5], autoRotate: false }, rotation: 360, transformOrigin: "50% 50%", duration: 1 }, 0);
+          .to("[data-road-book]", { motionPath: { path: "[data-road-guide]", align: "[data-road-guide]", alignOrigin: [0.5, 0.5], autoRotate: false }, rotation: 360, duration: 1 }, 0);
         // Only the transform: "all" would also wipe each card's inline background and tilt, leaving it see-through.
         return () => gsap.set(cards, { clearProps: "transform" });
       });
@@ -107,10 +108,26 @@ export function Pinjam() {
             .to(stars, { fill: "var(--color-white)", duration: 0.3 });
           loops.push([ulas, tl]);
         }
-        loops.forEach(([el, tl]) => {
-          if (!el) return;
-          ScrollTrigger.create({ trigger: el, start: "top bottom", end: "bottom top", onToggle: (self) => (self.isActive ? tl.play() : tl.pause()) });
-        });
+        // They play only while on screen and while the page is not scrolling (calm while it moves).
+        let scrolling = false;
+        const watched = loops.flatMap(([el, tl]) => (el ? [{ tl, trigger: ScrollTrigger.create({ trigger: el, start: "top bottom", end: "bottom top" }) }] : []));
+        const sync = () => watched.forEach(({ tl, trigger }) => (trigger.isActive && !scrolling ? tl.play() : tl.pause()));
+        watched.forEach(({ trigger }) => (trigger.vars.onToggle = sync));
+        const onStart = () => {
+          scrolling = true;
+          sync();
+        };
+        const onEnd = () => {
+          scrolling = false;
+          sync();
+        };
+        ScrollTrigger.addEventListener("scrollStart", onStart);
+        ScrollTrigger.addEventListener("scrollEnd", onEnd);
+        sync();
+        return () => {
+          ScrollTrigger.removeEventListener("scrollStart", onStart);
+          ScrollTrigger.removeEventListener("scrollEnd", onEnd);
+        };
       });
       // Narrow screens: the sticky cards pile up, and each one recedes and dims as the next slides over it.
       mm.add(STACK_MOTION, () => {
@@ -145,18 +162,16 @@ export function Pinjam() {
         <div data-road className="relative mx-auto mt-10 max-w-[84rem] lg:mt-12">
           <svg viewBox="0 0 1200 420" className="pointer-events-none absolute inset-x-0 top-1/2 hidden w-full -translate-y-1/2 lg:block" aria-hidden="true">
             <path d="M-20 300 C 140 80 300 80 380 220 S 600 380 720 200 S 980 40 1220 160" fill="none" stroke="var(--color-sky)" strokeWidth="26" strokeLinecap="round" />
+          </svg>
+          {/* The line that draws itself sits on its own compositor layer, so its repaint never touches the cards. */}
+          <svg viewBox="0 0 1200 420" className="pointer-events-none absolute inset-x-0 top-1/2 hidden w-full -translate-y-1/2 will-change-transform lg:block" aria-hidden="true">
             <path data-road-line d="M-20 300 C 140 80 300 80 380 220 S 600 380 720 200 S 980 40 1220 160" fill="none" stroke="var(--color-blue)" strokeWidth="8" strokeLinecap="round" />
-          </svg>
-          {/* The travelling cover rides the road behind the cards (an invisible copy of it in the same box), showing in the
-              gaps between them and never covering their copy. */}
-          <svg viewBox="0 0 1200 420" className="pointer-events-none absolute inset-x-0 top-1/2 hidden w-full -translate-y-1/2 overflow-visible lg:block" aria-hidden="true">
             <path data-road-guide d="M-20 300 C 140 80 300 80 380 220 S 600 380 720 200 S 980 40 1220 160" fill="none" />
-            <g data-road-book>
-              <rect x="-32" y="-46" width="64" height="94" rx="8" fill="var(--color-navy)" fillOpacity="0.3" transform="translate(6 9)" />
-              <rect x="-35" y="-49" width="70" height="100" rx="9" fill="var(--color-white)" />
-              <image href={TRAVELLER.cover.src} x="-32" y="-46" width="64" height="94" preserveAspectRatio="xMidYMid slice" opacity="1" />
-            </g>
           </svg>
+          {/* The travelling cover rides the road behind the cards, showing in the gaps between them. */}
+          <div data-road-book className="pointer-events-none absolute top-0 left-0 hidden w-[clamp(3.5rem,4.5vw,4.25rem)] will-change-transform lg:block" aria-hidden="true">
+            <Image src={TRAVELLER.cover} alt="" sizes="68px" className="aspect-[2/3] w-full rounded-[0.4rem] object-cover ring-[3px] ring-white shadow-[0_10px_18px_-8px_rgb(3_4_10/0.45)]" />
+          </div>
 
           <ol className="relative grid gap-6 lg:grid-cols-4 lg:gap-5">
             {pinjam.steps.map((step, index) => (
