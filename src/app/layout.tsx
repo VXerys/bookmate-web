@@ -40,26 +40,34 @@ const caveat = Caveat({
   preload: false,
 });
 
-// Absolute share URLs need the production origin; until the domain is decided (A-004) it comes from the environment.
-const siteUrl = process.env.NEXT_PUBLIC_SITE_URL;
+// Absolute share URLs need the production origin. Until the domain is decided (A-004) it comes from NEXT_PUBLIC_SITE_URL,
+// then from Vercel's own production URL; without either, link previews pointed their image at localhost.
+const vercelUrl = process.env.VERCEL_PROJECT_PRODUCTION_URL;
+const siteUrl = process.env.NEXT_PUBLIC_SITE_URL ?? (vercelUrl ? `https://${vercelUrl}` : undefined);
 
 export const metadata: Metadata = {
   ...(siteUrl ? { metadataBase: new URL(siteUrl) } : {}),
-  title: `${site.name} | Klub baca komunitas`,
-  description: site.description,
+  title: site.shareTitle,
+  description: site.shareDescription,
   applicationName: site.name,
+  authors: [{ name: site.publisher }],
+  publisher: site.publisher,
+  keywords: ["BookMate", "klub baca", "komunitas baca", "pinjam buku", "aplikasi baca buku", "streak membaca", "bedah buku", "Android"],
+  alternates: { canonical: "/" },
   openGraph: {
     type: "website",
     locale: "id_ID",
+    url: "/",
     siteName: site.name,
-    title: `${site.name} | Klub baca komunitas`,
-    description: site.description,
+    title: site.shareTitle,
+    description: site.shareDescription,
   },
-  twitter: { card: "summary_large_image", title: `${site.name} | Klub baca komunitas`, description: site.description },
+  twitter: { card: "summary_large_image", title: site.shareTitle, description: site.shareDescription },
+  appLinks: { android: { package: site.app.packageId, url: site.app.playStoreUrl } },
 };
 
 export const viewport: Viewport = {
-  themeColor: palette.paper,
+  themeColor: palette.blue,
 };
 
 export default function RootLayout({ children }: LayoutProps<"/">) {

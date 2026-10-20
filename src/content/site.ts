@@ -4,6 +4,10 @@ export const site = {
   tagline: "Tempat buku bertemu rumah barunya, dan pembaca menemukan teman seperjalanannya.",
   description:
     "Klub baca di saku kamu: catat progres bacaan, jaga streak harian, bedah buku bareng komunitas, dan pinjam buku fisik dari sesama pembaca.",
+  // Title and description for link previews (WhatsApp, Instagram, X, search results), kept under about 160 characters.
+  shareTitle: "BookMate: klub baca komunitas & pinjam buku fisik",
+  shareDescription:
+    "Pinjam buku fisik dari rak teman, catat progres, jaga streak, bedah buku bareng klub, dan kumpulkan 30 lencana. Gratis untuk Android di Google Play.",
   publisher: "Mangcoding",
   locale: "id-ID",
   app: {
